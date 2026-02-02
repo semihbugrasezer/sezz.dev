@@ -128,4 +128,5 @@ copyright: |
 
 nav:
   - index.md
+  - Projects: projects.md
   - Tags: tags.md

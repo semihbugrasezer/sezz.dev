@@ -21,7 +21,7 @@ In this post, I will walk you through the basics of creating a RESTful API using
 
 I am currently working on building a RESTful API that will allow users to perform operations like creating, reading, updating, and deleting resources. This API will be built using **Go** and will follow best practices for REST architecture.
 
-Here’s a quick overview of what I'm doing:
+Here's a quick overview of what I'm doing:
 
 - Developing a scalable, high-performance REST API using **Go** and the **net/http** package.
 - Designing a clean, easy-to-understand structure with clear separation of concerns for better maintainability.
@@ -54,7 +54,7 @@ When developing RESTful APIs, it's crucial to understand some key concepts. Thes
 
 ## :construction_worker_tone1: Code Example: Building the API in Go :construction_worker_tone1:
 
-Let’s dive into some code. Below is a simple example of how to create a basic RESTful API using **Go**.
+Let's dive into some code. Below is a simple example of how to create a basic RESTful API using **Go**.
 
 ### Setting up the Project
 
