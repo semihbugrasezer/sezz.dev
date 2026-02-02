@@ -1,6 +1,6 @@
 ---
 title: Projects
-template: page.html
+template: main.html
 ---
 
 # Projects

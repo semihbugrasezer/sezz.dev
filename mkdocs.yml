@@ -52,7 +52,7 @@ plugins:
       blog_toc: true
       post_url_format: "{slug}"
   - git-committers:
-      enabled: true
+      enabled: false
       repository: semihbugrasezer/mkdocs-sezzdev-blog
       branch: patch-1
       token: !ENV ["GH_TOKEN"]
