@@ -1,0 +1,161 @@
+src/content.config.ts
+  s_bf9d59d8956a6a::t_fbf87651ea9b48 1-45,47-67
+  s_bf9d59d8956a6a::t_ed05995439e656 46
+src/components/Header.astro
+  s_bf9d59d8956a6a::t_d102aecb59e601 1-92
+public/favicon.svg
+  s_bf9d59d8956a6a::t_029569d77bdfc5 1
+src/content/projects/seerxo.md
+  s_bf9d59d8956a6a::t_2c7dc07a166f11 1-144
+src/content/writing/typescript-jsx-primer.md
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-76
+  s_bf9d59d8956a6a::t_5400347bd806c7 77-79
+src/pages/feed_rss_updated.xml.ts
+  s_bf9d59d8956a6a::t_029569d77bdfc5 1-2
+src/content/research/ssh-agent-forwarding-threat-model.md
+  s_bf9d59d8956a6a::t_47041fb050229f 1-80
+src/content/writing/javascript-interview-playbook.md
+  s_bf9d59d8956a6a::t_5400347bd806c7 135-137
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-134
+src/pages/about.astro
+  s_bf9d59d8956a6a::t_9608c865ba50a0 1-83
+src/layouts/Base.astro
+  s_bf9d59d8956a6a::t_5400347bd806c7 45
+  s_bf9d59d8956a6a::t_da2a449dddb617 115
+  s_bf9d59d8956a6a::t_72dfd5f6bc7423 1-44,46-114,116-121
+src/styles/global.css
+  s_bf9d59d8956a6a::t_72cc76adc55961 1-180,182-183,185-211,213-263
+  s_bf9d59d8956a6a::t_7480083cd709ff 181,184,212
+src/pages/projects/index.astro
+  s_bf9d59d8956a6a::t_f6dba94dbf7e8a 1-79
+tsconfig.json
+  s_bf9d59d8956a6a::t_09b5a77932a7c5 1-5
+src/content/writing/epic-react-articles-learning-path.md
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-58
+  s_bf9d59d8956a6a::t_5400347bd806c7 59-62
+src/pages/research/[id].astro
+  s_bf9d59d8956a6a::t_948ff9dd20a5dc 1-36
+src/content/research/deterministic-agent-triggers.md
+  s_bf9d59d8956a6a::t_1e7811c1aaffe2 29
+  s_bf9d59d8956a6a::t_23227b47564fa3 30,39-40,46
+  s_bf9d59d8956a6a::t_47041fb050229f 1-28,31-38,41-45,47-72
+src/content/writing/firstpost.md
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-124
+src/content/projects/sigsieve.md
+  s_bf9d59d8956a6a::t_08ac92fcf4def4 1-175
+src/content/writing/redux-toolkit-tutorial-reference.md
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-112
+  s_bf9d59d8956a6a::t_5400347bd806c7 113-116
+src/pages/[slug].astro
+  s_bf9d59d8956a6a::t_948ff9dd20a5dc 1-44
+src/content/writing/react-quick-start-notes.md
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-87
+  s_bf9d59d8956a6a::t_5400347bd806c7 88-91
+src/content/writing/javascript-mdn-reference-notes.md
+  s_bf9d59d8956a6a::t_5400347bd806c7 61-63
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-60
+README.md
+  s_bf9d59d8956a6a::t_9d53bb8910ba31 1-73
+src/content/writing/react-state-data-flow-tutorial.md
+  s_bf9d59d8956a6a::t_5400347bd806c7 52-54
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-51
+src/content/writing/react-production-patterns.md
+  s_bf9d59d8956a6a::t_5400347bd806c7 120-124
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-119
+netlify.toml
+  s_bf9d59d8956a6a::t_fbf87651ea9b48 2-3,6-48
+src/pages/search.astro
+  s_bf9d59d8956a6a::t_029569d77bdfc5 1-27,31-67
+  s_bf9d59d8956a6a::t_c343063ea8e739 28-30
+src/pages/now.astro
+  s_bf9d59d8956a6a::t_029569d77bdfc5 42
+  s_bf9d59d8956a6a::t_9608c865ba50a0 1-41,43-45
+scripts/check-site.mjs
+  s_bf9d59d8956a6a::t_9da5ca4c1bd325 1-76,80-96
+  s_bf9d59d8956a6a::t_efac7dbe666545 77-79
+src/content/projects/seerxo-os.md
+  s_bf9d59d8956a6a::t_08f388354533c6 47
+  s_bf9d59d8956a6a::t_b0ca56d11b3003 1-46,48-77,80-175
+  s_bf9d59d8956a6a::t_1e7811c1aaffe2 78
+  s_bf9d59d8956a6a::t_23227b47564fa3 79
+src/content/writing/javascript-guide-roadmap.md
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-54
+  s_bf9d59d8956a6a::t_5400347bd806c7 55-57
+astro.config.mjs
+  s_bf9d59d8956a6a::t_fbf87651ea9b48 1-17
+src/pages/writing/index.astro
+  s_bf9d59d8956a6a::t_bec3dbf85db84e 18-21
+  s_bf9d59d8956a6a::t_948ff9dd20a5dc 1-17,22-60
+src/content/writing/cline-memory-bank-guide.md
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-8,12-94
+  s_bf9d59d8956a6a::t_c5d80ddec6b0da 11
+  s_bf9d59d8956a6a::t_ff4a397970964f 9-10
+src/layouts/Article.astro
+  s_bf9d59d8956a6a::t_1648bf5b36a270 1-84
+src/lib/diagrams.ts
+  s_bf9d59d8956a6a::t_564f9f389c4083 1-55,57-65,67-75
+  s_bf9d59d8956a6a::t_da2a449dddb617 56,66
+package.json
+  s_bf9d59d8956a6a::t_861b9441ed8e7f 13-21
+  s_bf9d59d8956a6a::t_db1df5ae331db0 24-26
+  s_bf9d59d8956a6a::t_4fa4192dbded20 1-6,8-12,27-28
+  s_bf9d59d8956a6a::t_ad67e3a998aa2f 7
+  s_bf9d59d8956a6a::t_63b5276212bd5e 22-23
+src/pages/projects/[id].astro
+  s_bf9d59d8956a6a::t_f6dba94dbf7e8a 1-77
+src/pages/404.astro
+  s_bf9d59d8956a6a::t_029569d77bdfc5 1-12
+src/pages/robots.txt.ts
+  s_bf9d59d8956a6a::t_029569d77bdfc5 1-4
+src/pages/index.astro
+  s_bf9d59d8956a6a::t_659e95a78119c2 1-199,201-206
+  s_bf9d59d8956a6a::t_64c0861559d96c 200
+src/pages/feed_rss_created.xml.ts
+  s_bf9d59d8956a6a::t_029569d77bdfc5 1-3
+src/lib/feed.ts
+  s_bf9d59d8956a6a::t_029569d77bdfc5 1-24
+src/pages/research/index.astro
+  s_bf9d59d8956a6a::t_948ff9dd20a5dc 1-57
+src/content/writing/thinking-in-react-tutorial.md
+  s_bf9d59d8956a6a::t_5400347bd806c7 56-58
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-55
+src/pages/contact.astro
+  s_bf9d59d8956a6a::t_9608c865ba50a0 1-49
+src/components/ProjectCard.astro
+  s_bf9d59d8956a6a::t_6e9a4a6c8863cf 1-38,40-54
+  s_bf9d59d8956a6a::t_a3c3333843e5e6 39
+src/components/EntryList.astro
+  s_bf9d59d8956a6a::t_6e9a4a6c8863cf 1-26
+src/content/writing/typescript-react-handbook-notes.md
+  s_bf9d59d8956a6a::t_c0b529cb39b4c8 1-110
+  s_bf9d59d8956a6a::t_5400347bd806c7 111-113
+src/components/Footer.astro
+  s_bf9d59d8956a6a::t_5ba1ccb0fbd462 20
+  s_bf9d59d8956a6a::t_c4a752dcb60182 1-19,21-31
+.gitignore
+  s_bf9d59d8956a6a::t_193f0f0c589d3e 1-6
+package-lock.json
+  s_bf9d59d8956a6a::t_2c74ac01d8ded2 1-6249
+src/content/projects/bridge.md
+  s_bf9d59d8956a6a::t_422e23294df222 1-37
+src/content/projects/self-hosted-devops.md
+  s_bf9d59d8956a6a::t_a0cb2ddf7cdc7b 1-37
+src/lib/site.ts
+  s_bf9d59d8956a6a::t_481123b573da4a 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b084584c9c9ed845adc2c3e3ec79c72b02760ebc",
+  "prompts": {},
+  "sessions": {
+    "s_bf9d59d8956a6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "33c603b8-0d09-4c2f-8f3b-37d336009a62",
+        "model": "unknown"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
