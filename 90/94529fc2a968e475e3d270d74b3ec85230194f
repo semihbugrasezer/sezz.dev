@@ -1,0 +1,43 @@
+src/views/About.astro
+  s_bf9d59d8956a6a::t_e7767959c1d6ae 153
+src/layouts/Base.astro
+  s_bf9d59d8956a6a::t_4d9b59ce795e5a 41
+src/lib/site.ts
+  s_bf9d59d8956a6a::t_22fa8c8a9b5054 6
+src/lib/i18n.ts
+  s_bf9d59d8956a6a::t_22fa8c8a9b5054 73-74,105-106,137-138
+src/views/Contact.astro
+  s_bf9d59d8956a6a::t_e7767959c1d6ae 9,11-12,16,19,21-22,26,29,31-32,42,56-62,91
+  s_bf9d59d8956a6a::t_4d9b59ce795e5a 36
+src/content/writing/golden-evals-agent-output.md
+  s_bf9d59d8956a6a::t_377ed55c127174 1-67
+src/views/Home.astro
+  s_bf9d59d8956a6a::t_22fa8c8a9b5054 111,131,133,160,173,184,189-190,205-206
+  s_bf9d59d8956a6a::t_923edb0baa79ba 54,76,98
+src/content/writing/mcp-tool-schemas-overclaiming.md
+  s_bf9d59d8956a6a::t_377ed55c127174 1-59
+src/content/projects/seerxo-os.md
+  s_bf9d59d8956a6a::t_67c942df2911ce 247-248
+src/views/AiEngineering.astro
+  s_bf9d59d8956a6a::t_856c4a47b542b6 19,22,30,37-48,90,93,101,108-119,161,164,172,179-190,233-234,293-311,420-426
+src/views/Writing.astro
+  s_bf9d59d8956a6a::t_161e1e654513e3 16,23,30,68-78,89-93
+src/components/Footer.astro
+  s_bf9d59d8956a6a::t_e7767959c1d6ae 16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9094529fc2a968e475e3d270d74b3ec85230194f",
+  "prompts": {},
+  "sessions": {
+    "s_bf9d59d8956a6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "33c603b8-0d09-4c2f-8f3b-37d336009a62",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
