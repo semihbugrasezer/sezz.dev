@@ -1,5 +1,5 @@
 ---
-title: Seerxo OS
+title: Acthelm
 summary: A self-hosted operating system for a small company. PostgreSQL holds operational memory, a deterministic reconciler decides when work exists, and AI coding agents run inside isolated containers behind independent review and a signed release gateway.
 order: 1
 featured: true
@@ -31,7 +31,7 @@ l10n:
 
 ## Overview
 
-Seerxo OS is the system I use to run Seerxo, a one-founder company. It is a FastAPI service over
+Acthelm is the system I use to run Seerxo, a one-founder company. It is a FastAPI service over
 PostgreSQL that stores the company's operational state — goals, tasks, events, incidents,
 approvals, metrics — decides *without a model call* whether there is work to do, hands eligible
 work to AI coding CLIs (Claude Code and Codex) under strict boundaries, and records every outcome
@@ -126,7 +126,7 @@ verify → apply → record under a single `flock`, with sequence numbers, an ap
 
 ## How it was built — my role
 
-Seerxo OS is developed with AI coding agents, and the repository makes that visible:
+Acthelm is developed with AI coding agents, and the repository makes that visible:
 
 - 33 of 35 commits on `main` (as of 2026-11-01) are authored by the `seerxo-agent` account; 28 carry
   a Claude co-author trailer. A trailer means *co-authored*, not *written entirely by a model*.

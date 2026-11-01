@@ -1,6 +1,6 @@
 ---
 title: 'Why my agent worker does not close its own tasks'
-description: 'The worker in Seerxo OS can claim, run, retry and recover tasks unattended. What it cannot do by default is mark one done. Notes on the lifecycle and the race conditions behind it.'
+description: 'The worker in Acthelm can claim, run, retry and recover tasks unattended. What it cannot do by default is mark one done. Notes on the lifecycle and the race conditions behind it.'
 slug: why-my-agent-worker-does-not-close-its-own-tasks
 created: 2026-11-01
 topic: Agentic AI
@@ -9,7 +9,7 @@ tags: [agents, orchestration, postgresql, reliability, seerxo-os]
 draft: false
 ---
 
-An agent that can finish its own work can also declare its own work finished. In Seerxo OS I split
+An agent that can finish its own work can also declare its own work finished. In Acthelm I split
 those two things apart. The unattended worker runs tasks; a person closes them.
 
 ## The lifecycle
@@ -76,7 +76,7 @@ show how often a model completes a task well; that needs measurements I have not
 - [`app/worker.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/app/worker.py): `claim`, `holds_attempt`, `recover_stale`, retries
 - [`tests/test_worker_crash_recovery_postgres.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/tests/test_worker_crash_recovery_postgres.py)
 - [`docs/AUTONOMOUS_AGENT_ARCHITECTURE.md`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/docs/AUTONOMOUS_AGENT_ARCHITECTURE.md)
-- [Seerxo OS case study](/projects/seerxo-os/)
+- [Acthelm case study](/projects/seerxo-os/)
 
 ---
 

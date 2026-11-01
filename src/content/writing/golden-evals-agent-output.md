@@ -9,7 +9,7 @@ tags: [agents, evaluation, testing, seerxo-os]
 draft: false
 ---
 
-Most agent evaluation asks whether the model did the job well. In Seerxo OS I needed a different
+Most agent evaluation asks whether the model did the job well. In Acthelm I needed a different
 question answered first: **when an agent reports a result, what does the system do with it?** A
 model will sometimes say it finished when it did not. The rest of the system must not believe it.
 
@@ -58,7 +58,7 @@ published run yet. Those numbers need a separate harness with recorded runs.
 
 - [`evals/test_supervisor_evals.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_supervisor_evals.py)
 - [`evals/test_trust_evals.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_trust_evals.py)
-- [Seerxo OS case study](/projects/seerxo-os/)
+- [Acthelm case study](/projects/seerxo-os/)
 
 ---
 

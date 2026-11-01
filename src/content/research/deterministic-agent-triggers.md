@@ -1,6 +1,6 @@
 ---
 title: Deterministic triggers for agent work
-description: Should a language model decide whether there is work to do? Notes from Seerxo OS, where a rule-based reconciler creates tasks and a model is only called when a task already exists.
+description: Should a language model decide whether there is work to do? Notes from Acthelm, where a rule-based reconciler creates tasks and a model is only called when a task already exists.
 created: 2026-10-31
 type: Architecture Study
 status: In progress
@@ -9,10 +9,10 @@ tags: [agents, orchestration, postgresql, reliability]
 l10n:
   tr:
     title: "Ajan işleri için deterministik tetikleyiciler"
-    description: "Ortada yapılacak iş olup olmadığına bir dil modeli mi karar vermeli? Seerxo OS’ten notlar: görevleri kural tabanlı bir uzlaştırıcı oluşturuyor, model yalnızca görev zaten varsa çağrılıyor."
+    description: "Ortada yapılacak iş olup olmadığına bir dil modeli mi karar vermeli? Acthelm’den notlar: görevleri kural tabanlı bir uzlaştırıcı oluşturuyor, model yalnızca görev zaten varsa çağrılıyor."
   de:
     title: "Deterministische Auslöser für Agentenarbeit"
-    description: "Sollte ein Sprachmodell entscheiden, ob es Arbeit gibt? Notizen aus Seerxo OS, wo ein regelbasierter Reconciler Aufgaben anlegt und ein Modell nur aufgerufen wird, wenn bereits eine Aufgabe existiert."
+    description: "Sollte ein Sprachmodell entscheiden, ob es Arbeit gibt? Notizen aus Acthelm, wo ein regelbasierter Reconciler Aufgaben anlegt und ein Modell nur aufgerufen wird, wenn bereits eine Aufgabe existiert."
 ---
 
 ## Research question
@@ -24,7 +24,7 @@ what does the system look like when "is there work?" is answered without a model
 
 Agent frameworks often run a model in a loop and let it choose the next action, including whether
 to do anything at all. That makes cost and behaviour depend on the model's judgement at the least
-observable point in the system. Seerxo OS takes the opposite position: *no work means no model
+observable point in the system. Acthelm takes the opposite position: *no work means no model
 call.*
 
 ## Method
@@ -42,7 +42,7 @@ Separate the system into three layers and keep the model out of the first one:
 
 ## Implementation
 
-See the [Seerxo OS case study](/projects/seerxo-os/) for the architecture. The relevant pieces are
+See the [Acthelm case study](/projects/seerxo-os/) for the architecture. The relevant pieces are
 `app/business_reconciler.py`, `app/worker.py` and the migration that adds partial unique indexes
 for open work (`migrations/versions/b8e41d0c7a52_open_work_unique_indexes.py`).
 
@@ -75,5 +75,5 @@ against an alternative design.
 
 ## References
 
-- Seerxo OS repository: [github.com/Seerxo/seerxo-os](https://github.com/Seerxo/seerxo-os)
+- Acthelm repository: [github.com/Seerxo/seerxo-os](https://github.com/Seerxo/seerxo-os)
   — see `README.md`, `docs/AUTONOMOUS_AGENT_ARCHITECTURE.md`, `docs/operations/DECISIONS.md`
