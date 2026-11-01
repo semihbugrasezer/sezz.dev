@@ -1,0 +1,98 @@
+src/views/AiEngineering.astro
+  s_bf9d59d8956a6a::t_ed60fd9b93391e 1-262
+src/pages/about.astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 2,5
+src/layouts/Base.astro
+  s_bf9d59d8956a6a::t_5aeec688e97f09 9,21-29,47,62-63,74,93
+src/pages/projects/index.astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 2,5
+src/content/projects/self-hosted-devops.md
+  s_bf9d59d8956a6a::t_994bc8e0111d02 15-23
+src/pages/projects/[id].astro
+  s_bf9d59d8956a6a::t_f078d869c9987c 65
+src/content.config.ts
+  s_bf9d59d8956a6a::t_54a67ef5bdd8c1 32-34,51
+src/styles/global.css
+  s_bf9d59d8956a6a::t_98df59c93ea818 264-270
+src/lib/site.ts
+  s_bf9d59d8956a6a::t_bb111fc7bce6ec 9-10
+src/views/Home.astro
+  s_bf9d59d8956a6a::t_83a9907d52e88c 130
+  s_bf9d59d8956a6a::t_f078d869c9987c 255,262
+  s_bf9d59d8956a6a::t_9a6cdce30f0fba 1-129,131-254,256-261,263-271
+src/views/Research.astro
+  s_bf9d59d8956a6a::t_3031253dea1cf9 1-75,77-80
+  s_bf9d59d8956a6a::t_f078d869c9987c 76
+src/components/Footer.astro
+  s_bf9d59d8956a6a::t_5aeec688e97f09 3-5,13,15,19,23-24
+scripts/check-site.mjs
+  s_bf9d59d8956a6a::t_00113ebb6f6d4b 75-79,102
+src/pages/index.astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 2,5
+src/components/Header.astro
+  s_bf9d59d8956a6a::t_5aeec688e97f09 2-4,7-11,21,27,33-43,46,92-100
+  s_bf9d59d8956a6a::t_2160e135d32d24 12-16
+  s_bf9d59d8956a6a::t_83a9907d52e88c 114-116
+src/content/projects/bridge.md
+  s_bf9d59d8956a6a::t_994bc8e0111d02 15-23
+src/content/projects/seerxo.md
+  s_bf9d59d8956a6a::t_994bc8e0111d02 19-27
+src/pages/search.astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 2,5
+src/views/Contact.astro
+  s_bf9d59d8956a6a::t_6d751972d8aaef 1-64,66-73
+  s_bf9d59d8956a6a::t_f078d869c9987c 65
+src/views/Now.astro
+  s_bf9d59d8956a6a::t_6d751972d8aaef 1-77
+src/components/EntryList.astro
+  s_bf9d59d8956a6a::t_54a67ef5bdd8c1 2-3,7-10,18,21-22,25
+src/views/Writing.astro
+  s_bf9d59d8956a6a::t_a55d56b04e5507 1-86
+src/pages/contact.astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 2,5
+src/views/About.astro
+  s_bf9d59d8956a6a::t_6d751972d8aaef 67
+  s_bf9d59d8956a6a::t_0e477ffd28a931 1-66,68-128
+src/lib/i18n.ts
+  s_bf9d59d8956a6a::t_83a9907d52e88c 57-58,86,114
+  s_bf9d59d8956a6a::t_75450f60b0279e 1-56,59-85,87-113,115-142
+src/views/Search.astro
+  s_bf9d59d8956a6a::t_a55d56b04e5507 1-100
+src/pages/ai-engineering.astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 2,5
+src/content/projects/sigsieve.md
+  s_bf9d59d8956a6a::t_994bc8e0111d02 17-25
+src/pages/now.astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 2,5
+src/components/ProjectCard.astro
+  s_bf9d59d8956a6a::t_54a67ef5bdd8c1 4,6-8,20,24,28-32
+src/pages/writing/index.astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 2,5
+src/views/Projects.astro
+  s_bf9d59d8956a6a::t_3031253dea1cf9 1-96,98-100
+  s_bf9d59d8956a6a::t_f078d869c9987c 97
+src/content/projects/seerxo-os.md
+  s_bf9d59d8956a6a::t_994bc8e0111d02 17-25
+src/pages/research/index.astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 2,5
+README.md
+  s_bf9d59d8956a6a::t_5c96b13a7d8a83 69-82
+src/pages/[lang]/[...page].astro
+  s_bf9d59d8956a6a::t_f32560bdfed626 1-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d394dd63dd7320b9725faf9519b9fba39ec808f0",
+  "prompts": {},
+  "sessions": {
+    "s_bf9d59d8956a6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "33c603b8-0d09-4c2f-8f3b-37d336009a62",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
