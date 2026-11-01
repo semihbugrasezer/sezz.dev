@@ -1,0 +1,36 @@
+---
+import { getCollection, getEntry, render, type CollectionEntry } from 'astro:content';
+import Article from '../../layouts/Article.astro';
+import { SITE, readingTime } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('research', (e) => !e.data.draft);
+  return entries.map((e) => ({ params: { id: e.id }, props: { entry: e } }));
+}
+const { entry } = Astro.props as { entry: CollectionEntry<'research'> };
+const d = entry.data;
+const { Content, headings } = await render(entry);
+const project = d.project ? await getEntry('projects', d.project) : undefined;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.created.toISOString(),
+  dateModified: (d.updated ?? d.created).toISOString(),
+  author: { '@id': `${SITE.url}/#person` },
+  mainEntityOfPage: new URL(`/research/${entry.id}/`, SITE.url).href,
+};
+---
+
+<Article title={d.title} description={d.description} eyebrow={`Research · ${d.type}`} headings={headings}
+  created={d.created} updated={d.updated} minutes={readingTime(entry.body)} meta={[`Status: ${d.status}`]} jsonLd={jsonLd}>
+  <Content />
+  <Fragment slot="after">
+    {project && (
+      <p class="notice">This entry relates to <a href={`/projects/${project.id}/`}>{project.data.title}</a>. Claims are drawn from that project's public repository and dated.</p>
+    )}
+    <p class="meta" style="margin-top:var(--s-5)"><a href="/research/">← Research journal</a></p>
+  </Fragment>
+</Article>

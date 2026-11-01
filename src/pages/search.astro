@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Search" description="Search articles, research notes and project case studies on sezz.dev.">
+  <header class="wrap page-head">
+    <p class="eyebrow">Search</p>
+    <h1>Search the site</h1>
+    <p class="lede">Articles, learning notes, research entries and project case studies.</p>
+  </header>
+  <div class="wrap prose-wrap" style="padding-top:var(--s-6)">
+    <form role="search" class="search" onsubmit="return false">
+      <label for="q" class="visually-hidden">Search query</label>
+      <input id="q" type="search" placeholder="e.g. destination binding, PostgreSQL, React state" autocomplete="off" />
+    </form>
+    <p id="status" class="meta" aria-live="polite"></p>
+    <ol id="results" class="results"></ol>
+    <noscript><p class="notice">Search needs JavaScript. Browse <a href="/writing/">writing</a>, <a href="/research/">research</a> or <a href="/projects/">projects</a> instead.</p></noscript>
+  </div>
+</Base>
+
+<script>
+  // Pagefind index is generated after the build into /pagefind/.
+  const input = document.getElementById('q') as HTMLInputElement;
+  const list = document.getElementById('results')!;
+  const status = document.getElementById('status')!;
+  let pf: any;
+  // Runtime-only module produced by Pagefind; the variable keeps bundlers and tsc from resolving it.
+  const PAGEFIND = '/pagefind/pagefind.js';
+  const load = async () => (pf ??= await import(/* @vite-ignore */ PAGEFIND));
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  let token = 0;
+  input.addEventListener('input', async () => {
+    const q = input.value.trim();
+    const mine = ++token;
+    if (!q) { list.innerHTML = ''; status.textContent = ''; return; }
+    try {
+      const search = await (await load()).debouncedSearch(q, {}, 200);
+      if (!search || mine !== token) return;
+      const data = await Promise.all(search.results.slice(0, 12).map((r: any) => r.data()));
+      if (mine !== token) return;
+      status.textContent = `${search.results.length} result${search.results.length === 1 ? '' : 's'}`;
+      // Excerpts come from Pagefind with <mark> highlighting of our own content.
+      list.innerHTML = data.map((d: any) => `<li><a href="${esc(d.url)}"><span class="t">${esc(d.meta.title ?? d.url)}</span><span class="x">${d.excerpt}</span></a></li>`).join('');
+    } catch {
+      status.textContent = 'Search index unavailable. It is generated during the production build.';
+    }
+  });
+  const q = new URLSearchParams(location.search).get('q');
+  if (q) { input.value = q; input.dispatchEvent(new Event('input')); }
+  input.focus();
+</script>
+
+<style>
+  .search input {
+    width: 100%; padding: 0.8rem 1rem; font-size: var(--fs-md); border: 1px solid var(--rule-strong);
+    border-radius: var(--radius); background: var(--bg-raised);
+  }
+  .search input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+  #status { margin-top: var(--s-3); }
+  .results { list-style: none; padding: 0; margin-top: var(--s-4); border-top: 1px solid var(--rule); }
+  .results :global(li) { border-bottom: 1px solid var(--rule); }
+  .results :global(a) { display: grid; gap: var(--s-1); padding-block: var(--s-4); text-decoration: none; }
+  .results :global(.t) { font-weight: 600; }
+  .results :global(.x) { color: var(--ink-2); font-size: var(--fs-sm); }
+  .results :global(mark) { background: var(--accent-wash); color: var(--ink); padding: 0 0.1em; }
+</style>

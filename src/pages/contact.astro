@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+---
+
+<Base title="Contact" description="How to reach Semih Buğra Sezer: GitHub and LinkedIn.">
+  <header class="wrap page-head">
+    <p class="eyebrow">Contact</p>
+    <h1>Get in touch</h1>
+    <p class="lede">For engineering roles, collaboration on agent infrastructure or security tooling, or questions about anything published here.</p>
+  </header>
+
+  <div class="wrap">
+    <ul class="channels">
+      <li>
+        <a href={SITE.linkedin} rel="me noopener" target="_blank">
+          <span class="eyebrow">LinkedIn</span>
+          <span class="v">linkedin.com/in/semihbugrasezer</span>
+          <span class="d">Best for roles and professional enquiries.</span>
+        </a>
+      </li>
+      <li>
+        <a href={SITE.github} rel="me noopener" target="_blank">
+          <span class="eyebrow">GitHub</span>
+          <span class="v">github.com/semihbugrasezer</span>
+          <span class="d">Issues and discussions on the projects themselves.</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/semihbugrasezer/sigsieve/security" rel="noopener" target="_blank">
+          <span class="eyebrow">Security reports</span>
+          <span class="v">Per-repository security policy</span>
+          <span class="d">Please follow each project’s SECURITY.md rather than opening a public issue.</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .channels { list-style: none; padding: 0; display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin-top: var(--s-6); }
+  .channels a {
+    display: grid; gap: var(--s-2); height: 100%; padding: var(--s-5); text-decoration: none;
+    border: 1px solid var(--rule); border-radius: var(--radius); background: var(--bg-raised);
+  }
+  .channels a:hover { border-color: var(--ink-3); color: inherit; }
+  .v { font-weight: 600; font-size: var(--fs-md); word-break: break-word; }
+  .d { color: var(--ink-2); font-size: var(--fs-sm); }
+</style>

@@ -1,0 +1,54 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { project: CollectionEntry<'projects'>; index?: number; large?: boolean }
+const { project, index, large = false } = Astro.props;
+const p = project.data;
+---
+
+<article class:list={['card', { large }]} data-disciplines={p.disciplines.join('|')}>
+  <div class="card-top">
+    {index !== undefined && <span class="idx meta">{String(index).padStart(2, '0')}</span>}
+    <span class="status">{p.status}</span>
+  </div>
+  <h3><a href={`/projects/${project.id}/`}>{p.title}</a></h3>
+  <p class="summary">{p.summary}</p>
+  {large && (
+    <div class="problem">
+      <p class="eyebrow">Problem</p>
+      <p>{p.problem}</p>
+    </div>
+  )}
+  <ul class="chips" aria-label="Technologies">
+    {p.stack.slice(0, large ? 7 : 5).map((s) => <li class="chip">{s}</li>)}
+  </ul>
+  <div class="card-links meta">
+    <a href={`/projects/${project.id}/`}>Case study →</a>
+    {p.repo && <a href={p.repo} rel="noopener" target="_blank">Source</a>}
+    {p.site && <a href={p.site} rel="noopener" target="_blank">Live</a>}
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative; display: flex; flex-direction: column; gap: var(--s-3);
+    padding: var(--s-5); background: var(--bg-raised); border: 1px solid var(--rule); border-radius: var(--radius);
+    transition: border-color 140ms ease, transform 140ms ease;
+  }
+  .card:hover { border-color: var(--rule-strong); }
+  .card:focus-within { border-color: var(--ink-3); }
+  .card-top { display: flex; align-items: baseline; gap: var(--s-3); }
+  .idx { color: var(--accent); }
+  h3 { font-family: var(--font-display); font-weight: 550; font-size: var(--fs-lg); letter-spacing: -0.01em; }
+  h3 a { text-decoration: none; }
+  /* Whole-card click target without nesting links. */
+  h3 a::after { content: ''; position: absolute; inset: 0; z-index: 0; }
+  .card-links a, .card :global(.chips) { position: relative; z-index: 1; }
+  .summary { color: var(--ink-2); font-size: var(--fs-sm); }
+  .large .summary { font-size: var(--fs-base); }
+  .problem { border-top: 1px dashed var(--rule); padding-top: var(--s-3); font-size: var(--fs-sm); color: var(--ink-2); }
+  .problem .eyebrow { margin-bottom: var(--s-1); }
+  .card-links { display: flex; gap: var(--s-4); margin-top: auto; padding-top: var(--s-2); }
+  .card-links a { text-decoration: none; color: var(--ink-2); }
+  .card-links a:hover { color: var(--accent-ink); }
+  .card-links a:first-child { color: var(--ink); }
+</style>

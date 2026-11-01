@@ -1,0 +1,84 @@
+---
+import type { MarkdownHeading } from 'astro';
+import Base from './Base.astro';
+import { formatDate, isoDate } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  headings: MarkdownHeading[];
+  created?: Date;
+  updated?: Date;
+  minutes?: number;
+  meta?: string[];
+  jsonLd?: Record<string, unknown>;
+  type?: 'article' | 'website';
+}
+const { title, description, eyebrow, headings, created, updated, minutes, meta = [], jsonLd, type = 'article' } = Astro.props;
+const toc = headings.filter((h) => h.depth === 2);
+const showUpdated = updated && created && isoDate(updated) !== isoDate(created);
+---
+
+<Base title={title} description={description} type={type} published={created} modified={updated} jsonLd={jsonLd}>
+  <article class="article">
+    <header class="wrap article-head">
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      <p class="lede">{description}</p>
+      <div class="meta meta-row">
+        {created && <span>Published <time datetime={isoDate(created)}>{formatDate(created)}</time></span>}
+        {showUpdated && <span>Updated <time datetime={isoDate(updated!)}>{formatDate(updated!)}</time></span>}
+        {minutes && <span>{minutes} min read</span>}
+        {meta.map((m) => <span>{m}</span>)}
+      </div>
+      <slot name="head" />
+    </header>
+
+    <div class="wrap article-grid">
+      {toc.length > 2 && (
+        <nav class="toc" aria-label="On this page">
+          <p class="eyebrow">On this page</p>
+          <ol>
+            {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+          </ol>
+        </nav>
+      )}
+      <div class="prose" data-pagefind-body>
+        <slot />
+      </div>
+      <aside class="after">
+        <slot name="after" />
+      </aside>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article-head { padding-block: var(--s-8) var(--s-6); max-width: calc(52rem + 2 * var(--gutter)); margin-left: 0; margin-inline: auto; }
+  .article-head h1 {
+    font-family: var(--font-display); font-weight: 500; font-size: var(--fs-2xl);
+    letter-spacing: -0.02em; margin-block: var(--s-3) var(--s-4);
+  }
+  .lede { font-size: var(--fs-md); color: var(--ink-2); max-width: 62ch; margin-bottom: var(--s-4); }
+  .article-grid {
+    display: grid; gap: var(--s-6); grid-template-columns: minmax(0, var(--measure));
+    justify-content: center; border-top: 1px solid var(--rule); padding-top: var(--s-6);
+  }
+  .after { grid-column: 1 / -1; }
+  .after:empty { display: none; }
+  .toc ol { list-style: none; padding: 0; margin-top: var(--s-3); display: grid; gap: var(--s-2); counter-reset: toc; }
+  .toc li { counter-increment: toc; font-size: var(--fs-sm); line-height: 1.35; display: grid; grid-template-columns: 1.6rem 1fr; }
+  .toc li::before { content: counter(toc, decimal-leading-zero); font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); padding-top: 0.12rem; }
+  .toc a { text-decoration: none; color: var(--ink-2); }
+  .toc a:hover { color: var(--accent-ink); }
+  @media (min-width: 68rem) {
+    .article-grid { grid-template-columns: 13rem minmax(0, var(--measure)) 1fr; justify-content: start; }
+    .toc { position: sticky; top: 5.5rem; align-self: start; max-height: calc(100vh - 7rem); overflow: auto; }
+    .article-grid:not(:has(.toc)) .prose { grid-column: 2; }
+    .after { grid-column: 2; }
+  }
+  @media (max-width: 67.99rem) {
+    .toc { border: 1px solid var(--rule); border-radius: var(--radius); padding: var(--s-4); background: var(--bg-raised); }
+  }
+</style>

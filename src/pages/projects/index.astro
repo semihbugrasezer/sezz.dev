@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const featured = projects.filter((p) => p.data.featured);
+const supporting = projects.filter((p) => !p.data.featured);
+const disciplines = ['Autonomous AI', 'Backend & Infrastructure', 'Security & Tools', 'Applied Research'];
+---
+
+<Base title="Projects" description="Engineering case studies: Seerxo OS, SigSieve, Seerxo and supporting projects — problem, architecture, design decisions, evidence and limitations.">
+  <header class="wrap page-head">
+    <p class="eyebrow">Projects</p>
+    <h1>Engineering work</h1>
+    <p class="lede">
+      Systems I have designed and built, documented as case studies. Facts are taken from the public
+      repositories and dated; maturity and limitations are stated alongside the design.
+    </p>
+  </header>
+
+  <div class="wrap">
+    <div class="filter" role="group" aria-label="Filter projects by discipline" hidden>
+      <button type="button" aria-pressed="true" data-filter="">All</button>
+      {disciplines.map((d) => <button type="button" aria-pressed="false" data-filter={d}>{d}</button>)}
+    </div>
+
+    <section aria-labelledby="featured-h" class="block">
+      <h2 id="featured-h" class="eyebrow">Featured case studies</h2>
+      <div class="cards">
+        {featured.map((p, i) => <ProjectCard project={p} index={i + 1} large />)}
+      </div>
+    </section>
+
+    <section aria-labelledby="supporting-h" class="block">
+      <h2 id="supporting-h" class="eyebrow">Supporting projects</h2>
+      <div class="cards">
+        {supporting.map((p) => <ProjectCard project={p} />)}
+      </div>
+    </section>
+
+    <p class="notice">
+      <strong>Selection.</strong> Older practice repositories (tutorial-level APIs, course projects) are on
+      <a href="https://github.com/semihbugrasezer" rel="noopener" target="_blank">GitHub</a> but are not presented here as portfolio work.
+    </p>
+    <p class="empty meta" hidden>No projects in this discipline.</p>
+  </div>
+</Base>
+
+<script>
+  const group = document.querySelector<HTMLElement>('.filter')!;
+  group.hidden = false;
+  const buttons = group.querySelectorAll<HTMLButtonElement>('button');
+  const cards = document.querySelectorAll<HTMLElement>('[data-disciplines]');
+  group.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('button');
+    if (!btn) return;
+    const f = btn.dataset.filter ?? '';
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    cards.forEach((c) => (c.hidden = !!f && !c.dataset.disciplines!.split('|').includes(f)));
+    document.querySelectorAll<HTMLElement>('.block').forEach((s) => {
+      s.hidden = ![...s.querySelectorAll<HTMLElement>('[data-disciplines]')].some((c) => !c.hidden);
+    });
+  });
+</script>
+
+<style>
+  .filter { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-block: var(--s-6) 0; }
+  .filter button {
+    font-family: var(--font-mono); font-size: var(--fs-xs); padding: 0.35rem 0.7rem; cursor: pointer;
+    border: 1px solid var(--rule-strong); border-radius: 999px; background: var(--bg-raised); color: var(--ink-2);
+  }
+  .filter button[aria-pressed='true'] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .block { margin-top: var(--s-7); }
+  .block > h2 { margin-bottom: var(--s-4); }
+  .cards { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); }
+  .cards :global([hidden]) { display: none; }
+  .notice { margin-top: var(--s-7); }
+</style>
