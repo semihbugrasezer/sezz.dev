@@ -1,0 +1,19 @@
+src/views/Now.astro
+  s_bf9d59d8956a6a::t_6d9f9910bca611 10,29,48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fc282fe19d8278167bb902fa0aa4c4bb2d180dea",
+  "prompts": {},
+  "sessions": {
+    "s_bf9d59d8956a6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "33c603b8-0d09-4c2f-8f3b-37d336009a62",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
