@@ -74,7 +74,7 @@ flowchart TB
   BR -->|"deduped tasks"| PG[("company-postgres")]
   Desk["Founder Desk (React)"] <--> API["company-api (FastAPI)"]
   API <--> PG
-  W["company-worker"] <-->|"claim · SKIP LOCKED · checkpoints"| PG
+  W["company-worker"] <-->|"conditional claim · checkpoints"| PG
   W -->|"run request"| R["company-reasoner<br/>Claude Code / Codex CLI"]
   W -->|"job file"| L["company-coder-launch<br/>(root, systemd)"]
   L --> C["coder container<br/>scoped files only"]
@@ -102,10 +102,11 @@ calls the business reconciler. The reconciler compares goals with measured metri
 most one open task per goal and rule (`GOAL_BEHIND`, `GOAL_UNMEASURED`, `GOAL_NO_WORK`, …), deduplicated by a
 partial unique index on `dedupe_key` over open tasks. *No work means no model call.*
 
-**Worker.** `company-worker` polls every 60 seconds and claims tasks atomically with
-`SELECT … FOR UPDATE SKIP LOCKED`. Every run writes an `agent_runs` row, events and an audit
-record. Tasks move `READY → IN_PROGRESS → REVIEW`; the worker never marks work `DONE` — closing a
-task is a human decision.
+**Worker.** `company-worker` polls every 60 seconds and claims a task with a conditional
+`UPDATE … WHERE status = 'READY'`: if two workers race, the second updates zero rows and walks
+away. Every run writes an `agent_runs` row, events and an audit record. An approved result moves
+the task to `REVIEW`, not `DONE`: closing work is the founder's decision. The one exception is an
+opt-in policy (`AUTO_CLOSE_GOAL_NO_WORK`, off by default) for low-risk internal planning tasks.
 
 **Reasoner.** Model CLIs run in a separate `company-reasoner` container that has no database URL,
 GitHub token or messaging token. Providers are tried in registry order and each reports a health
@@ -223,7 +224,7 @@ All links point at commit `43f000c`.
 ## What this project demonstrates about my AI engineering skills
 
 - **Agent orchestration with explicit state.** Tasks, runs, events and approvals live in
-  PostgreSQL; claims are atomic; the lifecycle never lets an agent mark its own work done.
+  PostgreSQL; claims are atomic; by default an agent cannot mark its own work done.
 - **Keeping models out of decisions that need guarantees.** Work detection, deduplication,
   release risk and approval identity are deterministic code, not prompts.
 - **Tool-use and execution boundaries.** Model CLIs run without database or GitHub credentials;

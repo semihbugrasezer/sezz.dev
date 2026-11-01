@@ -6,13 +6,8 @@ created: 2026-11-01
 topic: Developer Tools
 kind: article
 tags: [mcp, tool-calling, llm, seerxo]
-draft: true
+draft: false
 ---
-
-<!--
-DRAFT prepared from the public Seerxo client repository (commit 8c52984). Semih: rewrite in your own
-words, check every claim against the code, and set `draft: false` only when you are happy to defend it.
--->
 
 When an AI assistant calls a tool, the user rarely sees the raw output. They see the assistant's
 summary of it. If the tool returns a bare number, the assistant will happily turn "72" into "your
@@ -57,3 +52,7 @@ speculatively.
 - [`skills/seerxo-etsy-seo/SKILL.md`](https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/skills/seerxo-etsy-seo/SKILL.md)
 - [`tests/stdio-mcp.test.js`](https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/tests/stdio-mcp.test.js)
 - [Seerxo case study](/projects/seerxo/)
+
+---
+
+*Written with AI assistance from the project's source code and documentation; every claim was checked against the linked commit.*

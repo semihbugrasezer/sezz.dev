@@ -6,14 +6,8 @@ created: 2026-11-01
 topic: Agentic AI
 kind: article
 tags: [agents, evaluation, testing, seerxo-os]
-draft: true
+draft: false
 ---
-
-<!--
-DRAFT prepared from the Seerxo OS repository (commit 43f000c). Semih: rewrite in your own words,
-check every claim against the code, and set `draft: false` only when you are happy to defend it in
-an interview.
--->
 
 Most agent evaluation asks whether the model did the job well. In Seerxo OS I needed a different
 question answered first: **when an agent reports a result, what does the system do with it?** A
@@ -23,8 +17,8 @@ model will sometimes say it finished when it did not. The rest of the system mus
 
 Every worker run ends with a structured result: task id, status, summary, evidence, and optional
 fields such as an approval request. A supervisor function turns that result into one verdict:
-`APPROVED`, `REVISION_REQUIRED`, `FAILED` or `ESCALATE`. The worker never marks a task done; a
-human closes it.
+`APPROVED`, `REVISION_REQUIRED`, `FAILED` or `ESCALATE`. An approved result moves the task to
+review, not done; by default only a human closes it.
 
 ## Scenarios, not samples
 
@@ -65,3 +59,7 @@ published run yet. Those numbers need a separate harness with recorded runs.
 - [`evals/test_supervisor_evals.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_supervisor_evals.py)
 - [`evals/test_trust_evals.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_trust_evals.py)
 - [Seerxo OS case study](/projects/seerxo-os/)
+
+---
+
+*Written with AI assistance from the project's source code and documentation; every claim was checked against the linked commit.*

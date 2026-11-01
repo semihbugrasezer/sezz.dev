@@ -35,8 +35,8 @@ Separate the system into three layers and keep the model out of the first one:
    emits tasks from a fixed rule set (`GOAL_BEHIND`, `GOAL_UNMEASURED`, `GOAL_NO_WORK`,
    `GOAL_CONFIG_INVALID`, `GOAL_ACHIEVED`). At most one open task per goal and rule, enforced by a partial
    unique index over open tasks (`uq_tasks_open_dedupe`).
-2. **Execution (model-driven, bounded).** A worker claims tasks with
-   `SELECT … FOR UPDATE SKIP LOCKED` and calls a model CLI in an isolated container.
+2. **Execution (model-driven, bounded).** A worker claims a task with a
+   conditional `UPDATE … WHERE status = 'READY'` and calls a model CLI in an isolated container.
 3. **Authorisation (deterministic + human).** Signed policy, an allow-list of low-risk paths and a
    human signature decide what reaches production.
 
