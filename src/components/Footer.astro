@@ -13,6 +13,7 @@ const year = new Date().getFullYear();
       <p class="meta">{s.role}</p>
     </div>
     <ul class="links" aria-label={s.elsewhere}>
+      <li><a href={`mailto:${SITE.email}`}>{s.email}</a></li>
       <li><a href={SITE.github} rel="me noopener" target="_blank">GitHub</a></li>
       <li><a href={SITE.linkedin} rel="me noopener" target="_blank">LinkedIn</a></li>
       <li><a href="/feed_rss_created.xml">RSS</a></li>

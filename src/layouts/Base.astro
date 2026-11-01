@@ -38,6 +38,7 @@ const person = {
   url: SITE.url,
   jobTitle: 'AI Engineer',
   alumniOf: { '@type': 'CollegeOrUniversity', name: 'Karabük University' },
+  email: `mailto:${SITE.email}`,
   sameAs: [SITE.github, SITE.linkedin],
 };
 const ld = [person, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];

@@ -6,37 +6,40 @@ import { getLang, localize, type Lang } from '../lib/i18n';
 const lang = getLang(Astro.url);
 const copy = {
   en: {
-    title: 'Contact', description: 'How to reach Semih Buğra Sezer: GitHub and LinkedIn.', h1: 'Get in touch',
+    title: 'Contact', description: 'How to reach Semih Buğra Sezer: email, LinkedIn and GitHub.', h1: 'Get in touch',
     lede: 'For AI Engineer, Applied AI Engineer and LLM / Agent Engineering roles, open-source collaboration, or questions about the systems documented here.',
-    li: 'Best for roles and professional enquiries.', gh: 'Issues and discussions on the projects themselves.',
+    em: 'Email', emD: 'The most direct way to reach me about roles.',
+    li: 'Professional profile and messages.', gh: 'Issues and discussions on the projects themselves.',
     sec: 'Security reports', secV: 'Per-repository security policy', secD: 'Please follow each project’s SECURITY.md rather than opening a public issue.',
     recruitersTitle: 'For recruiters and hiring managers',
     recruitersBody: 'Links you can paste into an application or a hiring note. Case studies are in English.',
-    linkLabels: ['Portfolio', 'AI engineering evidence', 'Seerxo OS — agentic AI case study', 'Seerxo — LLM product case study', 'SigSieve — security engineering case study', 'GitHub', 'LinkedIn'],
+    linkLabels: ['Email', 'Portfolio', 'AI engineering evidence', 'Seerxo OS — agentic AI case study', 'Seerxo — LLM product case study', 'SigSieve — security engineering case study', 'GitHub', 'LinkedIn'],
   },
   tr: {
-    title: 'İletişim', description: 'Semih Buğra Sezer’e ulaşmanın yolları: GitHub ve LinkedIn.', h1: 'İletişime geçin',
+    title: 'İletişim', description: 'Semih Buğra Sezer’e ulaşmanın yolları: e-posta, LinkedIn ve GitHub.', h1: 'İletişime geçin',
     lede: 'AI Engineer, Applied AI Engineer ve LLM / Agent Engineering pozisyonları, açık kaynak iş birlikleri veya burada anlatılan sistemlerle ilgili sorularınız için.',
-    li: 'Pozisyonlar ve profesyonel talepler için en uygun kanal.', gh: 'Projelerle ilgili issue ve tartışmalar için.',
+    em: 'E-posta', emD: 'Pozisyonlar için bana ulaşmanın en doğrudan yolu.',
+    li: 'Profesyonel profil ve mesajlar.', gh: 'Projelerle ilgili issue ve tartışmalar için.',
     sec: 'Güvenlik bildirimleri', secV: 'Depo bazında güvenlik politikası', secD: 'Lütfen herkese açık issue açmak yerine her projenin SECURITY.md dosyasını izleyin.',
     recruitersTitle: 'İşe alım uzmanları ve yöneticiler için',
     recruitersBody: 'Bir başvuruya veya değerlendirme notuna yapıştırabileceğiniz bağlantılar. Vaka çalışmaları İngilizcedir.',
-    linkLabels: ['Portföy', 'AI mühendisliği kanıtları', 'Seerxo OS — agentic AI vaka çalışması', 'Seerxo — LLM ürünü vaka çalışması', 'SigSieve — güvenlik mühendisliği vaka çalışması', 'GitHub', 'LinkedIn'],
+    linkLabels: ['E-posta', 'Portföy', 'AI mühendisliği kanıtları', 'Seerxo OS — agentic AI vaka çalışması', 'Seerxo — LLM ürünü vaka çalışması', 'SigSieve — güvenlik mühendisliği vaka çalışması', 'GitHub', 'LinkedIn'],
   },
   de: {
-    title: 'Kontakt', description: 'So erreichen Sie Semih Buğra Sezer: GitHub und LinkedIn.', h1: 'Kontakt aufnehmen',
+    title: 'Kontakt', description: 'So erreichen Sie Semih Buğra Sezer: E-Mail, LinkedIn und GitHub.', h1: 'Kontakt aufnehmen',
     lede: 'Für Rollen als AI Engineer, Applied AI Engineer und LLM-/Agent-Engineer, Open-Source-Zusammenarbeit oder Fragen zu den hier dokumentierten Systemen.',
-    li: 'Am besten für Stellenangebote und berufliche Anfragen.', gh: 'Issues und Diskussionen zu den Projekten selbst.',
+    em: 'E-Mail', emD: 'Der direkteste Weg, mich wegen einer Stelle zu erreichen.',
+    li: 'Berufliches Profil und Nachrichten.', gh: 'Issues und Diskussionen zu den Projekten selbst.',
     sec: 'Sicherheitsmeldungen', secV: 'Security-Policy je Repository', secD: 'Bitte folgen Sie der SECURITY.md des jeweiligen Projekts, statt ein öffentliches Issue zu eröffnen.',
     recruitersTitle: 'Für Recruiter und Hiring Manager',
     recruitersBody: 'Links zum Einfügen in eine Bewerbung oder Einschätzung. Die Fallstudien sind auf Englisch.',
-    linkLabels: ['Portfolio', 'Belege zum AI Engineering', 'Seerxo OS — Fallstudie Agentic AI', 'Seerxo — Fallstudie LLM-Produkt', 'SigSieve — Fallstudie Security-Engineering', 'GitHub', 'LinkedIn'],
+    linkLabels: ['E-Mail', 'Portfolio', 'Belege zum AI Engineering', 'Seerxo OS — Fallstudie Agentic AI', 'Seerxo — Fallstudie LLM-Produkt', 'SigSieve — Fallstudie Security-Engineering', 'GitHub', 'LinkedIn'],
   },
 } satisfies Record<Lang, unknown>;
 const c = copy[lang];
 const abs = (path: string) => `https://sezz.dev${path}`;
 const recruiterLinks = [
-  abs(localize('/', lang)), abs(localize('/ai-engineering/', lang)), abs('/projects/seerxo-os/'), abs('/projects/seerxo/'),
+  `mailto:${SITE.email}`, abs(localize('/', lang)), abs(localize('/ai-engineering/', lang)), abs('/projects/seerxo-os/'), abs('/projects/seerxo/'),
   abs('/projects/sigsieve/'), SITE.github, SITE.linkedin,
 ].map((href, i) => ({ href, label: c.linkLabels[i] }));
 ---
@@ -50,6 +53,13 @@ const recruiterLinks = [
 
   <div class="wrap">
     <ul class="channels">
+      <li>
+        <a href={`mailto:${SITE.email}`}>
+          <span class="eyebrow">{c.em}</span>
+          <span class="v">{SITE.email}</span>
+          <span class="d">{c.emD}</span>
+        </a>
+      </li>
       <li>
         <a href={SITE.linkedin} rel="me noopener" target="_blank">
           <span class="eyebrow">LinkedIn</span>
@@ -78,7 +88,7 @@ const recruiterLinks = [
       <p>{c.recruitersBody}</p>
       <dl>
         {recruiterLinks.map((l) => (
-          <div><dt>{l.label}</dt><dd><a href={l.href} {...(l.href.startsWith('https://sezz.dev') ? {} : { rel: 'noopener', target: '_blank' })}>{l.href}</a></dd></div>
+          <div><dt>{l.label}</dt><dd><a href={l.href} {...(l.href.startsWith('http') && !l.href.startsWith('https://sezz.dev') ? { rel: 'noopener', target: '_blank' } : {})}>{l.href.replace(/^mailto:/, '')}</a></dd></div>
         ))}
       </dl>
     </section>
