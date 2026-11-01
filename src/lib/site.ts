@@ -3,7 +3,7 @@ export const SITE = {
   name: 'Semih Buğra Sezer',
   github: 'https://github.com/semihbugrasezer',
   linkedin: 'https://www.linkedin.com/in/semihbugrasezer/',
-  email: 'semih.b.sezer@gmail.com',
+  email: 'hello@sezz.dev',
   repo: 'https://github.com/semihbugrasezer/sezz.dev',
 };
 
