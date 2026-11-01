@@ -76,7 +76,7 @@ show how often a model completes a task well; that needs measurements I have not
 - [`app/worker.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/app/worker.py): `claim`, `holds_attempt`, `recover_stale`, retries
 - [`tests/test_worker_crash_recovery_postgres.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/tests/test_worker_crash_recovery_postgres.py)
 - [`docs/AUTONOMOUS_AGENT_ARCHITECTURE.md`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/docs/AUTONOMOUS_AGENT_ARCHITECTURE.md)
-- [Acthelm case study](/projects/seerxo-os/)
+- [Acthelm case study](/projects/acthelm/)
 
 ---
 

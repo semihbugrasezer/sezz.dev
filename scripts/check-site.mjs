@@ -9,9 +9,9 @@ import { join, relative } from 'node:path';
 const DIST = 'dist';
 const SITE = 'https://sezz.dev';
 
-// Public URLs of sezz.dev captured from the live sitemap on 2026-10-31, plus the two RSS feeds and sitemaps.
+// Public URLs retained across site migrations and the Acthelm rename, plus the RSS feeds and sitemaps.
 const LEGACY = [
-  '/', '/projects/', '/tags/',
+  '/', '/projects/', '/projects/seerxo-os/', '/tags/',
   '/cline-memory-bank-a-practical-guide-to-persistent-ai-context/',
   '/epic-react-articles-a-guided-reading-path/',
   '/building-a-restful-api-with-go/',

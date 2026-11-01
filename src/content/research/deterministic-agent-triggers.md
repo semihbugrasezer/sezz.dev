@@ -4,7 +4,7 @@ description: Should a language model decide whether there is work to do? Notes f
 created: 2026-10-31
 type: Architecture Study
 status: In progress
-project: seerxo-os
+project: acthelm
 tags: [agents, orchestration, postgresql, reliability]
 l10n:
   tr:
@@ -42,7 +42,7 @@ Separate the system into three layers and keep the model out of the first one:
 
 ## Implementation
 
-See the [Acthelm case study](/projects/seerxo-os/) for the architecture. The relevant pieces are
+See the [Acthelm case study](/projects/acthelm/) for the architecture. The relevant pieces are
 `app/business_reconciler.py`, `app/worker.py` and the migration that adds partial unique indexes
 for open work (`migrations/versions/b8e41d0c7a52_open_work_unique_indexes.py`).
 
