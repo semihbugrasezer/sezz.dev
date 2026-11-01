@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import { getLang, type Lang } from '../lib/i18n';
+
+const lang = getLang(Astro.url);
+// Project links point at English case studies.
+const copy = {
+  en: {
+    title: 'Now', description: 'What Semih Buğra Sezer is working on and investigating right now.', h1: 'What I’m working on',
+    lede: 'A snapshot, not a promise. Updated <time datetime="2026-10-31">31 October 2026</time>; statuses come from each project’s repository on that date.',
+    body: `
+      <h2>Active</h2>
+      <ul>
+        <li><strong><a href="/projects/seerxo-os/">Seerxo OS</a></strong> — V1, in active development. Working toward an evidence-backed unattended pilot of the isolated code-change stage, and a signed cutover of release duties to the public repository.</li>
+        <li><strong><a href="/projects/sigsieve/">SigSieve</a></strong> — experimental pre-release (<code>v0.1.0-alpha.2</code>). Next: tagging <code>alpha.3</code>, broader hardware-key testing and an external review before anything non-experimental.</li>
+        <li><strong><a href="/projects/seerxo/">Seerxo</a></strong> — live product. Keeping the open-source client’s dependency scanning green and extending the deterministic listing audit.</li>
+      </ul>
+      <h2>Investigating</h2>
+      <ul>
+        <li>What evidence is sufficient before an AI coding agent runs unattended.</li>
+        <li>Destination-bound SSH authentication with non-exportable keys.</li>
+        <li>Tool schemas that make agents report results without overclaiming.</li>
+      </ul>
+      <h2>Not active</h2>
+      <p>The <a href="/projects/bridge/">Bridge</a> gateway and the <a href="/projects/self-hosted-devops/">self-hosted DevOps platform</a> have had no commits since July 2026 and May 2026 respectively.</p>`,
+  },
+  tr: {
+    title: 'Şimdi', description: 'Semih Buğra Sezer’in şu an üzerinde çalıştığı ve incelediği konular.', h1: 'Şu an üzerinde çalıştıklarım',
+    lede: 'Bir söz değil, anlık bir görüntü. Güncelleme: <time datetime="2026-10-31">31 Ekim 2026</time>; durumlar o tarihteki proje depolarından alınmıştır.',
+    body: `
+      <h2>Aktif</h2>
+      <ul>
+        <li><strong><a href="/projects/seerxo-os/">Seerxo OS</a></strong> — V1, aktif geliştirmede. İzole kod değişikliği aşamasının kanıtlarla desteklenen gözetimsiz bir pilotu ve sürüm sorumluluklarının imzalı bir prosedürle herkese açık depoya taşınması üzerinde çalışıyorum.</li>
+        <li><strong><a href="/projects/sigsieve/">SigSieve</a></strong> — deneysel ön sürüm (<code>v0.1.0-alpha.2</code>). Sırada: <code>alpha.3</code> etiketi, daha geniş donanım anahtarı testleri ve deneysel olmayan herhangi bir sürümden önce harici inceleme.</li>
+        <li><strong><a href="/projects/seerxo/">Seerxo</a></strong> — canlı ürün. Açık kaynak istemcinin bağımlılık taramalarını yeşilde tutmak ve deterministik ilan denetimini genişletmek.</li>
+      </ul>
+      <h2>İncelediklerim</h2>
+      <ul>
+        <li>Bir AI kodlama ajanı gözetimsiz çalışmadan önce hangi kanıtın yeterli olduğu.</li>
+        <li>Dışa aktarılamayan anahtarlarla hedefe bağlı SSH kimlik doğrulaması.</li>
+        <li>Ajanların sonuçları abartmadan raporlamasını sağlayan araç şemaları.</li>
+      </ul>
+      <h2>Aktif olmayanlar</h2>
+      <p><a href="/projects/bridge/">Bridge</a> ağ geçidinde Temmuz 2026’dan, <a href="/projects/self-hosted-devops/">kendi sunucusunda çalışan DevOps platformunda</a> ise Mayıs 2026’dan beri commit yok.</p>`,
+  },
+  de: {
+    title: 'Aktuell', description: 'Woran Semih Buğra Sezer gerade arbeitet und was er untersucht.', h1: 'Woran ich gerade arbeite',
+    lede: 'Eine Momentaufnahme, kein Versprechen. Stand: <time datetime="2026-10-31">31. Oktober 2026</time>; der Status stammt aus den jeweiligen Repositories zu diesem Datum.',
+    body: `
+      <h2>Aktiv</h2>
+      <ul>
+        <li><strong><a href="/projects/seerxo-os/">Seerxo OS</a></strong> — V1, in aktiver Entwicklung. Ziel: ein belegter, unbeaufsichtigter Pilot der isolierten Codeänderungs-Stufe und die signierte Übergabe der Release-Aufgaben an das öffentliche Repository.</li>
+        <li><strong><a href="/projects/sigsieve/">SigSieve</a></strong> — experimentelle Vorabversion (<code>v0.1.0-alpha.2</code>). Als Nächstes: Tag für <code>alpha.3</code>, breitere Tests mit Hardware-Schlüsseln und ein externes Review vor jeder nicht-experimentellen Version.</li>
+        <li><strong><a href="/projects/seerxo/">Seerxo</a></strong> — Live-Produkt. Die Abhängigkeitsscans des Open-Source-Clients grün halten und die deterministische Listing-Prüfung erweitern.</li>
+      </ul>
+      <h2>In Untersuchung</h2>
+      <ul>
+        <li>Welche Belege ausreichen, bevor ein KI-Coding-Agent unbeaufsichtigt läuft.</li>
+        <li>Zielgebundene SSH-Authentifizierung mit nicht exportierbaren Schlüsseln.</li>
+        <li>Tool-Schemas, die Agenten dazu bringen, Ergebnisse ohne Übertreibung zu melden.</li>
+      </ul>
+      <h2>Nicht aktiv</h2>
+      <p>Das <a href="/projects/bridge/">Bridge</a>-Gateway und die <a href="/projects/self-hosted-devops/">selbst gehostete DevOps-Plattform</a> haben seit Juli 2026 bzw. Mai 2026 keine Commits mehr.</p>`,
+  },
+} satisfies Record<Lang, unknown>;
+const c = copy[lang];
+---
+
+<Base title={c.title} description={c.description}>
+  <header class="wrap page-head">
+    <p class="eyebrow">{c.title}</p>
+    <h1>{c.h1}</h1>
+    <p class="lede" set:html={c.lede} />
+  </header>
+
+  <div class="wrap prose-wrap prose" style="padding-top:var(--s-6)" set:html={c.body} />
+</Base>

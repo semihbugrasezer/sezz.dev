@@ -16,6 +16,15 @@ facts:
   - 5 MCP tools, 2 runtime dependencies
   - 103 test cases, CI on Node 18 / 20 / 22
   - 28 GitHub stars (not a user count)
+l10n:
+  tr:
+    summary: "Etsy ilanlarını taslak olarak hazırlayan, denetleyen ve iyileştiren canlı bir ürün. Tek hesap ve kredi havuzu; bir CLI, stdio MCP sunucusu, uzak MCP uç noktası, Claude Code skill'i ve web uygulamasının arkasında. Deterministik denetim, ücretli AI üretiminden ayrı tutulur."
+    problem: "Bir Etsy ilanının katı kuralları (≤140 karakter başlık, ≤20 karakterlik tam 13 etiket) ve esnek kuralları (ana anahtar kelimelerle başlamak) vardır. Satıcıların bu kurallara uyan taslaklara ve mevcut ilanlarında neyin yanlış olduğuna dair dürüst bir açıklamaya ihtiyacı var — tercihen zaten kullandıkları AI asistanının içinde."
+    status: "Canlı ürün · npm seerxo 1.13.0"
+  de:
+    summary: "Ein Live-Produkt, das Etsy-Listings entwirft, prüft und optimiert. Ein Konto und ein Guthaben hinter CLI, stdio-MCP-Server, Remote-MCP-Endpunkt, Claude-Code-Skill und Web-App – mit einer deterministischen Prüfung, die getrennt von der kostenpflichtigen KI-Generierung läuft."
+    problem: "Ein Etsy-Listing hat harte Regeln (Titel ≤ 140 Zeichen, genau 13 Tags mit je ≤ 20 Zeichen) und weiche (mit den wichtigsten Keywords beginnen). Verkäufer brauchen Entwürfe, die diese Regeln einhalten, und eine ehrliche Erklärung, was an bestehenden Listings nicht stimmt – am besten direkt im KI-Assistenten, den sie ohnehin nutzen."
+    status: "Live-Produkt · npm seerxo 1.13.0"
 ---
 
 ## Overview

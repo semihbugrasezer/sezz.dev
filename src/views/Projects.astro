@@ -1,0 +1,100 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getLang, type Lang } from '../lib/i18n';
+
+const lang = getLang(Astro.url);
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const featured = projects.filter((p) => p.data.featured);
+const supporting = projects.filter((p) => !p.data.featured);
+// Filter values match the content data; only the labels are translated.
+const disciplines = ['Autonomous AI', 'Backend & Infrastructure', 'Security & Tools', 'Applied Research'] as const;
+
+const copy = {
+  en: {
+    title: 'Projects', description: 'Engineering case studies: Seerxo OS, SigSieve, Seerxo and supporting projects — problem, architecture, design decisions, evidence and limitations.',
+    h1: 'Engineering work', lede: 'Systems I have designed and built, documented as case studies. Facts are taken from the public repositories and dated; maturity and limitations are stated alongside the design.',
+    filter: 'Filter projects by discipline', all: 'All', labels: disciplines as readonly string[],
+    featured: 'Featured case studies', supporting: 'Supporting projects',
+    notice: '<strong>Selection.</strong> Older practice repositories (tutorial-level APIs, course projects) are on <a href="https://github.com/semihbugrasezer" rel="noopener" target="_blank">GitHub</a> but are not presented here as portfolio work.',
+  },
+  tr: {
+    title: 'Projeler', description: 'Mühendislik vaka çalışmaları: Seerxo OS, SigSieve, Seerxo ve destekleyici projeler — problem, mimari, tasarım kararları, kanıtlar ve sınırlamalar.',
+    h1: 'Mühendislik çalışmaları', lede: 'Tasarlayıp geliştirdiğim sistemler, vaka çalışması olarak belgelendi. Bilgiler herkese açık depolardan alınmış ve tarihlendirilmiştir; olgunluk düzeyi ve sınırlamalar tasarımla birlikte belirtilir. Vaka çalışmalarının tam metni İngilizcedir.',
+    filter: 'Projeleri disipline göre filtrele', all: 'Tümü', labels: ['Otonom AI', 'Backend ve Altyapı', 'Güvenlik ve Araçlar', 'Uygulamalı Araştırma'],
+    featured: 'Öne çıkan vaka çalışmaları', supporting: 'Destekleyici projeler',
+    notice: '<strong>Seçim.</strong> Daha eski pratik depoları (eğitim düzeyindeki API’ler, ders projeleri) <a href="https://github.com/semihbugrasezer" rel="noopener" target="_blank">GitHub</a>’da duruyor ama burada portföy çalışması olarak sunulmuyor.',
+  },
+  de: {
+    title: 'Projekte', description: 'Engineering-Fallstudien: Seerxo OS, SigSieve, Seerxo und weitere Projekte — Problem, Architektur, Designentscheidungen, Belege und Grenzen.',
+    h1: 'Engineering-Arbeit', lede: 'Systeme, die ich entworfen und gebaut habe, dokumentiert als Fallstudien. Die Angaben stammen aus den öffentlichen Repositories und sind datiert; Reifegrad und Grenzen stehen neben dem Design. Die ausführlichen Fallstudien sind auf Englisch.',
+    filter: 'Projekte nach Bereich filtern', all: 'Alle', labels: ['Autonome KI', 'Backend & Infrastruktur', 'Security & Tools', 'Angewandte Forschung'],
+    featured: 'Ausgewählte Fallstudien', supporting: 'Weitere Projekte',
+    notice: '<strong>Auswahl.</strong> Ältere Übungs-Repositories (Tutorial-APIs, Kursprojekte) liegen auf <a href="https://github.com/semihbugrasezer" rel="noopener" target="_blank">GitHub</a>, werden hier aber nicht als Portfolio-Arbeit gezeigt.',
+  },
+} satisfies Record<Lang, unknown>;
+const c = copy[lang];
+---
+
+<Base title={c.title} description={c.description}>
+  <header class="wrap page-head">
+    <p class="eyebrow">{c.title}</p>
+    <h1>{c.h1}</h1>
+    <p class="lede">{c.lede}</p>
+  </header>
+
+  <div class="wrap">
+    <div class="filter" role="group" aria-label={c.filter} hidden>
+      <button type="button" aria-pressed="true" data-filter="">{c.all}</button>
+      {disciplines.map((d, i) => <button type="button" aria-pressed="false" data-filter={d}>{c.labels[i]}</button>)}
+    </div>
+
+    <section aria-labelledby="featured-h" class="block">
+      <h2 id="featured-h" class="eyebrow">{c.featured}</h2>
+      <div class="cards">
+        {featured.map((p, i) => <ProjectCard project={p} index={i + 1} large />)}
+      </div>
+    </section>
+
+    <section aria-labelledby="supporting-h" class="block">
+      <h2 id="supporting-h" class="eyebrow">{c.supporting}</h2>
+      <div class="cards">
+        {supporting.map((p) => <ProjectCard project={p} />)}
+      </div>
+    </section>
+
+    <p class="notice" set:html={c.notice} />
+  </div>
+</Base>
+
+<script>
+  const group = document.querySelector<HTMLElement>('.filter')!;
+  group.hidden = false;
+  const buttons = group.querySelectorAll<HTMLButtonElement>('button');
+  const cards = document.querySelectorAll<HTMLElement>('[data-disciplines]');
+  group.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('button');
+    if (!btn) return;
+    const f = btn.dataset.filter ?? '';
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    cards.forEach((c) => (c.hidden = !!f && !c.dataset.disciplines!.split('|').includes(f)));
+    document.querySelectorAll<HTMLElement>('.block').forEach((s) => {
+      s.hidden = ![...s.querySelectorAll<HTMLElement>('[data-disciplines]')].some((c) => !c.hidden);
+    });
+  });
+</script>
+
+<style>
+  .filter { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-block: var(--s-6) 0; }
+  .filter button {
+    font-family: var(--font-mono); font-size: var(--fs-xs); padding: 0.35rem 0.7rem; cursor: pointer;
+    border: 1px solid var(--rule-strong); border-radius: 999px; background: var(--bg-raised); color: var(--ink-2);
+  }
+  .filter button[aria-pressed='true'] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .block { margin-top: var(--s-7); }
+  .block > h2 { margin-bottom: var(--s-4); }
+  .cards { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
+  .cards :global([hidden]) { display: none; }
+  .notice { margin-top: var(--s-7); }
+</style>

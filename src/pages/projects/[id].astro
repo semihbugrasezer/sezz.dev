@@ -62,7 +62,7 @@ const jsonLd = {
 <style>
   .facts {
     display: grid; gap: 0; margin-top: var(--s-5); border: 1px solid var(--rule); border-radius: var(--radius);
-    background: var(--bg-raised); grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    background: var(--bg-raised); grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
   }
   .facts > div { padding: var(--s-3) var(--s-4); border-bottom: 1px solid var(--rule); }
   .facts .wide { grid-column: 1 / -1; border-bottom: 0; }

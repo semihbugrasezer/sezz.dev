@@ -1,0 +1,128 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+import { getLang, localize, t, type Lang } from '../lib/i18n';
+
+const lang = getLang(Astro.url);
+const s = t(lang);
+const L = (path: string) => localize(path, lang);
+const NS = 'https://github.com/semihbugrasezer/network-simulation-dashboard';
+
+const copy = {
+  en: {
+    title: 'About',
+    description: 'Semih Buğra Sezer is an AI engineer focused on agentic AI, LLM applications, MCP developer tools and reliable software systems.',
+    eyebrow: 'About',
+    body: `
+      <p>I am a computer engineering graduate working on applied AI and autonomous agent systems. I design agent workflows, developer tools and the backend infrastructure around them. My central question is how AI agents can complete useful work without giving up control of state, credentials or production.</p>
+      <p>My practical work has been in backend development and production software — Go, Python, TypeScript and Node.js services, React front ends, PostgreSQL and Redis, Docker and CI/CD pipelines. More recently it has included Rust for systems and security tooling.</p>
+      <p>I care about the parts of engineering that are easy to skip: explicit state, recovery paths, written threat models, tests that fail for the right reason, and documentation that states limitations as clearly as features. The case studies on this site are written in that spirit — each one says what is unfinished.</p>
+      <h2>My AI engineering focus</h2>
+      <p>I work on tool calling and MCP integrations, agent orchestration, task state and recovery, and explicit human-approval boundaries. My <a href="${L('/ai-engineering/')}">AI engineering evidence page</a> links those skills to source code and case studies, and distinguishes tested capabilities from future experiments.</p>
+      <h2>How I work</h2>
+      <ul>
+        <li><strong>Decompose before building.</strong> Write the problem, the boundaries and the failure modes down first.</li>
+        <li><strong>Keep decisions deterministic where they can be.</strong> Use models for the parts that genuinely need judgement, and keep them out of the parts that need guarantees.</li>
+        <li><strong>Fail closed.</strong> Unknown input, unclear authority and missing evidence are refusals, not guesses.</li>
+        <li><strong>Prefer evidence to adjectives.</strong> Measured, dated facts over claims; “not verified” when that is the truth.</li>
+      </ul>
+      <h2>Research</h2>
+      <p>The <a href="${L('/research/')}">research journal</a> collects technical investigations that come up while building systems, each with a stated method and its limitations. It is engineering work, not academic research: I do not hold an academic appointment and none of it is peer-reviewed.</p>
+      <h2>Education</h2>
+      <p>B.Sc. Computer Engineering, Karabük University. Senior project: a performance comparison of network topologies and queueing algorithms using NS-3 simulation (<a href="${NS}" rel="noopener" target="_blank">results dashboard</a>).</p>`,
+    workingWith: 'Working with',
+    skills: [['Languages', 'Go, Python, TypeScript, JavaScript, Rust'], ['Backend', 'Node.js, FastAPI, REST, MCP / JSON-RPC'], ['Data', 'PostgreSQL, Redis'], ['Infrastructure', 'Docker, Compose, Traefik, GitHub Actions, Linux'], ['Frontend', 'React'], ['AI tooling', 'Claude Code, Codex CLI, LLM APIs']],
+    elsewhere: 'Elsewhere',
+  },
+  tr: {
+    title: 'Hakkımda',
+    description: 'Semih Buğra Sezer; agentic AI, LLM uygulamaları, MCP geliştirici araçları ve güvenilir yazılım sistemlerine odaklanan bir AI mühendisi.',
+    eyebrow: 'Hakkımda',
+    body: `
+      <p>Uygulamalı AI ve otonom ajan sistemleri üzerine çalışan bir bilgisayar mühendisiyim. Ajan iş akışları, geliştirici araçları ve bunları çevreleyen backend altyapısını tasarlıyorum. Temel sorum şu: AI ajanları; durum, kimlik bilgileri ya da canlı ortam üzerindeki kontrolden vazgeçmeden nasıl faydalı iş çıkarabilir?</p>
+      <p>Pratik deneyimim backend geliştirme ve canlı ortamdaki yazılımlar üzerine — Go, Python, TypeScript ve Node.js servisleri, React arayüzleri, PostgreSQL ve Redis, Docker ve CI/CD hatları. Son dönemde sistem ve güvenlik araçları için Rust da kullanıyorum.</p>
+      <p>Mühendislikte kolayca atlanan kısımları önemsiyorum: açık durum yönetimi, kurtarma yolları, yazılı tehdit modelleri, doğru sebeple başarısız olan testler ve sınırlamaları özellikler kadar net anlatan dokümantasyon. Bu sitedeki vaka çalışmaları bu anlayışla yazıldı — her biri neyin henüz bitmediğini söylüyor.</p>
+      <h2>AI mühendisliği odağım</h2>
+      <p>Araç çağırma (tool calling) ve MCP entegrasyonları, ajan orkestrasyonu, görev durumu ve kurtarma ile açık insan onayı sınırları üzerine çalışıyorum. <a href="${L('/ai-engineering/')}">AI mühendisliği kanıt sayfam</a> bu becerileri kaynak koda ve vaka çalışmalarına bağlıyor; test edilmiş yetenekleri gelecekteki deneylerden ayırıyor.</p>
+      <h2>Nasıl çalışıyorum</h2>
+      <ul>
+        <li><strong>Kurmadan önce parçala.</strong> Önce problemi, sınırları ve hata durumlarını yaz.</li>
+        <li><strong>Kararları mümkün olduğunca deterministik tut.</strong> Modelleri gerçekten muhakeme gerektiren yerlerde kullan, garanti gereken yerlerden uzak tut.</li>
+        <li><strong>Şüphede reddet (fail closed).</strong> Bilinmeyen girdi, belirsiz yetki ve eksik kanıt tahminle değil, retle karşılanır.</li>
+        <li><strong>Sıfat yerine kanıt.</strong> İddialar yerine ölçülmüş ve tarihli bilgiler; doğrusu buysa “doğrulanmadı”.</li>
+      </ul>
+      <h2>Araştırma</h2>
+      <p><a href="${L('/research/')}">Araştırma günlüğü</a>, sistem geliştirirken ortaya çıkan teknik incelemeleri yöntemleri ve sınırlamalarıyla birlikte topluyor. Bu akademik değil, mühendislik çalışması: akademik bir görevim yok ve içerikler hakemli değil.</p>
+      <h2>Eğitim</h2>
+      <p>Bilgisayar Mühendisliği lisans, Karabük Üniversitesi. Bitirme projesi: NS-3 simülasyonu ile ağ topolojileri ve kuyruklama algoritmalarının performans karşılaştırması (<a href="${NS}" rel="noopener" target="_blank">sonuç paneli</a>).</p>`,
+    workingWith: 'Kullandıklarım',
+    skills: [['Diller', 'Go, Python, TypeScript, JavaScript, Rust'], ['Backend', 'Node.js, FastAPI, REST, MCP / JSON-RPC'], ['Veri', 'PostgreSQL, Redis'], ['Altyapı', 'Docker, Compose, Traefik, GitHub Actions, Linux'], ['Frontend', 'React'], ['AI araçları', 'Claude Code, Codex CLI, LLM API’leri']],
+    elsewhere: 'Bağlantılar',
+  },
+  de: {
+    title: 'Über mich',
+    description: 'Semih Buğra Sezer ist AI Engineer mit Fokus auf Agentic AI, LLM-Anwendungen, MCP-Entwickler-Tools und zuverlässige Softwaresysteme.',
+    eyebrow: 'Über mich',
+    body: `
+      <p>Ich habe Computer Engineering studiert und arbeite an angewandter KI und autonomen Agentensystemen. Ich entwerfe Agenten-Workflows, Entwickler-Tools und die Backend-Infrastruktur dafür. Meine zentrale Frage: Wie können KI-Agenten nützliche Arbeit erledigen, ohne die Kontrolle über Zustand, Zugangsdaten oder Produktion abzugeben?</p>
+      <p>Praktische Erfahrung habe ich in der Backend-Entwicklung und mit produktiver Software — Services in Go, Python, TypeScript und Node.js, React-Frontends, PostgreSQL und Redis, Docker und CI/CD-Pipelines. In letzter Zeit kommt Rust für System- und Security-Tools hinzu.</p>
+      <p>Mir sind die Teile des Engineerings wichtig, die man leicht überspringt: expliziter Zustand, Wiederherstellungspfade, schriftliche Bedrohungsmodelle, Tests, die aus dem richtigen Grund fehlschlagen, und Dokumentation, die Grenzen so klar benennt wie Features. Die Fallstudien auf dieser Website sind in diesem Sinne geschrieben — jede sagt, was noch nicht fertig ist.</p>
+      <h2>Mein Schwerpunkt im AI Engineering</h2>
+      <p>Ich arbeite an Tool Calling und MCP-Integrationen, Agenten-Orchestrierung, Aufgabenzustand und Wiederherstellung sowie an klaren Grenzen für menschliche Freigaben. Meine <a href="${L('/ai-engineering/')}">AI-Engineering-Seite</a> verknüpft diese Fähigkeiten mit Quellcode und Fallstudien und trennt getestete Fähigkeiten von geplanten Experimenten.</p>
+      <h2>Wie ich arbeite</h2>
+      <ul>
+        <li><strong>Erst zerlegen, dann bauen.</strong> Zuerst Problem, Grenzen und Fehlerfälle aufschreiben.</li>
+        <li><strong>Entscheidungen deterministisch halten, wo es geht.</strong> Modelle dort einsetzen, wo echtes Urteilsvermögen nötig ist – und aus Teilen heraushalten, die Garantien brauchen.</li>
+        <li><strong>Im Zweifel ablehnen (fail closed).</strong> Unbekannte Eingaben, unklare Befugnisse und fehlende Belege führen zur Ablehnung, nicht zum Raten.</li>
+        <li><strong>Belege statt Adjektive.</strong> Gemessene, datierte Fakten statt Behauptungen; „nicht verifiziert“, wenn das die Wahrheit ist.</li>
+      </ul>
+      <h2>Recherche</h2>
+      <p>Das <a href="${L('/research/')}">Recherche-Journal</a> sammelt technische Untersuchungen, die beim Bau von Systemen entstehen, jeweils mit Methode und Grenzen. Das ist Engineering-Arbeit, keine akademische Forschung: Ich habe keine akademische Anstellung, und nichts davon ist peer-reviewed.</p>
+      <h2>Ausbildung</h2>
+      <p>B.Sc. Computer Engineering, Universität Karabük. Abschlussprojekt: Leistungsvergleich von Netzwerktopologien und Warteschlangenalgorithmen mit NS-3-Simulation (<a href="${NS}" rel="noopener" target="_blank">Ergebnis-Dashboard</a>).</p>`,
+    workingWith: 'Werkzeuge',
+    skills: [['Sprachen', 'Go, Python, TypeScript, JavaScript, Rust'], ['Backend', 'Node.js, FastAPI, REST, MCP / JSON-RPC'], ['Daten', 'PostgreSQL, Redis'], ['Infrastruktur', 'Docker, Compose, Traefik, GitHub Actions, Linux'], ['Frontend', 'React'], ['KI-Tools', 'Claude Code, Codex CLI, LLM-APIs']],
+    elsewhere: 'Profile',
+  },
+} satisfies Record<Lang, unknown>;
+const c = copy[lang];
+---
+
+<Base title={c.title} description={c.description} type="profile">
+  <header class="wrap page-head">
+    <p class="eyebrow">{c.eyebrow}</p>
+    <h1>Semih Buğra Sezer</h1>
+    <p class="lede">{s.role}</p>
+  </header>
+
+  <div class="wrap grid">
+    <div class="prose" set:html={c.body} />
+
+    <aside class="side">
+      <section>
+        <h2 class="eyebrow">{c.workingWith}</h2>
+        <dl>
+          {c.skills.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+      </section>
+      <section>
+        <h2 class="eyebrow">{c.elsewhere}</h2>
+        <ul class="plain">
+          <li><a href={SITE.github} rel="me noopener" target="_blank">GitHub — semihbugrasezer</a></li>
+          <li><a href={SITE.linkedin} rel="me noopener" target="_blank">LinkedIn</a></li>
+          <li><a href={L('/contact/')}>{s.contact}</a></li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .grid { display: grid; gap: var(--s-7); padding-top: var(--s-6); }
+  @media (min-width: 60rem) { .grid { grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr); } }
+  .side { display: grid; gap: var(--s-6); align-content: start; }
+  .side dl { display: grid; gap: var(--s-3); margin-top: var(--s-3); }
+  .side dt { font-weight: 600; font-size: var(--fs-sm); }
+  .side dd { color: var(--ink-2); font-size: var(--fs-sm); }
+  .plain { list-style: none; padding: 0; margin-top: var(--s-3); display: grid; gap: var(--s-2); font-size: var(--fs-sm); }
+</style>

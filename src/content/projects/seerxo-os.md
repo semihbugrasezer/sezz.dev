@@ -14,6 +14,15 @@ facts:
   - ~2,100 test functions across 142 test files (static count)
   - Release risk is an allow-list; only docs/* is low-risk
   - No licence yet — source is public, all rights reserved
+l10n:
+  tr:
+    summary: "Küçük bir şirket için kendi sunucunda çalışan bir işletim sistemi. Operasyonel hafıza PostgreSQL'de tutulur, işin ne zaman var olduğuna deterministik bir uzlaştırıcı (reconciler) karar verir ve AI kodlama ajanları bağımsız inceleme ile imzalı bir sürüm geçidinin (release gateway) arkasında, izole konteynerlerde çalışır."
+    problem: "Dil modelleri unutur, doğaçlama yapar ve yönlendirilebilir. Ajanların kendi adına çalışmasına izin veren bir şirketin, bir konuşmadan daha uzun yaşayan bir duruma, \"iş var mı?\" sorusuna deterministik bir cevaba ve model kötü davrandığında bile ayakta kalan sınırlara ihtiyacı vardır."
+    status: "V1 · aktif geliştirmede · tek bir şirket için çalışıyor"
+  de:
+    summary: "Ein selbst gehostetes Betriebssystem für ein kleines Unternehmen. PostgreSQL hält das operative Gedächtnis, ein deterministischer Reconciler entscheidet, wann Arbeit anliegt, und KI-Coding-Agenten laufen in isolierten Containern hinter unabhängigem Review und einem signierten Release-Gateway."
+    problem: "Sprachmodelle vergessen, improvisieren und lassen sich zu Dingen überreden. Ein Unternehmen, das Agenten in seinem Namen arbeiten lässt, braucht Zustand, der ein Gespräch überdauert, eine deterministische Antwort auf „Gibt es Arbeit?“ und Grenzen, die auch dann halten, wenn sich ein Modell falsch verhält."
+    status: "V1 · in aktiver Entwicklung · im Einsatz für ein Unternehmen"
 ---
 
 ## Overview

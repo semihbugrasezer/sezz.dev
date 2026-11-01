@@ -1,0 +1,271 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import EntryList from '../components/EntryList.astro';
+import { SITE, readingTime } from '../lib/site';
+import { getLang, localize, t, type Lang } from '../lib/i18n';
+
+const lang = getLang(Astro.url);
+const s = t(lang);
+const L = (path: string) => localize(path, lang);
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const featured = projects.filter((p) => p.data.featured);
+const statusOf = (p: (typeof projects)[number]) => (lang === 'en' ? p.data.status : p.data.l10n[lang].status);
+
+const research = (await getCollection('research', (e) => !e.data.draft)).map((e) => ({
+  href: `/research/${e.id}/`,
+  title: e.data.title,
+  description: e.data.description,
+  date: e.data.created,
+  label: `${e.data.type} · ${e.data.status}`,
+}));
+const articles = (await getCollection('writing', (e) => !e.data.draft && e.data.kind === 'article')).map((e) => ({
+  href: `/${e.data.slug}/`,
+  title: e.data.title,
+  description: e.data.description,
+  date: e.data.created,
+  label: e.data.topic,
+  minutes: readingTime(e.body),
+}));
+const latest = [...research, ...articles].sort((a, b) => +b.date - +a.date).slice(0, 4);
+const notesCount = (await getCollection('writing', (e) => e.data.kind === 'learning-note')).length;
+
+const copy = {
+  en: {
+    intro: 'I build agentic AI systems, LLM-powered developer tools and the backend infrastructure that makes them reliable. My work spans agent orchestration, MCP integrations, deterministic workflows and explicit security boundaries. B.Sc. Computer Engineering, Karabük University.',
+    ctaAi: 'Explore AI engineering', ctaProjects: 'See engineering case studies', ctaGithub: 'View GitHub',
+    specLabel: 'Current engineering work', specTitle: 'Selected systems · Oct 2026', stack: 'Stack',
+    focusEyebrow: 'Areas of focus', focusTitle: 'Where I spend engineering time',
+    areas: [
+      ['Agentic AI & Orchestration', 'Agents that act inside explicit boundaries: persisted state, deterministic triggers, isolated execution, independent review and human authorisation.', 'Deterministic triggers'],
+      ['Backend & Infrastructure', 'APIs, PostgreSQL-backed services, containers and CI/CD — with recovery paths, backups and observability designed in rather than added later.', 'Seerxo API & clients', 'Self-hosted PaaS'],
+      ['Security & Developer Tools', 'Small tools with a written threat model: fail-closed defaults, minimal dependencies, fuzzed parsers and documented limitations.'],
+      ['LLM Evaluation & Applied Research', 'Evidence-led investigations of agent reliability, tool-use boundaries and evaluation methods — with hypotheses separated from verified results.', 'Research journal', 'SSH agent threat model'],
+    ],
+    workEyebrow: 'Featured engineering work', workTitle: 'Engineering evidence, not just a tech stack',
+    workBody: 'Explore what I designed, why the tradeoffs matter, what the code demonstrates and where the work is not yet verified.',
+    workMoreAi: 'How these projects demonstrate AI engineering →', workMoreAll: 'All projects →',
+    writingEyebrow: 'Research & writing', writingTitle: 'Latest notes',
+    writingBody: (n: number, a: string) => `Architecture studies and engineering articles. ${n} shorter learning notes live in the ${a}.`, archive: 'writing archive',
+    nowEyebrow: 'Currently exploring', nowTitle: 'Open questions', asOf: 'As of 31 Oct 2026', nowMore: 'more on /now',
+    exploring: [
+      ['Unattended agent work.', 'What evidence is enough before an isolated coding agent runs without a human watching — in'],
+      ['Destination-bound SSH keys.', 'Making hardware-backed keys usable only for authentication to approved hosts — in'],
+      ['Agent-facing product surfaces.', 'Tool schemas that stop agents overclaiming, and deterministic checks next to generation — in'],
+    ],
+    contactEyebrow: 'Contact & collaboration', contactTitle: 'Let’s talk about systems',
+    contactBody: 'Open to AI Engineer, Applied AI Engineer and LLM / Agent Engineering roles, and collaboration on useful open-source AI infrastructure.',
+    contactAll: 'All contact options',
+  },
+  tr: {
+    intro: 'Agentic AI sistemleri, LLM tabanlı geliştirici araçları ve bunları güvenilir kılan backend altyapısını geliştiriyorum. Çalışmalarım ajan orkestrasyonu, MCP entegrasyonları, deterministik iş akışları ve açık güvenlik sınırlarını kapsıyor. Karabük Üniversitesi, Bilgisayar Mühendisliği lisans.',
+    ctaAi: 'AI mühendisliğini incele', ctaProjects: 'Vaka çalışmalarını gör', ctaGithub: 'GitHub profilim',
+    specLabel: 'Güncel mühendislik çalışmaları', specTitle: 'Seçili sistemler · Ekim 2026', stack: 'Teknolojiler',
+    focusEyebrow: 'Odak alanları', focusTitle: 'Mühendislik zamanımı nereye ayırıyorum',
+    areas: [
+      ['Agentic AI ve Orkestrasyon', 'Açık sınırlar içinde çalışan ajanlar: kalıcı durum, deterministik tetikleyiciler, izole çalıştırma, bağımsız inceleme ve insan onayı.', 'Deterministik tetikleyiciler'],
+      ['Backend ve Altyapı', "API'ler, PostgreSQL tabanlı servisler, konteynerler ve CI/CD — kurtarma yolları, yedekler ve gözlemlenebilirlik sonradan eklenmeden, baştan tasarlanarak.", 'Seerxo API ve istemcileri', 'Kendi sunucusunda PaaS'],
+      ['Güvenlik ve Geliştirici Araçları', 'Yazılı tehdit modeli olan küçük araçlar: varsayılan olarak reddeden (fail-closed) davranış, minimum bağımlılık, fuzz testinden geçmiş parser’lar ve belgelenmiş sınırlamalar.'],
+      ['LLM Değerlendirme ve Uygulamalı Araştırma', 'Ajan güvenilirliği, araç kullanım sınırları ve değerlendirme yöntemleri üzerine kanıta dayalı incelemeler — hipotezler doğrulanmış sonuçlardan ayrı tutularak.', 'Araştırma günlüğü', 'SSH agent tehdit modeli'],
+    ],
+    workEyebrow: 'Öne çıkan mühendislik çalışmaları', workTitle: 'Teknoloji listesi değil, mühendislik kanıtı',
+    workBody: 'Neyi tasarladığımı, ödünleşimlerin neden önemli olduğunu, kodun neyi gösterdiğini ve çalışmanın henüz nerede doğrulanmadığını inceleyin.',
+    workMoreAi: 'Bu projeler AI mühendisliğini nasıl gösteriyor →', workMoreAll: 'Tüm projeler →',
+    writingEyebrow: 'Araştırma ve yazılar', writingTitle: 'Son notlar',
+    writingBody: (n: number, a: string) => `Mimari incelemeler ve mühendislik yazıları (İngilizce). ${n} kısa öğrenme notu ${a} bölümünde.`, archive: 'yazı arşivi',
+    nowEyebrow: 'Şu an incelediklerim', nowTitle: 'Açık sorular', asOf: '31 Ekim 2026 itibarıyla', nowMore: '/now sayfasında devamı',
+    exploring: [
+      ['Gözetimsiz ajan çalışması.', 'İzole bir kodlama ajanı, başında bir insan olmadan çalışmadan önce ne kadar kanıt yeterlidir —'],
+      ['Hedefe bağlı SSH anahtarları.', 'Donanım destekli anahtarları yalnızca onaylı sunuculara kimlik doğrulama için kullanılabilir kılmak —'],
+      ['Ajanlara dönük ürün yüzeyleri.', 'Ajanların abartılı sonuç bildirmesini engelleyen araç şemaları ve üretimin yanında deterministik kontroller —'],
+    ],
+    contactEyebrow: 'İletişim ve iş birliği', contactTitle: 'Sistemler üzerine konuşalım',
+    contactBody: 'AI Engineer, Applied AI Engineer ve LLM / Agent Engineering pozisyonlarına ve faydalı açık kaynak AI altyapısı üzerine iş birliklerine açığım.',
+    contactAll: 'Tüm iletişim seçenekleri',
+  },
+  de: {
+    intro: 'Ich baue Agentic-AI-Systeme, LLM-gestützte Entwickler-Tools und die Backend-Infrastruktur, die sie zuverlässig macht. Meine Arbeit umfasst Agenten-Orchestrierung, MCP-Integrationen, deterministische Workflows und klare Sicherheitsgrenzen. B.Sc. Computer Engineering, Universität Karabük.',
+    ctaAi: 'AI Engineering ansehen', ctaProjects: 'Fallstudien ansehen', ctaGithub: 'GitHub-Profil',
+    specLabel: 'Aktuelle Engineering-Arbeit', specTitle: 'Ausgewählte Systeme · Okt. 2026', stack: 'Stack',
+    focusEyebrow: 'Schwerpunkte', focusTitle: 'Woran ich arbeite',
+    areas: [
+      ['Agentic AI & Orchestrierung', 'Agenten, die innerhalb klarer Grenzen handeln: persistenter Zustand, deterministische Auslöser, isolierte Ausführung, unabhängiges Review und menschliche Freigabe.', 'Deterministische Auslöser'],
+      ['Backend & Infrastruktur', 'APIs, PostgreSQL-basierte Services, Container und CI/CD – mit Wiederherstellungspfaden, Backups und Observability, die von Anfang an mitgedacht sind.', 'Seerxo-API & Clients', 'Selbst gehostete PaaS'],
+      ['Security & Entwickler-Tools', 'Kleine Werkzeuge mit schriftlichem Bedrohungsmodell: Fail-closed-Verhalten, minimale Abhängigkeiten, gefuzzte Parser und dokumentierte Grenzen.'],
+      ['LLM-Evaluierung & angewandte Forschung', 'Evidenzbasierte Untersuchungen zu Agenten-Zuverlässigkeit, Grenzen der Tool-Nutzung und Evaluierungsmethoden – Hypothesen getrennt von verifizierten Ergebnissen.', 'Recherche-Journal', 'Bedrohungsmodell SSH-Agent'],
+    ],
+    workEyebrow: 'Ausgewählte Projekte', workTitle: 'Engineering-Belege statt Tech-Stack-Liste',
+    workBody: 'Was ich entworfen habe, warum die Abwägungen wichtig sind, was der Code zeigt – und wo die Arbeit noch nicht verifiziert ist.',
+    workMoreAi: 'Wie diese Projekte AI Engineering belegen →', workMoreAll: 'Alle Projekte →',
+    writingEyebrow: 'Recherche & Artikel', writingTitle: 'Neueste Beiträge',
+    writingBody: (n: number, a: string) => `Architekturstudien und Engineering-Artikel (auf Englisch). ${n} kürzere Lernnotizen finden sich im ${a}.`, archive: 'Artikelarchiv',
+    nowEyebrow: 'Aktuelle Fragen', nowTitle: 'Offene Fragen', asOf: 'Stand: 31. Okt. 2026', nowMore: 'mehr unter /now',
+    exploring: [
+      ['Unbeaufsichtigte Agentenarbeit.', 'Welche Belege reichen, bevor ein isolierter Coding-Agent ohne menschliche Aufsicht läuft – in'],
+      ['Zielgebundene SSH-Schlüssel.', 'Hardware-gestützte Schlüssel nur für die Anmeldung an freigegebenen Hosts nutzbar machen – in'],
+      ['Produktoberflächen für Agenten.', 'Tool-Schemas, die Agenten an Übertreibungen hindern, und deterministische Prüfungen neben der Generierung – in'],
+    ],
+    contactEyebrow: 'Kontakt & Zusammenarbeit', contactTitle: 'Lassen Sie uns über Systeme sprechen',
+    contactBody: 'Offen für Rollen als AI Engineer, Applied AI Engineer und LLM-/Agent-Engineer sowie für Zusammenarbeit an nützlicher Open-Source-KI-Infrastruktur.',
+    contactAll: 'Alle Kontaktmöglichkeiten',
+  },
+} satisfies Record<Lang, unknown>;
+const c = copy[lang];
+
+const areaLinks = [
+  [{ href: '/projects/seerxo-os/', label: 'Seerxo OS' }, { href: '/research/deterministic-agent-triggers/', label: c.areas[0][2] }],
+  [{ href: '/projects/seerxo/', label: c.areas[1][2] }, { href: '/projects/self-hosted-devops/', label: c.areas[1][3] }],
+  [{ href: '/projects/sigsieve/', label: 'SigSieve' }, { href: '/projects/bridge/', label: 'Bridge' }],
+  [{ href: L('/research/'), label: c.areas[3][2] }, { href: '/research/ssh-agent-forwarding-threat-model/', label: c.areas[3][3] }],
+];
+const exploringLinks = [['/projects/seerxo-os/', 'Seerxo OS'], ['/projects/sigsieve/', 'SigSieve'], ['/projects/seerxo/', 'Seerxo']];
+---
+
+<Base>
+  <section class="hero grid-bg" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="idx">sezz.dev</span> <span set:html={s.roleHtml} /></p>
+        <h1 id="hero-title">Semih Buğra Sezer</h1>
+        <p class="tagline">{s.tagline}</p>
+        <p class="intro">{c.intro}</p>
+        <div class="actions">
+          <a class="btn primary" href={L('/ai-engineering/')}>{c.ctaAi} <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn" href={L('/projects/')}>{c.ctaProjects}</a>
+          <a class="btn" href={SITE.github} rel="noopener" target="_blank">{c.ctaGithub}</a>
+        </div>
+      </div>
+
+      <aside class="spec" aria-label={c.specLabel}>
+        <p class="eyebrow">{c.specTitle}</p>
+        <dl>
+          {featured.map((p) => (
+            <div class="spec-row">
+              <dt><a href={`/projects/${p.id}/`}>{p.data.title}</a></dt>
+              <dd>{statusOf(p)}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="meta spec-foot">{c.stack}: Go · Python · TypeScript · Rust · PostgreSQL · Docker</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="focus-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">01</span> {c.focusEyebrow}</p>
+        <h2 id="focus-title">{c.focusTitle}</h2>
+      </div>
+      <ol class="areas">
+        {c.areas.map((a, i) => (
+          <li class="area">
+            <span class="meta area-n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{a[0]}</h3>
+            <p>{a[1]}</p>
+            <ul class="area-links">
+              {areaLinks[i].map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">02</span> {c.workEyebrow}</p>
+        <h2 id="work-title">{c.workTitle}</h2>
+        <p>{c.workBody}</p>
+      </div>
+      <div class="featured">
+        {featured.map((p, i) => <ProjectCard project={p} index={i + 1} large />)}
+      </div>
+      <p class="more-link"><a href={L('/ai-engineering/')}>{c.workMoreAi}</a> · <a href={L('/projects/')}>{c.workMoreAll}</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="writing-title">
+    <div class="wrap two-col">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">03</span> {c.writingEyebrow}</p>
+        <h2 id="writing-title">{c.writingTitle}</h2>
+        <p set:html={c.writingBody(notesCount, `<a href="${L('/writing/')}">${c.archive}</a>`)} />
+      </div>
+      <EntryList items={latest} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="now-title">
+    <div class="wrap two-col">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">04</span> {c.nowEyebrow}</p>
+        <h2 id="now-title">{c.nowTitle}</h2>
+        <p class="meta">{c.asOf} · <a href={L('/now/')}>{c.nowMore}</a></p>
+      </div>
+      <ul class="exploring">
+        {c.exploring.map(([title, body], i) => (
+          <li><strong>{title}</strong> {body} <a href={exploringLinks[i][0]}>{exploringLinks[i][1]}</a>.</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="contact-title">
+    <div class="wrap contact">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">05</span> {c.contactEyebrow}</p>
+        <h2 id="contact-title">{c.contactTitle}</h2>
+        <p>{c.contactBody}</p>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href={SITE.linkedin} rel="noopener" target="_blank">LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn" href={SITE.github} rel="noopener" target="_blank">GitHub</a>
+        <a class="btn" href={L('/contact/')}>{c.contactAll}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { border-bottom: 1px solid var(--rule); }
+  .hero-grid { display: grid; gap: var(--s-7); padding-block: var(--s-9) var(--s-8); align-items: end; }
+  @media (min-width: 60rem) { .hero-grid { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); } }
+  .hero h1 {
+    font-family: var(--font-display); font-weight: 500; font-size: var(--fs-hero);
+    letter-spacing: -0.035em; line-height: 0.98; margin-block: var(--s-4) var(--s-5);
+  }
+  .tagline { font-family: var(--font-display); font-size: var(--fs-lg); line-height: 1.35; max-width: 30ch; color: var(--ink); font-style: italic; }
+  .intro { margin-top: var(--s-4); color: var(--ink-2); max-width: 58ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
+
+  .spec { border: 1px solid var(--rule-strong); background: var(--bg-raised); border-radius: var(--radius); padding: var(--s-5); }
+  .spec dl { margin-top: var(--s-3); }
+  .spec-row { display: grid; gap: var(--s-1); padding-block: var(--s-3); border-top: 1px solid var(--rule); }
+  .spec-row:first-child { border-top: 0; }
+  .spec dt { font-weight: 600; }
+  .spec dt a { text-decoration: none; }
+  .spec dt a::after { content: ' →'; color: var(--ink-3); }
+  .spec dd { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-2); }
+  .spec-foot { border-top: 1px solid var(--rule); padding-top: var(--s-3); }
+
+  .areas { list-style: none; padding: 0; display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+  .area { padding: var(--s-5); border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: var(--s-2); }
+  .area-n { color: var(--accent); }
+  .area h3 { font-size: var(--fs-md); font-weight: 600; }
+  .area p { color: var(--ink-2); font-size: var(--fs-sm); }
+  .area-links { list-style: none; padding: 0; margin-top: auto; padding-top: var(--s-3); display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-4); font-size: var(--fs-sm); }
+
+  .featured { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
+  .more-link { margin-top: var(--s-5); font-size: var(--fs-sm); }
+
+  .two-col { display: grid; gap: var(--s-6); align-items: start; }
+  @media (min-width: 60rem) { .two-col { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); } }
+  .exploring { list-style: none; padding: 0; display: grid; gap: var(--s-4); }
+  .exploring li { padding-left: var(--s-5); border-left: 1px solid var(--rule-strong); color: var(--ink-2); }
+  .exploring strong { color: var(--ink); font-weight: 600; }
+  .contact .actions { margin-top: 0; }
+</style>

@@ -14,6 +14,15 @@ facts:
   - 4 fuzz targets; CI on macOS arm64, Linux x86_64 and Linux arm64
   - unsafe confined to one module (src/socket.rs)
   - MIT licence
+l10n:
+  tr:
+    summary: "Rust ile yazılmış yerel bir SSH agent proxy'si. Uzak sunuculara yalnızca izin listesindeki kimlikleri iletir ve isteğe bağlı olarak her anahtarı doğrulanmış hedef host anahtarlarına bağlayabilir. İmzalama, Secretive'in tuttuğu Secure Enclave anahtarları dahil, mevcut agent'ınızda kalır."
+    problem: "SSH agent'ınızı ilettiğinizde, uzak sunucuda sokete erişebilen her süreç agent'taki her anahtarla imza isteyebilir. Donanım destekli anahtarlar çalınamaz, ama yine de kullanılabilirler."
+    status: "Deneysel ön sürüm (v0.1.0-alpha.2) · bağımsız denetimden geçmedi"
+  de:
+    summary: "Ein lokaler SSH-Agent-Proxy in Rust, der nur freigegebene Identitäten an entfernte Hosts weiterreicht und jeden Schlüssel optional an verifizierte Ziel-Hostkeys binden kann. Signiert wird weiterhin im vorhandenen Agent – auch mit Secure-Enclave-Schlüsseln aus Secretive."
+    problem: "Wer seinen SSH-Agent weiterleitet, erlaubt jedem Prozess auf dem entfernten Host, der den Socket erreicht, Signaturen mit jedem Schlüssel im Agent anzufordern. Hardware-gestützte Schlüssel lassen sich nicht stehlen – benutzen lassen sie sich trotzdem."
+    status: "Experimentelle Vorabversion (v0.1.0-alpha.2) · nicht unabhängig auditiert"
 ---
 
 ## Overview
