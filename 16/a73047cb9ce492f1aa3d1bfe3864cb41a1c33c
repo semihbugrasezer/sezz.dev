@@ -1,0 +1,23 @@
+netlify.toml
+  s_bf9d59d8956a6a::t_ce94f164976939 49-59
+scripts/check-site.mjs
+  s_bf9d59d8956a6a::t_ce94f164976939 12,32
+src/content/research/deterministic-agent-triggers.md
+  s_bf9d59d8956a6a::t_ce94f164976939 44-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "16a73047cb9ce492f1aa3d1bfe3864cb41a1c33c",
+  "prompts": {},
+  "sessions": {
+    "s_bf9d59d8956a6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "33c603b8-0d09-4c2f-8f3b-37d336009a62",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Semih Buğra Sezer <semih.b.sezer@gmail.com>"
+    }
+  }
+}
