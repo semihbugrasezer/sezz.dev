@@ -16,10 +16,10 @@ const copy = {
   en: {
     title: 'AI Engineering',
     description: 'Evidence-backed agentic AI engineering work: orchestration, MCP integrations, evaluation questions, security boundaries, and open-source tools.',
-    eyebrow: 'AI engineering · evidence over claims',
+    eyebrow: 'AI engineering',
     h1: 'Building AI systems that can act — and be checked.',
     lede: 'My focus is applied AI engineering: agent orchestration, LLM-powered tools and the infrastructure that makes their behaviour observable, recoverable and bounded by explicit authority.',
-    ctaEvidence: 'See engineering evidence →', ctaProjects: 'All project case studies', ctaRole: 'Discuss an AI engineering role',
+    ctaEvidence: 'See the systems →', ctaProjects: 'All project case studies', ctaRole: 'Discuss an AI engineering role',
     approach: 'Approach', approachTitle: 'More than prompting a model',
     principles: [
       ['Design the workflow', 'Explicit tasks, structured tool contracts, persisted state and deterministic gates around model decisions.'],
@@ -27,13 +27,25 @@ const copy = {
       ['Measure the outcome', 'Tests and repeatable evaluations, not demo videos or model-generated claims of success.'],
     ],
     selected: 'Selected systems', evidenceTitle: 'What my work demonstrates',
-    evidenceBody: 'These are implemented systems and published code, not a list of AI frameworks I claim to know.',
+    evidenceBody: 'Three systems I built, each with public code and a detailed case study.',
     systems: [
       { category: 'Agent orchestration & reliability', description: 'An agent-driven operating system with persisted task state, deterministic triggers, isolated code changes, independent model review and explicit release authorisation.', demonstrates: ['Agent lifecycle and task orchestration', 'Tool execution boundaries and human approval', 'Crash recovery and auditability'], limitation: 'Active development; do not treat its Stage C design as proof of fully unattended execution.' },
       { category: 'LLM applications & agent-facing tools', description: 'A live product with CLI, local and remote MCP integrations, an API and a rule-based listing audit kept separate from generative operations.', demonstrates: ['MCP and tool schema design', 'LLM-backed product integration', 'Deterministic validation and API contracts'], limitation: 'The backend is not public; the case study is limited to verified client code and documented interfaces.' },
       { category: 'Supporting work · SSH security engineering', description: 'Not an AI project: a Rust SSH-agent proxy that limits which keys can be forwarded and can bind them to trusted destination host keys. It shows the security habits I apply to AI infrastructure.', demonstrates: ['Threat modelling and least privilege', 'Protocol-level security controls', 'Test-driven handling of failure modes'], limitation: 'Experimental security software. Not independently audited; no claims of complete protection.' },
     ],
     evidenceH4: 'Engineering evidence', scope: 'Scope:', readCase: 'Read case study', inspect: 'Inspect source',
+    codeEyebrow: 'For code reviewers', codeTitle: 'Where to start in the code',
+    codeBody: 'Direct links into the repositories, pinned to the commits the case studies describe.',
+    code: [
+      ['Seerxo OS', 'Deterministic work detection — no work, no model call', 'app/business_reconciler.py'],
+      ['Seerxo OS', 'Golden evals: “done” without evidence is rejected', 'evals/test_supervisor_evals.py'],
+      ['Seerxo OS', 'Prompt-injection evals: external text is data, not instruction', 'evals/test_trust_evals.py'],
+      ['Seerxo OS', 'Crash-recovery tests against real PostgreSQL', 'tests/test_worker_crash_recovery_postgres.py'],
+      ['Seerxo', 'MCP tool schemas with explicit limitations', 'src/mcp/tools.js'],
+      ['Seerxo', 'End-to-end test of the stdio MCP server', 'tests/stdio-mcp.test.js'],
+      ['SigSieve', 'Threat model', 'docs/THREAT_MODEL.md'],
+      ['SigSieve', 'Findings register: every issue and its fix', 'docs/FINDINGS.md'],
+    ],
     evalEyebrow: 'AI evaluation & reliability', evalTitle: 'What is measured today, and what is not',
     evalBody: 'An impressive demo and a reliable AI system differ in what gets checked. The table shows each dimension and its current evidence. “In CI” means a deterministic test runs on every change; it pins the system’s reaction to agent output, not the quality of a model.',
     colDim: 'Dimension', colStatus: 'Status', colEvidence: 'Evidence',
@@ -75,10 +87,10 @@ const copy = {
   tr: {
     title: 'AI Mühendisliği',
     description: 'Kanıta dayalı agentic AI mühendisliği: orkestrasyon, MCP entegrasyonları, değerlendirme soruları, güvenlik sınırları ve açık kaynak araçlar.',
-    eyebrow: 'AI mühendisliği · iddia değil kanıt',
+    eyebrow: 'AI mühendisliği',
     h1: 'Harekete geçebilen — ve denetlenebilen — AI sistemleri.',
     lede: 'Odağım uygulamalı AI mühendisliği: ajan orkestrasyonu, LLM tabanlı araçlar ve bunların davranışını gözlemlenebilir, kurtarılabilir ve açık yetkiyle sınırlı kılan altyapı.',
-    ctaEvidence: 'Mühendislik kanıtlarını gör →', ctaProjects: 'Tüm vaka çalışmaları', ctaRole: 'AI mühendisliği pozisyonu için iletişim',
+    ctaEvidence: 'Sistemleri gör →', ctaProjects: 'Tüm vaka çalışmaları', ctaRole: 'AI mühendisliği pozisyonu için iletişim',
     approach: 'Yaklaşım', approachTitle: 'Bir modele prompt yazmaktan fazlası',
     principles: [
       ['İş akışını tasarla', 'Açık görevler, yapılandırılmış araç sözleşmeleri, kalıcı durum ve model kararlarının etrafında deterministik kontrol noktaları.'],
@@ -86,13 +98,25 @@ const copy = {
       ['Sonucu ölç', 'Demo videoları ya da modelin kendi ürettiği başarı iddiaları değil; testler ve tekrarlanabilir değerlendirmeler.'],
     ],
     selected: 'Seçili sistemler', evidenceTitle: 'Çalışmalarımın gösterdikleri',
-    evidenceBody: 'Bunlar hayata geçmiş sistemler ve yayımlanmış kodlar; bildiğimi iddia ettiğim AI framework’lerinin bir listesi değil.',
+    evidenceBody: 'Geliştirdiğim üç sistem; her birinin herkese açık kodu ve ayrıntılı bir vaka çalışması var.',
     systems: [
       { category: 'Ajan orkestrasyonu ve güvenilirlik', description: 'Kalıcı görev durumu, deterministik tetikleyiciler, izole kod değişiklikleri, bağımsız model incelemesi ve açık sürüm onayı olan, ajanlarla çalışan bir işletim sistemi.', demonstrates: ['Ajan yaşam döngüsü ve görev orkestrasyonu', 'Araç çalıştırma sınırları ve insan onayı', 'Çökme sonrası kurtarma ve denetlenebilirlik'], limitation: 'Aktif geliştirmede; Stage C tasarımını tamamen gözetimsiz çalışmanın kanıtı olarak görmeyin.' },
       { category: 'LLM uygulamaları ve ajanlara dönük araçlar', description: 'CLI, yerel ve uzak MCP entegrasyonları, bir API ve üretken işlemlerden ayrı tutulan kural tabanlı bir ilan denetimi olan canlı bir ürün.', demonstrates: ['MCP ve araç şeması tasarımı', 'LLM destekli ürün entegrasyonu', 'Deterministik doğrulama ve API sözleşmeleri'], limitation: 'Backend herkese açık değil; vaka çalışması doğrulanmış istemci kodu ve belgelenmiş arayüzlerle sınırlıdır.' },
       { category: 'Destekleyici çalışma · SSH güvenlik mühendisliği', description: 'Bir AI projesi değil: hangi anahtarların iletilebileceğini sınırlayan ve bunları güvenilir hedef host anahtarlarına bağlayabilen, Rust ile yazılmış bir SSH agent proxy’si. AI altyapısında uyguladığım güvenlik alışkanlıklarını gösteriyor.', demonstrates: ['Tehdit modelleme ve en az yetki', 'Protokol düzeyinde güvenlik kontrolleri', 'Hata durumlarının test odaklı ele alınması'], limitation: 'Deneysel güvenlik yazılımı. Bağımsız denetimden geçmedi; tam koruma iddiası yoktur.' },
     ],
     evidenceH4: 'Mühendislik kanıtı', scope: 'Kapsam:', readCase: 'Vaka çalışmasını oku', inspect: 'Kaynak kodu incele',
+    codeEyebrow: 'Kod inceleyenler için', codeTitle: 'Koda nereden başlamalı',
+    codeBody: 'Vaka çalışmalarının anlattığı commit’lere sabitlenmiş, doğrudan depo bağlantıları.',
+    code: [
+      ['Seerxo OS', 'Deterministik iş tespiti — iş yoksa model çağrısı da yok', 'app/business_reconciler.py'],
+      ['Seerxo OS', 'Golden eval’ler: kanıtsız “bitti” reddedilir', 'evals/test_supervisor_evals.py'],
+      ['Seerxo OS', 'Prompt injection eval’leri: dış metin talimat değil, veridir', 'evals/test_trust_evals.py'],
+      ['Seerxo OS', 'Gerçek PostgreSQL üzerinde çökme sonrası kurtarma testleri', 'tests/test_worker_crash_recovery_postgres.py'],
+      ['Seerxo', 'Sınırlamaları açıkça belirten MCP araç şemaları', 'src/mcp/tools.js'],
+      ['Seerxo', 'stdio MCP sunucusu için uçtan uca test', 'tests/stdio-mcp.test.js'],
+      ['SigSieve', 'Tehdit modeli', 'docs/THREAT_MODEL.md'],
+      ['SigSieve', 'Bulgu kaydı: her sorun ve düzeltmesi', 'docs/FINDINGS.md'],
+    ],
     evalEyebrow: 'AI değerlendirme ve güvenilirlik', evalTitle: 'Bugün neyin ölçüldüğü, neyin ölçülmediği',
     evalBody: 'Etkileyici bir demo ile güvenilir bir AI sistemi arasındaki fark, neyin kontrol edildiğindedir. Tablo her boyutu ve mevcut kanıtını gösterir. “CI’da” ifadesi, her değişiklikte deterministik bir testin çalıştığı anlamına gelir; bu, modelin kalitesini değil, sistemin ajan çıktısına tepkisini sabitler.',
     colDim: 'Boyut', colStatus: 'Durum', colEvidence: 'Kanıt',
@@ -134,10 +158,10 @@ const copy = {
   de: {
     title: 'AI Engineering',
     description: 'Belegbare Agentic-AI-Engineering-Arbeit: Orchestrierung, MCP-Integrationen, Evaluierungsfragen, Sicherheitsgrenzen und Open-Source-Tools.',
-    eyebrow: 'AI Engineering · Belege statt Behauptungen',
+    eyebrow: 'AI Engineering',
     h1: 'KI-Systeme, die handeln können – und überprüfbar bleiben.',
     lede: 'Mein Schwerpunkt ist angewandtes AI Engineering: Agenten-Orchestrierung, LLM-gestützte Tools und die Infrastruktur, die ihr Verhalten beobachtbar, wiederherstellbar und durch klare Befugnisse begrenzt macht.',
-    ctaEvidence: 'Engineering-Belege ansehen →', ctaProjects: 'Alle Fallstudien', ctaRole: 'Über eine AI-Engineering-Rolle sprechen',
+    ctaEvidence: 'Systeme ansehen →', ctaProjects: 'Alle Fallstudien', ctaRole: 'Über eine AI-Engineering-Rolle sprechen',
     approach: 'Ansatz', approachTitle: 'Mehr als ein Modell zu prompten',
     principles: [
       ['Den Workflow entwerfen', 'Explizite Aufgaben, strukturierte Tool-Verträge, persistenter Zustand und deterministische Kontrollpunkte rund um Modellentscheidungen.'],
@@ -145,13 +169,25 @@ const copy = {
       ['Das Ergebnis messen', 'Tests und wiederholbare Evaluierungen statt Demo-Videos oder vom Modell erzeugter Erfolgsmeldungen.'],
     ],
     selected: 'Ausgewählte Systeme', evidenceTitle: 'Was meine Arbeit zeigt',
-    evidenceBody: 'Das sind umgesetzte Systeme und veröffentlichter Code – keine Liste von KI-Frameworks, die ich zu beherrschen behaupte.',
+    evidenceBody: 'Drei Systeme, die ich gebaut habe – jeweils mit öffentlichem Code und einer ausführlichen Fallstudie.',
     systems: [
       { category: 'Agenten-Orchestrierung & Zuverlässigkeit', description: 'Ein agentengesteuertes Betriebssystem mit persistentem Aufgabenzustand, deterministischen Auslösern, isolierten Codeänderungen, unabhängigem Modell-Review und expliziter Release-Freigabe.', demonstrates: ['Agenten-Lebenszyklus und Aufgaben-Orchestrierung', 'Grenzen der Tool-Ausführung und menschliche Freigabe', 'Wiederherstellung nach Abstürzen und Nachvollziehbarkeit'], limitation: 'In aktiver Entwicklung; das Stage-C-Design ist kein Beleg für vollständig unbeaufsichtigte Ausführung.' },
       { category: 'LLM-Anwendungen & Tools für Agenten', description: 'Ein Live-Produkt mit CLI, lokalen und entfernten MCP-Integrationen, einer API und einer regelbasierten Listing-Prüfung, die von generativen Vorgängen getrennt ist.', demonstrates: ['MCP- und Tool-Schema-Design', 'LLM-gestützte Produktintegration', 'Deterministische Validierung und API-Verträge'], limitation: 'Das Backend ist nicht öffentlich; die Fallstudie beschränkt sich auf verifizierten Client-Code und dokumentierte Schnittstellen.' },
       { category: 'Ergänzende Arbeit · SSH-Sicherheits-Engineering', description: 'Kein KI-Projekt: ein SSH-Agent-Proxy in Rust, der begrenzt, welche Schlüssel weitergeleitet werden, und sie an vertrauenswürdige Ziel-Hostkeys binden kann. Er zeigt die Sicherheitsgewohnheiten, die ich in KI-Infrastruktur einbringe.', demonstrates: ['Bedrohungsmodellierung und minimale Rechte', 'Sicherheitskontrollen auf Protokollebene', 'Testgetriebener Umgang mit Fehlerfällen'], limitation: 'Experimentelle Sicherheitssoftware. Nicht unabhängig auditiert; kein Anspruch auf vollständigen Schutz.' },
     ],
     evidenceH4: 'Engineering-Belege', scope: 'Umfang:', readCase: 'Fallstudie lesen', inspect: 'Quellcode ansehen',
+    codeEyebrow: 'Für Code-Reviewer', codeTitle: 'Wo man im Code anfängt',
+    codeBody: 'Direkte Links in die Repositories, fixiert auf die Commits, die die Fallstudien beschreiben.',
+    code: [
+      ['Seerxo OS', 'Deterministische Arbeitserkennung — keine Arbeit, kein Modellaufruf', 'app/business_reconciler.py'],
+      ['Seerxo OS', 'Golden Evals: „erledigt“ ohne Beleg wird abgelehnt', 'evals/test_supervisor_evals.py'],
+      ['Seerxo OS', 'Prompt-Injection-Evals: externer Text ist Daten, keine Anweisung', 'evals/test_trust_evals.py'],
+      ['Seerxo OS', 'Crash-Recovery-Tests gegen echtes PostgreSQL', 'tests/test_worker_crash_recovery_postgres.py'],
+      ['Seerxo', 'MCP-Tool-Schemas mit expliziten Grenzen', 'src/mcp/tools.js'],
+      ['Seerxo', 'End-to-End-Test des stdio-MCP-Servers', 'tests/stdio-mcp.test.js'],
+      ['SigSieve', 'Bedrohungsmodell', 'docs/THREAT_MODEL.md'],
+      ['SigSieve', 'Findings-Register: jedes Problem und seine Behebung', 'docs/FINDINGS.md'],
+    ],
     evalEyebrow: 'KI-Evaluierung & Zuverlässigkeit', evalTitle: 'Was heute gemessen wird – und was nicht',
     evalBody: 'Eine beeindruckende Demo und ein zuverlässiges KI-System unterscheiden sich darin, was geprüft wird. Die Tabelle zeigt jede Dimension mit ihrem aktuellen Beleg. „In CI“ bedeutet, dass bei jeder Änderung ein deterministischer Test läuft; er fixiert die Reaktion des Systems auf Agentenausgaben, nicht die Qualität eines Modells.',
     colDim: 'Dimension', colStatus: 'Status', colEvidence: 'Beleg',
@@ -194,6 +230,8 @@ const copy = {
 const c = copy[lang];
 const OS = 'https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/';
 const SX = 'https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/';
+const SS = 'https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/';
+const codeBase: Record<string, string> = { 'Seerxo OS': OS, Seerxo: SX, SigSieve: SS };
 const evHref = (path: string) => (path.startsWith('sx:') ? SX + path.slice(3) : OS + path);
 const statusLabel = { ci: c.stCI, partial: c.stPartial, planned: c.stPlanned } as Record<string, string>;
 const systems = c.systems.map((sys, i) => ({ ...sys, ...sources[i], number: String(i + 1).padStart(2, '0') }));
@@ -250,6 +288,25 @@ const communityHrefs = ['https://github.com/semihbugrasezer/sigsieve', 'https://
           </article>
         ))}
       </div>
+    </section>
+
+    <section class="code" aria-labelledby="code-heading">
+      <div class="section-head">
+        <p class="eyebrow">{c.codeEyebrow}</p>
+        <h2 id="code-heading">{c.codeTitle}</h2>
+        <p>{c.codeBody}</p>
+      </div>
+      <ul class="code-list">
+        {c.code.map(([project, what, path]) => (
+          <li>
+            <a href={codeBase[project] + path} rel="noopener" target="_blank">
+              <span class="meta">{project}</span>
+              <span class="what">{what}</span>
+              <code>{path}</code>
+            </a>
+          </li>
+        ))}
+      </ul>
     </section>
 
     <section id="evaluation" class="eval" aria-labelledby="eval-heading">
@@ -360,4 +417,11 @@ const communityHrefs = ['https://github.com/semihbugrasezer/sigsieve', 'https://
   .badge.partial { border-color: var(--accent); color: var(--accent-ink); }
   .badge.planned { color: var(--ink-3); border-style: dashed; }
   .harness { padding-left: 1.3em; display: grid; gap: var(--s-1); color: var(--ink-2); max-width: 70ch; }
+  .code-list { list-style: none; padding: 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); column-gap: var(--s-6); }
+  .code-list li { border-bottom: 1px solid var(--rule); }
+  .code-list a { display: grid; grid-template-columns: 6rem 1fr; gap: var(--s-1) var(--s-3); padding-block: var(--s-3); text-decoration: none; }
+  .code-list .meta { padding-top: 0.2rem; }
+  .code-list .what { font-weight: 550; font-size: var(--fs-sm); }
+  .code-list code { grid-column: 2; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); overflow-wrap: anywhere; }
+  .code-list a:hover .what { color: var(--accent-ink); }
 </style>

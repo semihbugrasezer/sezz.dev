@@ -13,21 +13,21 @@ const copy = {
     h1: 'Engineering writing', lede: 'Articles from my own engineering work, and learning notes I keep while studying official documentation. Learning notes are summaries of the cited source, not original research.',
     searchAll: 'Search all writing', articles: 'Articles',
     hint: (a: string) => `Architecture studies and experiments are in the ${a}.`, journal: 'research journal',
-    notes: 'Technical learning notes', groups: { 'AI tooling': 'AI tooling', 'React & TypeScript': 'React & TypeScript', JavaScript: 'JavaScript' },
+    notes: 'Archive: learning notes', notesBody: (n: number) => `${n} notes from early 2026 that summarise official JavaScript, React and TypeScript documentation while I studied it.`, groups: { 'AI tooling': 'AI tooling', 'React & TypeScript': 'React & TypeScript', JavaScript: 'JavaScript' },
   },
   tr: {
     title: 'Yazılar', description: 'Backend mühendisliği, agentic AI, JavaScript, React ve TypeScript üzerine mühendislik yazıları ve teknik öğrenme notları.',
     h1: 'Mühendislik yazıları', lede: 'Kendi mühendislik çalışmalarımdan yazılar ve resmî dokümantasyonu çalışırken tuttuğum öğrenme notları. Öğrenme notları belirtilen kaynağın özetidir, özgün araştırma değildir. Yazıların tamamı İngilizcedir.',
     searchAll: 'Tüm yazılarda ara', articles: 'Makaleler',
     hint: (a: string) => `Mimari incelemeler ve deneyler ${a} bölümünde.`, journal: 'araştırma günlüğü',
-    notes: 'Teknik öğrenme notları', groups: { 'AI tooling': 'AI araçları', 'React & TypeScript': 'React ve TypeScript', JavaScript: 'JavaScript' },
+    notes: 'Arşiv: öğrenme notları', notesBody: (n: number) => `2026 başında resmî JavaScript, React ve TypeScript dokümantasyonunu çalışırken tuttuğum ${n} özet not.`, groups: { 'AI tooling': 'AI araçları', 'React & TypeScript': 'React ve TypeScript', JavaScript: 'JavaScript' },
   },
   de: {
     title: 'Artikel', description: 'Engineering-Artikel und technische Lernnotizen zu Backend-Engineering, Agentic AI, JavaScript, React und TypeScript.',
     h1: 'Engineering-Artikel', lede: 'Artikel aus meiner eigenen Engineering-Arbeit und Lernnotizen, die ich beim Studium offizieller Dokumentation führe. Lernnotizen fassen die genannte Quelle zusammen und sind keine eigene Forschung. Alle Texte sind auf Englisch.',
     searchAll: 'Alle Artikel durchsuchen', articles: 'Artikel',
     hint: (a: string) => `Architekturstudien und Experimente stehen im ${a}.`, journal: 'Recherche-Journal',
-    notes: 'Technische Lernnotizen', groups: { 'AI tooling': 'KI-Tools', 'React & TypeScript': 'React & TypeScript', JavaScript: 'JavaScript' },
+    notes: 'Archiv: Lernnotizen', notesBody: (n: number) => `${n} Notizen aus Anfang 2026, die offizielle JavaScript-, React- und TypeScript-Dokumentation beim Lernen zusammenfassen.`, groups: { 'AI tooling': 'KI-Tools', 'React & TypeScript': 'React & TypeScript', JavaScript: 'JavaScript' },
   },
 } satisfies Record<Lang, unknown>;
 const c = copy[lang];
@@ -65,14 +65,17 @@ const noteGroups = [...new Set(notes.map(groupOf))] as (keyof typeof c.groups)[]
       <p class="meta hint" set:html={c.hint(`<a href="${L('/research/')}">${c.journal}</a>`)} />
     </section>
 
-    <section class="block" aria-labelledby="notes-h">
-      <h2 id="notes-h" class="eyebrow">{c.notes}</h2>
-      {noteGroups.map((g) => (
-        <div class="group">
-          <h3>{c.groups[g]}</h3>
-          <EntryList items={notes.filter((n) => groupOf(n) === g).map(toItem)} />
-        </div>
-      ))}
+    <section class="block archive" aria-labelledby="notes-h">
+      <details>
+        <summary><h2 id="notes-h" class="eyebrow">{c.notes} ({notes.length})</h2></summary>
+        <p class="meta hint">{c.notesBody(notes.length)}</p>
+        {noteGroups.map((g) => (
+          <div class="group">
+            <h3>{c.groups[g]}</h3>
+            <EntryList items={notes.filter((n) => groupOf(n) === g).map(toItem)} />
+          </div>
+        ))}
+      </details>
     </section>
   </div>
 </Base>
@@ -83,4 +86,9 @@ const noteGroups = [...new Set(notes.map(groupOf))] as (keyof typeof c.groups)[]
   .group { margin-top: var(--s-5); }
   .group h3 { font-size: var(--fs-base); font-weight: 600; margin-bottom: var(--s-3); }
   .hint { margin-top: var(--s-3); }
+  .archive summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: var(--s-2); padding-block: var(--s-3); border-top: 1px solid var(--rule); }
+  .archive summary::-webkit-details-marker { display: none; }
+  .archive summary::before { content: '+'; font-family: var(--font-mono); color: var(--ink-3); width: 1ch; }
+  .archive details[open] summary::before { content: '−'; }
+  .archive summary h2 { display: inline; }
 </style>

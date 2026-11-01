@@ -133,8 +133,6 @@ Seerxo OS is developed with AI coding agents, and the repository makes that visi
   `DEC-001` … `DEC-008`, and the 2026-10-07 decision not to loosen the coder container for Codex).
   I am that founder: the recorded decisions, policies and boundaries are mine, and I operate the
   system. 18 commits also list me as co-author.
-- The public history starts at an initial public-release commit on 2026-10-26; earlier development
-  happened in a private repository.
 
 ## Design decisions
 
@@ -237,9 +235,6 @@ All links point at commit `43f000c`.
 - **Failure handling.** Bounded retries, loop detection, stale-run recovery and checkpoints at the
   model boundary, tested against real PostgreSQL crashes.
 
-What it does **not** yet demonstrate: measured task-completion rates, model-level tool-call
-accuracy, latency or cost per task, or unattended operation of the code-change stage.
-
 ## Results and evidence
 
 - The API, worker, reconciler, Desk, backups and release gateway run in production for one company
@@ -247,11 +242,10 @@ accuracy, latency or cost per task, or unattended operation of the code-change s
 - The full design — threat model, release gateway, approval identity, decisions — is documented in
   the public repository and can be checked against the code.
 
-I am deliberately not quoting a pass rate, cost saving or throughput figure: none has been measured
-in a way I would publish.
-
 ## Limitations
 
+- No measured task-completion rate, model-level tool-call accuracy, latency or cost per task yet;
+  see the [planned evaluation harness](/ai-engineering/#evaluation).
 - Single host, single company; no horizontal scaling.
 - No automatic merge. Stage D is not enabled. Unattended code changes are off by default.
 - The repository's own documents disagree on how far the Stage C pilot went; I treat it as
