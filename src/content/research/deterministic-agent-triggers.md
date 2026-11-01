@@ -41,8 +41,8 @@ for open work (`migrations/versions/b8e41d0c7a52_open_work_unique_indexes.py`).
 
 ## Observations (so far)
 
-- **Idle cost is zero by construction.** With no tasks, the worker sleeps; there is nothing for a
-  model to be asked.
+- **No model calls when idle.** With no tasks, the worker sleeps; there is nothing for a model to be
+  asked.
 - **Deduplication belongs in the database.** A partial unique index over *open* tasks is a stronger guarantee than asking a
   model or a scheduler not to create duplicates.
 - **Crash recovery needs checkpoints at the model boundary.** Storing the result of a completed

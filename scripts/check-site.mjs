@@ -9,7 +9,7 @@ import { join, relative } from 'node:path';
 const DIST = 'dist';
 const SITE = 'https://sezz.dev';
 
-// Public URLs of sezz.dev captured from the live sitemap on 2026-10-31, plus the two RSS feeds.
+// Public URLs of sezz.dev captured from the live sitemap on 2026-10-31, plus the two RSS feeds and sitemaps.
 const LEGACY = [
   '/', '/projects/', '/tags/',
   '/cline-memory-bank-a-practical-guide-to-persistent-ai-context/',
@@ -29,6 +29,7 @@ const LEGACY = [
   '/category/productivity/', '/category/react/', '/category/javascript/', '/category/golang/',
   '/page/2/', '/archive/2026/page/2/',
   '/feed_rss_created.xml', '/feed_rss_updated.xml',
+  '/sitemap.xml', '/sitemap.xml.gz',
 ];
 
 // Minimal parser for the [[redirects]] tables we write in netlify.toml.

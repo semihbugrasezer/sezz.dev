@@ -46,3 +46,14 @@ status = 301
 from = "/blog/"
 to = "/writing/"
 status = 301
+
+# The MkDocs site published /sitemap.xml(.gz); search consoles may still point there.
+[[redirects]]
+from = "/sitemap.xml"
+to = "/sitemap-index.xml"
+status = 301
+
+[[redirects]]
+from = "/sitemap.xml.gz"
+to = "/sitemap-index.xml"
+status = 301
