@@ -1,0 +1,77 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Article from '../../layouts/Article.astro';
+import { SITE } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({ params: { id: p.id }, props: { project: p } }));
+}
+const { project } = Astro.props as { project: CollectionEntry<'projects'> };
+const p = project.data;
+const { Content, headings } = await render(project);
+const related = (await getCollection('research', (r) => !r.data.draft && r.data.project === project.id));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: p.title,
+  description: p.summary,
+  ...(p.repo && { codeRepository: p.repo }),
+  ...(p.site && { url: p.site }),
+  author: { '@id': `${SITE.url}/#person` },
+  programmingLanguage: p.stack.slice(0, 3),
+};
+---
+
+<Article title={p.title} description={p.summary} eyebrow={`Case study · ${p.disciplines.join(' · ')}`} headings={headings} type="website" jsonLd={jsonLd}>
+  <Fragment slot="head">
+    <dl class="facts">
+      <div><dt>Status</dt><dd>{p.status}</dd></div>
+      <div><dt>Stack</dt><dd>{p.stack.join(', ')}</dd></div>
+      <div>
+        <dt>Links</dt>
+        <dd class="links">
+          {p.repo && <a href={p.repo} rel="noopener" target="_blank">Repository</a>}
+          {p.site && <a href={p.site} rel="noopener" target="_blank">Live site</a>}
+          {p.package && <a href={p.package.url} rel="noopener" target="_blank">npm: {p.package.name}</a>}
+        </dd>
+      </div>
+      {p.facts.length > 0 && (
+        <div class="wide">
+          <dt>Evidence{p.measured && <span class="meta"> · measured {p.measured}</span>}</dt>
+          <dd><ul>{p.facts.map((f) => <li>{f}</li>)}</ul></dd>
+        </div>
+      )}
+    </dl>
+  </Fragment>
+
+  <Content />
+
+  <Fragment slot="after">
+    {related.length > 0 && (
+      <section class="related" aria-labelledby="related-h">
+        <h2 id="related-h" class="eyebrow">Related research</h2>
+        <ul>{related.map((r) => <li><a href={`/research/${r.id}/`}>{r.data.title}</a> <span class="meta">· {r.data.type}</span></li>)}</ul>
+      </section>
+    )}
+    <p class="back meta"><a href="/projects/">← All projects</a></p>
+  </Fragment>
+</Article>
+
+<style>
+  .facts {
+    display: grid; gap: 0; margin-top: var(--s-5); border: 1px solid var(--rule); border-radius: var(--radius);
+    background: var(--bg-raised); grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  }
+  .facts > div { padding: var(--s-3) var(--s-4); border-bottom: 1px solid var(--rule); }
+  .facts .wide { grid-column: 1 / -1; border-bottom: 0; }
+  .facts dt { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin-bottom: var(--s-1); }
+  .facts dt .meta { text-transform: none; letter-spacing: 0; }
+  .facts dd { font-size: var(--fs-sm); }
+  .facts ul { padding-left: 1.1em; display: grid; gap: 0.15rem; }
+  .links { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-4); }
+  .related { border-top: 1px solid var(--rule); padding-top: var(--s-5); margin-top: var(--s-6); }
+  .related ul { list-style: none; padding: 0; margin-top: var(--s-3); }
+  .back { margin-top: var(--s-6); }
+</style>

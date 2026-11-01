@@ -1,0 +1,89 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+---
+
+<Base title="About" description="Semih Buğra Sezer is an AI engineer focused on agentic AI, LLM applications, MCP developer tools and reliable software systems." type="profile">
+  <header class="wrap page-head">
+    <p class="eyebrow">About</p>
+    <h1>Semih Buğra Sezer</h1>
+    <p class="lede">{SITE.role}</p>
+  </header>
+
+  <div class="wrap grid">
+    <div class="prose">
+      <p>
+        I am a computer engineering graduate working on applied AI and autonomous agent systems. I design
+        agent workflows, developer tools and the backend infrastructure around them. My central question
+        is how AI agents can complete useful work without giving up control of state, credentials or production.
+      </p>
+      <p>
+        My practical work has been in backend development and production software — Go, Python, TypeScript and
+        Node.js services, React front ends, PostgreSQL and Redis, Docker and CI/CD pipelines. More recently it has
+        included Rust for systems and security tooling.
+      </p>
+      <p>
+        I care about the parts of engineering that are easy to skip: explicit state, recovery paths, written threat
+        models, tests that fail for the right reason, and documentation that states limitations as clearly as
+        features. The case studies on this site are written in that spirit — each one says what is unfinished.
+      </p>
+      <h2>My AI engineering focus</h2>
+      <p>
+        I work on tool calling and MCP integrations, agent orchestration, task state and recovery,
+        and explicit human-approval boundaries. My <a href="/ai-engineering/">AI engineering evidence page</a>
+        links those skills to source code and case studies, and distinguishes tested capabilities from future experiments.
+      </p>
+      <h2>How I work</h2>
+      <ul>
+        <li><strong>Decompose before building.</strong> Write the problem, the boundaries and the failure modes down first.</li>
+        <li><strong>Keep decisions deterministic where they can be.</strong> Use models for the parts that genuinely need judgement, and keep them out of the parts that need guarantees.</li>
+        <li><strong>Fail closed.</strong> Unknown input, unclear authority and missing evidence are refusals, not guesses.</li>
+        <li><strong>Prefer evidence to adjectives.</strong> Measured, dated facts over claims; “not verified” when that is the truth.</li>
+      </ul>
+      <h2>Independent research</h2>
+      <p>
+        “Independent researcher” here means independent technical investigation: questions that come up while
+        building systems, explored with a stated method and published with their limitations in the
+        <a href="/research/">research journal</a>. I do not hold an academic appointment and none of it is peer-reviewed.
+      </p>
+      <h2>Education</h2>
+      <p>
+        B.Sc. Computer Engineering, Karabük University. Senior project: a performance comparison of network
+        topologies and queueing algorithms using NS-3 simulation
+        (<a href="https://github.com/semihbugrasezer/network-simulation-dashboard" rel="noopener" target="_blank">results dashboard</a>).
+      </p>
+    </div>
+
+    <aside class="side">
+      <section>
+        <h2 class="eyebrow">Working with</h2>
+        <dl>
+          <div><dt>Languages</dt><dd>Go, Python, TypeScript, JavaScript, Rust</dd></div>
+          <div><dt>Backend</dt><dd>Node.js, FastAPI, REST, MCP / JSON-RPC</dd></div>
+          <div><dt>Data</dt><dd>PostgreSQL, Redis</dd></div>
+          <div><dt>Infrastructure</dt><dd>Docker, Compose, Traefik, GitHub Actions, Linux</dd></div>
+          <div><dt>Frontend</dt><dd>React</dd></div>
+          <div><dt>AI tooling</dt><dd>Claude Code, Codex CLI, LLM APIs</dd></div>
+        </dl>
+      </section>
+      <section>
+        <h2 class="eyebrow">Elsewhere</h2>
+        <ul class="plain">
+          <li><a href={SITE.github} rel="me noopener" target="_blank">GitHub — semihbugrasezer</a></li>
+          <li><a href={SITE.linkedin} rel="me noopener" target="_blank">LinkedIn</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .grid { display: grid; gap: var(--s-7); padding-top: var(--s-6); }
+  @media (min-width: 60rem) { .grid { grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr); } }
+  .side { display: grid; gap: var(--s-6); align-content: start; }
+  .side dl { display: grid; gap: var(--s-3); margin-top: var(--s-3); }
+  .side dt { font-weight: 600; font-size: var(--fs-sm); }
+  .side dd { color: var(--ink-2); font-size: var(--fs-sm); }
+  .plain { list-style: none; padding: 0; margin-top: var(--s-3); display: grid; gap: var(--s-2); font-size: var(--fs-sm); }
+</style>

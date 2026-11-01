@@ -1,0 +1,210 @@
+---
+import Base from '../layouts/Base.astro';
+
+const systems = [
+  {
+    number: '01',
+    name: 'Seerxo OS',
+    category: 'Agent orchestration & reliability',
+    description: 'An agent-driven operating system with persisted task state, deterministic triggers, isolated code changes, independent model review and explicit release authorisation.',
+    demonstrates: ['Agent lifecycle and task orchestration', 'Tool execution boundaries and human approval', 'Crash recovery and auditability'],
+    limitation: 'Active development; do not treat its Stage C design as proof of fully unattended execution.',
+    caseStudy: '/projects/seerxo-os/',
+    source: 'https://github.com/Seerxo/seerxo-os',
+  },
+  {
+    number: '02',
+    name: 'Seerxo',
+    category: 'LLM applications & agent-facing tools',
+    description: 'A live product with CLI, local and remote MCP integrations, an API and a rule-based listing audit kept separate from generative operations.',
+    demonstrates: ['MCP and tool schema design', 'LLM-backed product integration', 'Deterministic validation and API contracts'],
+    limitation: 'The backend is not public; the case study is limited to verified client code and documented interfaces.',
+    caseStudy: '/projects/seerxo/',
+    source: 'https://github.com/semihbugrasezer/seerxo',
+  },
+  {
+    number: '03',
+    name: 'SigSieve',
+    category: 'Agent security & systems tooling',
+    description: 'A Rust SSH agent proxy that limits which existing identities can be forwarded and can optionally bind them to trusted destination host keys.',
+    demonstrates: ['Threat modelling and least privilege', 'Protocol-level security controls', 'Test-driven handling of failure modes'],
+    limitation: 'Experimental security software. Not independently audited; no claims of complete protection.',
+    caseStudy: '/projects/sigsieve/',
+    source: 'https://github.com/semihbugrasezer/sigsieve',
+  },
+];
+
+const questions = [
+  {
+    title: 'Can an agent complete work reliably?',
+    method: 'Create a versioned, repeatable task suite. Report task success, partial success and failures with the test conditions and sample size.',
+  },
+  {
+    title: 'When does multi-agent review help?',
+    method: 'Compare a single-agent baseline with coder-plus-reviewer workflows on the same tasks. Record reviewer disagreements and false approvals.',
+  },
+  {
+    title: 'What happens when tools fail?',
+    method: 'Inject timeouts, invalid tool output, stale state and interrupted runs. Measure recovery and identify where human intervention is required.',
+  },
+  {
+    title: 'What is the cost of autonomy?',
+    method: 'Measure latency, token/API usage where applicable, and resource costs per completed task; do not conflate subscriptions with per-token pricing.',
+  },
+];
+---
+
+<Base
+  title="AI Engineering"
+  description="Evidence-backed agentic AI engineering work: orchestration, MCP integrations, evaluation questions, security boundaries, and open-source tools."
+>
+  <header class="wrap page-head">
+    <p class="eyebrow">AI engineering · evidence over claims</p>
+    <h1>Building AI systems that can act — and be checked.</h1>
+    <p class="lede">
+      My focus is applied AI engineering: agent orchestration, LLM-powered tools and the
+      infrastructure that makes their behaviour observable, recoverable and bounded by explicit authority.
+    </p>
+    <div class="actions">
+      <a class="btn primary" href="#engineering-evidence">See engineering evidence →</a>
+      <a class="btn" href="/projects/">All project case studies</a>
+      <a class="btn" href="/contact/">Discuss an AI engineering role</a>
+    </div>
+  </header>
+
+  <div class="wrap content">
+    <section class="principles" aria-labelledby="approach-heading">
+      <div class="section-head">
+        <p class="eyebrow">Approach</p>
+        <h2 id="approach-heading">More than prompting a model</h2>
+      </div>
+      <div class="principle-grid">
+        <article>
+          <h3>Design the workflow</h3>
+          <p>Explicit tasks, structured tool contracts, persisted state and deterministic gates around model decisions.</p>
+        </article>
+        <article>
+          <h3>Prove the boundaries</h3>
+          <p>Least privilege, isolated execution, independent review and honest documentation of failure modes.</p>
+        </article>
+        <article>
+          <h3>Measure the outcome</h3>
+          <p>Tests and repeatable evaluations, not demo videos or model-generated claims of success.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="engineering-evidence" class="evidence" aria-labelledby="evidence-heading">
+      <div class="section-head">
+        <p class="eyebrow">Selected systems</p>
+        <h2 id="evidence-heading">What my work demonstrates</h2>
+        <p>These are implemented systems and published code, not a list of AI frameworks I claim to know.</p>
+      </div>
+      <div class="system-grid">
+        {systems.map((item) => (
+          <article class="system">
+            <div class="system-top"><span class="meta">{item.number}</span><span class="eyebrow">{item.category}</span></div>
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+            <h4>Engineering evidence</h4>
+            <ul>{item.demonstrates.map((skill) => <li>{skill}</li>)}</ul>
+            <p class="caveat"><strong>Scope:</strong> {item.limitation}</p>
+            <div class="links">
+              <a href={item.caseStudy}>Read case study →</a>
+              <a href={item.source} target="_blank" rel="noopener">Inspect source</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="evaluations" aria-labelledby="evaluation-heading">
+      <div class="section-head">
+        <p class="eyebrow">Evaluation roadmap</p>
+        <h2 id="evaluation-heading">The questions I want my systems to answer</h2>
+        <p>
+          These are proposed experiments, <strong>not published benchmark results</strong>.
+          I will only report numbers once the tasks, methodology and raw evidence are available for review.
+        </p>
+      </div>
+      <ol class="question-grid">
+        {questions.map((q, index) => (
+          <li>
+            <span class="meta">{String(index + 1).padStart(2, '0')} / experiment to run</span>
+            <h3>{q.title}</h3>
+            <p>{q.method}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="gap">
+        <strong>Currently not claimed:</strong> a demonstrated RAG benchmark, custom-trained foundation model,
+        independently audited agent security, or measured production-level autonomous task success.
+        These require separate evidence.
+      </p>
+    </section>
+
+    <section class="community" aria-labelledby="community-heading">
+      <div class="section-head">
+        <p class="eyebrow">Public work & community</p>
+        <h2 id="community-heading">Build in public, make the work useful</h2>
+        <p>
+          Reusable code, technical documentation and transparent limitations are part of the work.
+          SigSieve and the Seerxo client have public source and MIT licences; Seerxo OS has public
+          source but currently no open-source licence. The distinction matters.
+        </p>
+      </div>
+      <div class="community-links">
+        <a href="https://github.com/semihbugrasezer/sigsieve" rel="noopener" target="_blank">
+          <strong>SigSieve</strong><span>Security model, limits, installation and source →</span>
+        </a>
+        <a href="https://github.com/semihbugrasezer/seerxo" rel="noopener" target="_blank">
+          <strong>Seerxo</strong><span>MCP tools, CLI documentation and source →</span>
+        </a>
+        <a href="/research/">
+          <strong>Technical research</strong><span>Architecture studies with evidence and limitations →</span>
+        </a>
+      </div>
+      <p class="small-print">Security concerns should be reported via each repository’s security policy, not public issue threads.</p>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-heading">
+      <h2 id="closing-heading">Interested in working together?</h2>
+      <p>
+        I am pursuing AI Engineer, Applied AI Engineer and LLM / Agent Engineering roles.
+        My strongest evidence is in agent systems, developer tools and backend infrastructure.
+      </p>
+      <div class="actions">
+        <a class="btn primary" href="/contact/">Contact me →</a>
+        <a class="btn" href="/about/">Background & experience</a>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page-head h1 { max-width: 20ch; }
+  .actions { display: flex; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-5); }
+  .content { padding-top: var(--s-7); display: grid; gap: var(--s-8); }
+  .principle-grid, .system-grid, .question-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
+  .principle-grid article, .system, .question-grid li { padding: var(--s-5); border: 1px solid var(--rule); background: var(--bg-raised); border-radius: var(--radius); }
+  h3 { font-size: var(--fs-md); font-weight: 600; }
+  h4 { font-size: var(--fs-sm); font-weight: 600; }
+  .principle-grid article, .system, .question-grid li { display: grid; gap: var(--s-3); align-content: start; }
+  .principle-grid p, .system p, .question-grid p { color: var(--ink-2); font-size: var(--fs-sm); }
+  .system-top { display: flex; gap: var(--s-3); justify-content: space-between; flex-wrap: wrap; }
+  .system-top .eyebrow { text-align: right; }
+  .system ul { padding-left: var(--s-5); font-size: var(--fs-sm); }
+  .system li + li { margin-top: var(--s-1); }
+  .system .caveat { border-top: 1px solid var(--rule); padding-top: var(--s-3); }
+  .links { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: auto; font-size: var(--fs-sm); }
+  .links a:first-child { font-weight: 600; }
+  .question-grid { list-style: none; padding: 0; }
+  .gap { padding: var(--s-4); border-left: 2px solid var(--accent); background: var(--bg-sunken); font-size: var(--fs-sm); color: var(--ink-2); }
+  .community-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--s-3); }
+  .community-links a { display: grid; gap: var(--s-2); border-top: 1px solid var(--rule-strong); padding-block: var(--s-4); text-decoration: none; }
+  .community-links span { font-size: var(--fs-sm); color: var(--ink-2); }
+  .small-print { font-size: var(--fs-sm); color: var(--ink-3); margin-top: var(--s-3); }
+  .closing { border-top: 1px solid var(--rule); padding-top: var(--s-7); }
+  .closing h2 { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-xl); }
+  .closing p { max-width: 64ch; margin-top: var(--s-3); color: var(--ink-2); }
+</style>

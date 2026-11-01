@@ -1,0 +1,31 @@
+---
+import { SITE } from '../lib/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap cols">
+    <div>
+      <p class="name">{SITE.name}</p>
+      <p class="meta">AI Engineer · Agentic AI & LLM Systems</p>
+    </div>
+    <ul class="links" aria-label="Elsewhere">
+      <li><a href={SITE.github} rel="me noopener" target="_blank">GitHub</a></li>
+      <li><a href={SITE.linkedin} rel="me noopener" target="_blank">LinkedIn</a></li>
+      <li><a href="/feed_rss_created.xml">RSS</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+  </div>
+  <div class="wrap fine meta">
+    <span>© {year} {SITE.name}. Project facts are checked against their public repositories.</span>
+    <a href={SITE.repo} rel="noopener" target="_blank">Site source</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--rule); margin-top: var(--s-8); padding-block: var(--s-6) var(--s-5); background: var(--bg-sunken); }
+  .cols { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-5); }
+  .name { font-family: var(--font-display); font-size: var(--fs-md); font-weight: 550; }
+  .links { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); list-style: none; padding: 0; font-size: var(--fs-sm); }
+  .fine { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-3); margin-top: var(--s-6); padding-top: var(--s-4); border-top: 1px solid var(--rule); }
+</style>

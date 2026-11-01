@@ -1,0 +1,26 @@
+---
+import { formatDate, isoDate } from '../lib/site';
+interface Item { href: string; title: string; description?: string; date: Date; label?: string; minutes?: number }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+---
+
+<ul class="entries">
+  {items.map((it) => (
+    <li class="entry">
+      <a href={it.href}>
+        <div class="meta">
+          <time datetime={isoDate(it.date)}>{formatDate(it.date)}</time>
+        </div>
+        <div>
+          <div class="entry-title">{it.title}</div>
+          {it.description && <p class="entry-desc">{it.description}</p>}
+          <div class="meta meta-row" style="margin-top:.35rem">
+            {it.label && <span>{it.label}</span>}
+            {it.minutes && <span>{it.minutes} min read</span>}
+          </div>
+        </div>
+      </a>
+    </li>
+  ))}
+</ul>

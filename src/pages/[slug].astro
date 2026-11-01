@@ -1,0 +1,44 @@
+---
+// Writing lives at the site root so URLs from the previous MkDocs site keep working.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Article from '../layouts/Article.astro';
+import { SITE, readingTime } from '../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing', (e) => !e.data.draft);
+  return posts.map((p) => ({ params: { slug: p.data.slug }, props: { post: p } }));
+}
+const { post } = Astro.props as { post: CollectionEntry<'writing'> };
+const d = post.data;
+const { Content, headings } = await render(post);
+const isNote = d.kind === 'learning-note';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.created.toISOString(),
+  dateModified: (d.updated ?? d.created).toISOString(),
+  author: { '@id': `${SITE.url}/#person` },
+  keywords: d.tags.join(', '),
+  mainEntityOfPage: new URL(`/${d.slug}/`, SITE.url).href,
+  ...(d.source && { isBasedOn: d.source.url }),
+};
+---
+
+<Article title={d.title} description={d.description} eyebrow={isNote ? 'Writing · Technical learning note' : `Writing · ${d.topic}`}
+  headings={headings} created={d.created} updated={d.updated} minutes={readingTime(post.body)} jsonLd={jsonLd}>
+  {isNote && d.source && (
+    <p class="notice">
+      <strong>Learning note.</strong> A structured summary written while studying
+      <a href={d.source.url} rel="noopener" target="_blank">{d.source.name}</a>. It is a study aid, not original
+      research — consult the source for authoritative detail.
+    </p>
+  )}
+  <Content />
+  <Fragment slot="after">
+    {d.tags.length > 0 && <ul class="chips" aria-label="Tags">{d.tags.map((t) => <li class="chip">#{t}</li>)}</ul>}
+    <p class="meta" style="margin-top:var(--s-5)"><a href="/writing/">← All writing</a></p>
+  </Fragment>
+</Article>

@@ -1,0 +1,92 @@
+---
+import { NAV } from '../lib/site';
+const path = Astro.url.pathname;
+const current = (href: string) => path === href || path.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="/" class="brand" aria-label="Semih Buğra Sezer — home">
+      <span class="mark" aria-hidden="true">sz</span>
+      <span class="brand-name">Semih Buğra Sezer</span>
+    </a>
+    <nav aria-label="Primary">
+      <ul>
+        {NAV.map((n) => (
+          <li><a href={n.href} aria-current={current(n.href) ? 'page' : undefined}>{n.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="tools">
+      <a class="icon-btn" href="/search/" aria-label="Search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      </a>
+      <button class="icon-btn" type="button" id="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+        <svg class="i-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        <svg class="i-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('theme-toggle')!;
+  const root = document.documentElement;
+  const dark = () => root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  const sync = () => btn.setAttribute('aria-pressed', String(dark()));
+  sync();
+  btn.addEventListener('click', () => {
+    const next = dark() ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch {}
+    sync();
+  });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', sync);
+</script>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(1.2) blur(8px);
+    -webkit-backdrop-filter: saturate(1.2) blur(8px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .bar { display: flex; align-items: center; gap: var(--s-5); min-height: 3.75rem; }
+  .brand { display: inline-flex; align-items: center; gap: var(--s-3); text-decoration: none; font-weight: 600; letter-spacing: -0.01em; }
+  .mark {
+    display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem;
+    border: 1px solid var(--ink); border-radius: 3px;
+    font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; letter-spacing: -0.02em;
+  }
+  .brand:hover .mark { background: var(--ink); color: var(--bg); }
+  nav { margin-left: auto; }
+  nav ul { display: flex; gap: var(--s-1); list-style: none; padding: 0; }
+  nav a {
+    display: block; padding: 0.4rem 0.6rem; font-size: var(--fs-sm); text-decoration: none; color: var(--ink-2); border-radius: 3px;
+  }
+  nav a:hover { color: var(--ink); background: var(--bg-sunken); }
+  nav a[aria-current='page'] { color: var(--ink); box-shadow: inset 0 -1.5px 0 var(--accent); border-radius: 0; }
+  .tools { display: flex; gap: var(--s-1); }
+  .icon-btn {
+    display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem;
+    border: 1px solid transparent; border-radius: 3px; background: none; color: var(--ink-2); cursor: pointer;
+  }
+  .icon-btn:hover { color: var(--ink); border-color: var(--rule); }
+  .i-sun { display: none; }
+  :global(:root[data-theme='dark']) .i-sun { display: block; }
+  :global(:root[data-theme='dark']) .i-moon { display: none; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .i-sun { display: block; }
+    :global(:root:not([data-theme='light'])) .i-moon { display: none; }
+  }
+
+  @media (max-width: 52rem) {
+    .bar { flex-wrap: wrap; gap: 0 var(--s-3); padding-block: var(--s-2) 0; }
+    .brand-name { font-size: var(--fs-sm); }
+    .tools { margin-left: auto; }
+    nav { order: 3; width: 100%; margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter); overflow-x: auto; scrollbar-width: none; }
+    nav ul { gap: 0; }
+    nav a { padding: 0.55rem 0.6rem; white-space: nowrap; }
+  }
+</style>
