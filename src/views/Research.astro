@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import EntryList from '../components/EntryList.astro';
+import { getLang, type Lang } from '../lib/i18n';
+
+const lang = getLang(Astro.url);
+const entries = (await getCollection('research', (e) => !e.data.draft)).sort((a, b) => +b.data.created - +a.data.created);
+const items = entries.map((e) => ({
+  href: `/research/${e.id}/`,
+  title: lang === 'en' ? e.data.title : e.data.l10n[lang].title,
+  description: lang === 'en' ? e.data.description : e.data.l10n[lang].description,
+  date: e.data.created,
+  label: `${e.data.type} · ${e.data.status}`,
+  localized: lang !== 'en',
+}));
+
+const copy = {
+  en: {
+    title: 'Research', description: 'An engineering research journal: agent orchestration, operational memory, AI safety boundaries, SSH security and secure delivery — with method, evidence and limitations.',
+    eyebrow: 'Research journal', h1: 'Engineering research',
+    lede: 'Technical investigations that come out of building real systems. Each entry states its question, method, evidence and limitations, and is labelled by what it is.',
+    types: [['Architecture Study', 'How and why a system is structured; tradeoffs made.'], ['Research Experiment', 'A structured test with a method and recorded results.'], ['Engineering Note', 'A short observation from implementation work.'], ['Build Log', 'Progress and lessons from developing a system.']],
+    scope: '<strong>Scope.</strong> This is engineering investigation, not academic research. Nothing here is peer-reviewed. Status labels — <em>Hypothesis</em>, <em>In progress</em>, <em>Observation</em>, <em>Concluded</em> — say how much weight an entry can bear.',
+    themes: 'Themes under investigation',
+    themeList: ['Agent orchestration & autonomy', 'LLM reliability & evaluation', 'Operational memory', 'AI safety boundaries', 'Deterministic workflows', 'Secure software delivery', 'SSH security & access control', 'CI/CD reliability'],
+  },
+  tr: {
+    title: 'Araştırma', description: 'Mühendislik araştırma günlüğü: ajan orkestrasyonu, operasyonel hafıza, AI güvenlik sınırları, SSH güvenliği ve güvenli yazılım teslimi — yöntem, kanıt ve sınırlamalarıyla.',
+    eyebrow: 'Araştırma günlüğü', h1: 'Mühendislik araştırmaları',
+    lede: 'Gerçek sistemler geliştirirken ortaya çıkan teknik incelemeler. Her kayıt sorusunu, yöntemini, kanıtını ve sınırlamalarını belirtir ve türüne göre etiketlenir. Kayıtların tam metni İngilizcedir.',
+    types: [['Architecture Study (Mimari inceleme)', 'Bir sistemin nasıl ve neden böyle kurulduğu; yapılan ödünleşimler.'], ['Research Experiment (Deney)', 'Yöntemi ve kayıtlı sonuçları olan yapılandırılmış bir test.'], ['Engineering Note (Mühendislik notu)', 'Uygulama çalışmasından kısa bir gözlem.'], ['Build Log (Geliştirme günlüğü)', 'Bir sistemi geliştirirken edinilen ilerleme ve dersler.']],
+    scope: '<strong>Kapsam.</strong> Bu akademik değil, mühendislik araştırmasıdır; hiçbir içerik hakemli değildir. Durum etiketleri — <em>Hypothesis</em> (hipotez), <em>In progress</em> (devam ediyor), <em>Observation</em> (gözlem), <em>Concluded</em> (sonuçlandı) — bir kaydın ne kadar ağırlık taşıyabileceğini gösterir.',
+    themes: 'İncelenen temalar',
+    themeList: ['Ajan orkestrasyonu ve otonomi', 'LLM güvenilirliği ve değerlendirme', 'Operasyonel hafıza', 'AI güvenlik sınırları', 'Deterministik iş akışları', 'Güvenli yazılım teslimi', 'SSH güvenliği ve erişim kontrolü', 'CI/CD güvenilirliği'],
+  },
+  de: {
+    title: 'Recherche', description: 'Ein Engineering-Recherche-Journal: Agenten-Orchestrierung, operatives Gedächtnis, Sicherheitsgrenzen für KI, SSH-Sicherheit und sichere Auslieferung — mit Methode, Belegen und Grenzen.',
+    eyebrow: 'Recherche-Journal', h1: 'Engineering-Recherche',
+    lede: 'Technische Untersuchungen, die beim Bau echter Systeme entstehen. Jeder Eintrag nennt Fragestellung, Methode, Belege und Grenzen und ist nach seiner Art gekennzeichnet. Die Einträge selbst sind auf Englisch.',
+    types: [['Architecture Study (Architekturstudie)', 'Wie und warum ein System aufgebaut ist; getroffene Abwägungen.'], ['Research Experiment (Experiment)', 'Ein strukturierter Test mit Methode und dokumentierten Ergebnissen.'], ['Engineering Note (Engineering-Notiz)', 'Eine kurze Beobachtung aus der Umsetzung.'], ['Build Log (Entwicklungslog)', 'Fortschritt und Erkenntnisse aus der Entwicklung eines Systems.']],
+    scope: '<strong>Einordnung.</strong> Das ist Engineering-Recherche, keine akademische Forschung; nichts davon ist peer-reviewed. Die Status-Labels — <em>Hypothesis</em>, <em>In progress</em>, <em>Observation</em>, <em>Concluded</em> — zeigen, wie belastbar ein Eintrag ist.',
+    themes: 'Untersuchte Themen',
+    themeList: ['Agenten-Orchestrierung & Autonomie', 'LLM-Zuverlässigkeit & Evaluierung', 'Operatives Gedächtnis', 'Sicherheitsgrenzen für KI', 'Deterministische Workflows', 'Sichere Software-Auslieferung', 'SSH-Sicherheit & Zugriffskontrolle', 'CI/CD-Zuverlässigkeit'],
+  },
+} satisfies Record<Lang, unknown>;
+const c = copy[lang];
+---
+
+<Base title={c.title} description={c.description}>
+  <header class="wrap page-head">
+    <p class="eyebrow">{c.eyebrow}</p>
+    <h1>{c.h1}</h1>
+    <p class="lede">{c.lede}</p>
+  </header>
+
+  <div class="wrap body">
+    <div class="legend">
+      <dl>
+        {c.types.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+      </dl>
+      <p class="notice" set:html={c.scope} />
+    </div>
+    <EntryList items={items} />
+    <section class="themes" aria-labelledby="themes-h">
+      <h2 id="themes-h" class="eyebrow">{c.themes}</h2>
+      <ul class="chips">
+        {c.themeList.map((th) => <li class="chip">{th}</li>)}
+      </ul>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .body { display: grid; gap: var(--s-6); padding-top: var(--s-6); }
+  .legend { display: grid; gap: var(--s-4); }
+  .legend dl { display: grid; gap: var(--s-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .legend dt { font-weight: 600; font-size: var(--fs-sm); }
+  .legend dd { font-size: var(--fs-sm); color: var(--ink-2); }
+  .themes .chips { margin-top: var(--s-3); }
+</style>

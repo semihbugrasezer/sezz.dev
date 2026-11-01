@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import { getLang, localize, type Lang } from '../lib/i18n';
+
+const lang = getLang(Astro.url);
+const L = (path: string) => localize(path, lang);
+const copy = {
+  en: {
+    title: 'Search', description: 'Search articles, research notes and project case studies on sezz.dev.', h1: 'Search the site',
+    lede: 'Articles, learning notes, research entries and project case studies.', label: 'Search query',
+    placeholder: 'e.g. destination binding, PostgreSQL, React state', one: 'result', many: 'results',
+    unavailable: 'Search index unavailable. It is generated during the production build.',
+    noscript: (w: string, r: string, p: string) => `Search needs JavaScript. Browse ${w}, ${r} or ${p} instead.`, w: 'writing', r: 'research', p: 'projects',
+  },
+  tr: {
+    title: 'Ara', description: 'sezz.dev’deki yazılarda, araştırma notlarında ve vaka çalışmalarında arama yapın.', h1: 'Sitede ara',
+    lede: 'Yazılar, öğrenme notları, araştırma kayıtları ve proje vaka çalışmaları. İçerik İngilizce olduğundan İngilizce terimlerle aramak en iyi sonucu verir.', label: 'Arama sorgusu',
+    placeholder: 'ör. destination binding, PostgreSQL, React state', one: 'sonuç', many: 'sonuç',
+    unavailable: 'Arama dizini kullanılamıyor. Dizin, canlı derleme sırasında oluşturulur.',
+    noscript: (w: string, r: string, p: string) => `Arama için JavaScript gerekir. Bunun yerine ${w}, ${r} veya ${p} sayfalarına göz atın.`, w: 'yazılar', r: 'araştırma', p: 'projeler',
+  },
+  de: {
+    title: 'Suche', description: 'Artikel, Recherche-Notizen und Fallstudien auf sezz.dev durchsuchen.', h1: 'Website durchsuchen',
+    lede: 'Artikel, Lernnotizen, Recherche-Einträge und Projekt-Fallstudien. Die Inhalte sind auf Englisch – englische Suchbegriffe liefern die besten Ergebnisse.', label: 'Suchbegriff',
+    placeholder: 'z. B. destination binding, PostgreSQL, React state', one: 'Ergebnis', many: 'Ergebnisse',
+    unavailable: 'Suchindex nicht verfügbar. Er wird beim Produktions-Build erzeugt.',
+    noscript: (w: string, r: string, p: string) => `Die Suche benötigt JavaScript. Stattdessen ${w}, ${r} oder ${p} durchstöbern.`, w: 'Artikel', r: 'Recherche', p: 'Projekte',
+  },
+} satisfies Record<Lang, unknown>;
+const c = copy[lang];
+const link = (href: string, text: string) => `<a href="${L(href)}">${text}</a>`;
+---
+
+<Base title={c.title} description={c.description}>
+  <header class="wrap page-head">
+    <p class="eyebrow">{c.title}</p>
+    <h1>{c.h1}</h1>
+    <p class="lede">{c.lede}</p>
+  </header>
+  <div class="wrap prose-wrap" style="padding-top:var(--s-6)">
+    <form role="search" class="search" onsubmit="return false" data-one={c.one} data-many={c.many} data-unavailable={c.unavailable}>
+      <label for="q" class="visually-hidden">{c.label}</label>
+      <input id="q" type="search" placeholder={c.placeholder} autocomplete="off" lang={lang} />
+    </form>
+    <p id="status" class="meta" aria-live="polite"></p>
+    <ol id="results" class="results"></ol>
+    <noscript><p class="notice" set:html={c.noscript(link('/writing/', c.w), link('/research/', c.r), link('/projects/', c.p))} /></noscript>
+  </div>
+</Base>
+
+<script>
+  // Pagefind index is generated after the build into /pagefind/.
+  const input = document.getElementById('q') as HTMLInputElement;
+  const list = document.getElementById('results')!;
+  const status = document.getElementById('status')!;
+  const msg = (document.querySelector('form.search') as HTMLElement).dataset;
+  let pf: any;
+  // Runtime-only module produced by Pagefind; the variable keeps bundlers and tsc from resolving it.
+  const PAGEFIND = '/pagefind/pagefind.js';
+  const load = async () => (pf ??= await import(/* @vite-ignore */ PAGEFIND));
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  let token = 0;
+  input.addEventListener('input', async () => {
+    const q = input.value.trim();
+    const mine = ++token;
+    if (!q) { list.innerHTML = ''; status.textContent = ''; return; }
+    try {
+      const pagefind = await load();
+      // Only the English long-form pages are indexed; search that index from every language.
+      await pagefind.options({ language: 'en' }).catch(() => {});
+      const search = await pagefind.debouncedSearch(q, {}, 200);
+      if (!search || mine !== token) return;
+      const data = await Promise.all(search.results.slice(0, 12).map((r: any) => r.data()));
+      if (mine !== token) return;
+      status.textContent = `${search.results.length} ${search.results.length === 1 ? msg.one : msg.many}`;
+      // Excerpts come from Pagefind with <mark> highlighting of our own content.
+      list.innerHTML = data.map((d: any) => `<li><a href="${esc(d.url)}"><span class="t">${esc(d.meta.title ?? d.url)}</span><span class="x">${d.excerpt}</span></a></li>`).join('');
+    } catch {
+      status.textContent = msg.unavailable ?? '';
+    }
+  });
+  const q = new URLSearchParams(location.search).get('q');
+  if (q) { input.value = q; input.dispatchEvent(new Event('input')); }
+  input.focus();
+</script>
+
+<style>
+  .search input {
+    width: 100%; padding: 0.8rem 1rem; font-size: var(--fs-md); border: 1px solid var(--rule-strong);
+    border-radius: var(--radius); background: var(--bg-raised);
+  }
+  .search input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+  #status { margin-top: var(--s-3); }
+  .results { list-style: none; padding: 0; margin-top: var(--s-4); border-top: 1px solid var(--rule); }
+  .results :global(li) { border-bottom: 1px solid var(--rule); }
+  .results :global(a) { display: grid; gap: var(--s-1); padding-block: var(--s-4); text-decoration: none; }
+  .results :global(.t) { font-weight: 600; }
+  .results :global(.x) { color: var(--ink-2); font-size: var(--fs-sm); }
+  .results :global(mark) { background: var(--accent-wash); color: var(--ink); padding: 0 0.1em; }
+</style>

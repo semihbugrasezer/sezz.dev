@@ -29,6 +29,9 @@ const writing = defineCollection({
   }),
 });
 
+// Translated card text for /tr/ and /de/. The case study body itself stays in English.
+const projectL10n = z.object({ summary: z.string(), problem: z.string(), status: z.string(), demonstrates: z.array(z.string()) });
+
 const projects = defineCollection({
   loader: glob({ base: './src/content/projects', pattern: '**/*.md' }),
   schema: z.object({
@@ -45,8 +48,13 @@ const projects = defineCollection({
     package: z.object({ name: z.string(), url: z.url() }).optional(),
     measured: z.coerce.date().transform((d) => d.toISOString().slice(0, 10)).optional(),
     facts: z.array(z.string()).default([]),
+    // Engineering skills the project gives evidence for (shown on cards).
+    demonstrates: z.array(z.string()),
+    l10n: z.object({ tr: projectL10n, de: projectL10n }),
   }),
 });
+
+const researchL10n = z.object({ title: z.string(), description: z.string() });
 
 const research = defineCollection({
   loader: glob({ base: './src/content/research', pattern: '**/*.md' }),
@@ -61,6 +69,8 @@ const research = defineCollection({
     project: z.string().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    // Translated title/summary for TR/DE listings; the entry itself stays in English.
+    l10n: z.object({ tr: researchL10n, de: researchL10n }),
   }),
 });
 

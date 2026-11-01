@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import EntryList from '../components/EntryList.astro';
+import { readingTime } from '../lib/site';
+import { getLang, localize, t as ui, type Lang } from '../lib/i18n';
+
+const lang = getLang(Astro.url);
+const L = (path: string) => localize(path, lang);
+const copy = {
+  en: {
+    title: 'Writing', description: 'Engineering articles and technical learning notes on backend engineering, agentic AI, JavaScript, React and TypeScript.',
+    h1: 'Engineering writing', lede: 'Articles from my own engineering work, and learning notes I keep while studying official documentation. Learning notes are summaries of the cited source, not original research.',
+    searchAll: 'Search all writing', articles: 'Articles',
+    hint: (a: string) => `Architecture studies and experiments are in the ${a}.`, journal: 'research journal',
+    notes: 'Technical learning notes', groups: { 'AI tooling': 'AI tooling', 'React & TypeScript': 'React & TypeScript', JavaScript: 'JavaScript' },
+  },
+  tr: {
+    title: 'Yazılar', description: 'Backend mühendisliği, agentic AI, JavaScript, React ve TypeScript üzerine mühendislik yazıları ve teknik öğrenme notları.',
+    h1: 'Mühendislik yazıları', lede: 'Kendi mühendislik çalışmalarımdan yazılar ve resmî dokümantasyonu çalışırken tuttuğum öğrenme notları. Öğrenme notları belirtilen kaynağın özetidir, özgün araştırma değildir. Yazıların tamamı İngilizcedir.',
+    searchAll: 'Tüm yazılarda ara', articles: 'Makaleler',
+    hint: (a: string) => `Mimari incelemeler ve deneyler ${a} bölümünde.`, journal: 'araştırma günlüğü',
+    notes: 'Teknik öğrenme notları', groups: { 'AI tooling': 'AI araçları', 'React & TypeScript': 'React ve TypeScript', JavaScript: 'JavaScript' },
+  },
+  de: {
+    title: 'Artikel', description: 'Engineering-Artikel und technische Lernnotizen zu Backend-Engineering, Agentic AI, JavaScript, React und TypeScript.',
+    h1: 'Engineering-Artikel', lede: 'Artikel aus meiner eigenen Engineering-Arbeit und Lernnotizen, die ich beim Studium offizieller Dokumentation führe. Lernnotizen fassen die genannte Quelle zusammen und sind keine eigene Forschung. Alle Texte sind auf Englisch.',
+    searchAll: 'Alle Artikel durchsuchen', articles: 'Artikel',
+    hint: (a: string) => `Architekturstudien und Experimente stehen im ${a}.`, journal: 'Recherche-Journal',
+    notes: 'Technische Lernnotizen', groups: { 'AI tooling': 'KI-Tools', 'React & TypeScript': 'React & TypeScript', JavaScript: 'JavaScript' },
+  },
+} satisfies Record<Lang, unknown>;
+const c = copy[lang];
+const s = ui(lang);
+
+const posts = (await getCollection('writing', (e) => !e.data.draft)).sort((a, b) => +b.data.created - +a.data.created);
+const toItem = (e: (typeof posts)[number]) => ({
+  href: `/${e.data.slug}/`,
+  title: e.data.title,
+  description: e.data.description,
+  date: e.data.created,
+  label: e.data.kind === 'learning-note' ? `${s.learningNote} · ${e.data.source?.name ?? ''}` : e.data.topic,
+  minutes: readingTime(e.body),
+});
+const articles = posts.filter((p) => p.data.kind === 'article').map(toItem);
+const notes = posts.filter((p) => p.data.kind === 'learning-note');
+const reactTags = ['react', 'redux', 'redux-toolkit', 'jsx', 'typescript'];
+const groupOf = (n: (typeof notes)[number]) =>
+  n.data.topic === 'Agentic AI' ? 'AI tooling' : n.data.tags.some((t) => reactTags.includes(t)) ? 'React & TypeScript' : 'JavaScript';
+const noteGroups = [...new Set(notes.map(groupOf))] as (keyof typeof c.groups)[];
+---
+
+<Base title={c.title} description={c.description}>
+  <header class="wrap page-head">
+    <p class="eyebrow">{c.title}</p>
+    <h1>{c.h1}</h1>
+    <p class="lede">{c.lede}</p>
+    <p class="meta" style="margin-top:var(--s-4)"><a href={L('/search/')}>{c.searchAll}</a> · <a href="/feed_rss_created.xml">RSS</a></p>
+  </header>
+
+  <div class="wrap">
+    <section class="block" aria-labelledby="articles-h">
+      <h2 id="articles-h" class="eyebrow">{c.articles}</h2>
+      <EntryList items={articles} />
+      <p class="meta hint" set:html={c.hint(`<a href="${L('/research/')}">${c.journal}</a>`)} />
+    </section>
+
+    <section class="block" aria-labelledby="notes-h">
+      <h2 id="notes-h" class="eyebrow">{c.notes}</h2>
+      {noteGroups.map((g) => (
+        <div class="group">
+          <h3>{c.groups[g]}</h3>
+          <EntryList items={notes.filter((n) => groupOf(n) === g).map(toItem)} />
+        </div>
+      ))}
+    </section>
+  </div>
+</Base>
+
+<style>
+  .block { margin-top: var(--s-7); }
+  .block > h2 { margin-bottom: var(--s-4); }
+  .group { margin-top: var(--s-5); }
+  .group h3 { font-size: var(--fs-base); font-weight: 600; margin-bottom: var(--s-3); }
+  .hint { margin-top: var(--s-3); }
+</style>

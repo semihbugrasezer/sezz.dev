@@ -72,6 +72,11 @@ for (const file of walk(DIST)) {
   const html = readFileSync(file, 'utf8');
   const here = '/' + relative(DIST, file).replace(/index\.html$/, '').replace(/\\/g, '/');
 
+  // <html lang> must match the URL's language prefix (/tr/, /de/, otherwise English).
+  const wantLang = here.match(/^\/(tr|de)\//)?.[1] ?? 'en';
+  const gotLang = html.match(/<html[^>]*\slang="([^"]+)"/)?.[1];
+  if (gotLang !== wantLang) errors.push(`${here}: <html lang="${gotLang}"> but expected "${wantLang}"`);
+
   for (const [, src] of html.matchAll(/<script[^>]+src="([^"]+)"/g)) {
     if (/^(https?:)?\/\//.test(src) && !src.startsWith(SITE)) errors.push(`${here}: third-party script ${src}`);
   }
@@ -94,4 +99,4 @@ if (errors.length) {
   console.error(`check-site: ${errors.length} problem(s)\n  ` + errors.join('\n  '));
   process.exit(1);
 }
-console.log(`check-site: ${LEGACY.length} legacy URLs ok, ${links} internal references across ${pages} pages ok, no third-party scripts.`);
+console.log(`check-site: ${LEGACY.length} legacy URLs ok, ${links} internal references across ${pages} pages ok, html lang matches URL, no third-party scripts.`);

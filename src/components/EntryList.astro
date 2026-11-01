@@ -1,8 +1,14 @@
 ---
-import { formatDate, isoDate } from '../lib/site';
-interface Item { href: string; title: string; description?: string; date: Date; label?: string; minutes?: number }
+import { isoDate } from '../lib/site';
+import { formatDate, getLang, t } from '../lib/i18n';
+// `localized`: title/description are already in the page language (the linked entry is still English).
+interface Item { href: string; title: string; description?: string; date: Date; label?: string; minutes?: number; localized?: boolean }
 interface Props { items: Item[] }
 const { items } = Astro.props;
+const lang = getLang(Astro.url);
+const s = t(lang);
+// Long-form entries are written in English; flag that on translated pages.
+const en = lang !== 'en';
 ---
 
 <ul class="entries">
@@ -10,14 +16,14 @@ const { items } = Astro.props;
     <li class="entry">
       <a href={it.href}>
         <div class="meta">
-          <time datetime={isoDate(it.date)}>{formatDate(it.date)}</time>
+          <time datetime={isoDate(it.date)}>{formatDate(it.date, lang)}</time>
         </div>
         <div>
-          <div class="entry-title">{it.title}</div>
-          {it.description && <p class="entry-desc">{it.description}</p>}
+          <div class="entry-title" lang={en && !it.localized ? 'en' : undefined}>{it.title}{en && <abbr class="en" title={s.enBadgeTitle}>{s.enBadge}</abbr>}</div>
+          {it.description && <p class="entry-desc" lang={en && !it.localized ? 'en' : undefined}>{it.description}</p>}
           <div class="meta meta-row" style="margin-top:.35rem">
             {it.label && <span>{it.label}</span>}
-            {it.minutes && <span>{it.minutes} min read</span>}
+            {it.minutes && <span>{it.minutes} {s.minRead}</span>}
           </div>
         </div>
       </a>

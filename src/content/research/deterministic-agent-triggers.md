@@ -6,6 +6,13 @@ type: Architecture Study
 status: In progress
 project: seerxo-os
 tags: [agents, orchestration, postgresql, reliability]
+l10n:
+  tr:
+    title: "Ajan işleri için deterministik tetikleyiciler"
+    description: "Ortada yapılacak iş olup olmadığına bir dil modeli mi karar vermeli? Seerxo OS’ten notlar: görevleri kural tabanlı bir uzlaştırıcı oluşturuyor, model yalnızca görev zaten varsa çağrılıyor."
+  de:
+    title: "Deterministische Auslöser für Agentenarbeit"
+    description: "Sollte ein Sprachmodell entscheiden, ob es Arbeit gibt? Notizen aus Seerxo OS, wo ein regelbasierter Reconciler Aufgaben anlegt und ein Modell nur aufgerufen wird, wenn bereits eine Aufgabe existiert."
 ---
 
 ## Research question

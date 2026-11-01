@@ -1,0 +1,360 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import EntryList from '../components/EntryList.astro';
+import { SITE, readingTime } from '../lib/site';
+import { getLang, localize, t, type Lang } from '../lib/i18n';
+
+const lang = getLang(Astro.url);
+const s = t(lang);
+const L = (path: string) => localize(path, lang);
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const featured = projects.filter((p) => p.data.featured);
+
+const research = (await getCollection('research', (e) => !e.data.draft)).map((e) => ({
+  href: `/research/${e.id}/`,
+  title: lang === 'en' ? e.data.title : e.data.l10n[lang].title,
+  description: lang === 'en' ? e.data.description : e.data.l10n[lang].description,
+  date: e.data.created,
+  label: `${e.data.type} · ${e.data.status}`,
+  localized: lang !== 'en',
+}));
+const articles = (await getCollection('writing', (e) => !e.data.draft && e.data.kind === 'article')).map((e) => ({
+  href: `/${e.data.slug}/`,
+  title: e.data.title,
+  description: e.data.description,
+  date: e.data.created,
+  label: e.data.topic,
+  minutes: readingTime(e.body),
+}));
+const latest = [...research, ...articles].sort((a, b) => +b.date - +a.date).slice(0, 3);
+
+// Evidence links are pinned to the commits the case studies were measured at.
+const OS = 'https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/';
+const SS = 'https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/';
+const SX = 'https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/';
+
+const copy = {
+  en: {
+    intro: 'I am a computer engineer focused on designing and building agentic AI systems, LLM-powered applications, and developer tools. My work combines AI orchestration, backend engineering, reliable infrastructure, and security-conscious system design.',
+    ctaAi: 'Explore AI engineering', ctaProjects: 'View projects', ctaContact: 'Contact me',
+    glance: 'Profile at a glance',
+    glanceRows: [
+      ['Target roles', 'AI Engineer · Applied AI Engineer · Agentic AI / LLM Engineer · AI Product Engineer'],
+      ['Specialisation', 'Agentic AI, autonomous workflows and LLM application engineering'],
+      ['Core stack', 'Python · TypeScript / Node.js · Go · Rust · PostgreSQL · Redis · Docker · CI/CD · MCP'],
+      ['Education', 'B.Sc. Computer Engineering, Karabük University'],
+    ],
+    links: 'Links',
+    expertiseEyebrow: 'Engineering expertise', expertiseTitle: 'What I can show, not just list',
+    expertiseBody: 'Each area links to the code or document that backs it. Where evidence is still missing, it says so.',
+    expertise: [
+      ['Agentic AI & multi-agent workflows', 'Task orchestration with persisted state, a coder agent and an independent reviewer from a different provider, human approval at the boundaries.', 'Seerxo OS'],
+      ['LLM applications & tool calling', 'A live LLM product reachable from a CLI, MCP clients and the web, with one account and versioned API contracts.', 'Seerxo'],
+      ['MCP & AI developer tools', 'A hand-written stdio MCP server, a remote MCP endpoint, a Claude Code skill, and a gateway between model APIs.', 'Seerxo · Bridge'],
+      ['AI evaluation & reliability', 'Deterministic golden evals in CI for unsupported claims, malformed output and prompt injection. Task-success, latency and cost benchmarks are planned, not done.', 'Evaluation status'],
+      ['Backend systems & APIs', 'FastAPI and Node.js services on PostgreSQL: atomic claims, partial unique indexes, migrations, crash recovery and backups.', 'Seerxo OS'],
+      ['AI infrastructure & security', 'Isolated execution for coding agents, signed releases, least-privilege CI, and a fuzzed Rust SSH-agent proxy with a written threat model.', 'Release gateway · SigSieve'],
+    ],
+    workEyebrow: 'Featured engineering work', workTitle: 'Three systems worth a technical conversation',
+    workBody: 'Each case study covers the problem, architecture, my role (including AI-assisted development), decisions, evidence and open limitations.',
+    workMoreAi: 'How these projects demonstrate AI engineering →', workMoreAll: 'All projects →',
+    evidenceEyebrow: 'Engineering evidence', evidenceTitle: 'Start here if you review code',
+    evidenceBody: 'Direct links into the repositories, pinned to the commits the case studies describe.',
+    evidence: [
+      ['Seerxo OS', 'Deterministic work detection — no work, no model call', 'app/business_reconciler.py'],
+      ['Seerxo OS', 'Golden evals: “done” without evidence is rejected', 'evals/test_supervisor_evals.py'],
+      ['Seerxo OS', 'Prompt-injection evals: external text is data, not instruction', 'evals/test_trust_evals.py'],
+      ['Seerxo OS', 'Crash-recovery tests against real PostgreSQL', 'tests/test_worker_crash_recovery_postgres.py'],
+      ['Seerxo', 'MCP tool schemas with explicit limitations', 'src/mcp/tools.js'],
+      ['Seerxo', 'End-to-end test of the stdio MCP server', 'tests/stdio-mcp.test.js'],
+      ['SigSieve', 'Threat model written before the code', 'docs/THREAT_MODEL.md'],
+      ['SigSieve', 'Findings register: every issue and its fix', 'docs/FINDINGS.md'],
+    ],
+    ossEyebrow: 'Open source & community', ossTitle: 'Tools other developers can use',
+    ossBody: 'SigSieve (MIT), the Seerxo client and MCP server (MIT) and Bridge (Apache-2.0) are open source with install guides, issue trackers and security policies. Seerxo OS is public to read but not yet licensed.',
+    ossMore: 'Open source overview →',
+    writingEyebrow: 'Research & writing', writingTitle: 'Latest notes', writingMore: 'All writing →', researchMore: 'Research journal →',
+    contactEyebrow: 'Contact', contactTitle: 'Hiring for an AI engineering role?',
+    contactBody: 'I am looking for AI Engineer, Applied AI Engineer and LLM / Agent Engineering roles, including international and remote teams. LinkedIn is the fastest way to reach me.',
+    contactAll: 'All contact options',
+  },
+  tr: {
+    intro: 'Agentic AI sistemleri, LLM tabanlı uygulamalar ve geliştirici araçları tasarlayıp geliştirmeye odaklanan bir bilgisayar mühendisiyim. Çalışmalarım AI orkestrasyonu, backend mühendisliği, güvenilir altyapı ve güvenliği gözeten sistem tasarımını birleştiriyor.',
+    ctaAi: 'AI mühendisliğini incele', ctaProjects: 'Projeleri gör', ctaContact: 'İletişime geç',
+    glance: 'Kısaca profil',
+    glanceRows: [
+      ['Hedef pozisyonlar', 'AI Engineer · Applied AI Engineer · Agentic AI / LLM Engineer · AI Product Engineer'],
+      ['Uzmanlık', 'Agentic AI, otonom iş akışları ve LLM uygulama mühendisliği'],
+      ['Temel teknolojiler', 'Python · TypeScript / Node.js · Go · Rust · PostgreSQL · Redis · Docker · CI/CD · MCP'],
+      ['Eğitim', 'Bilgisayar Mühendisliği lisans, Karabük Üniversitesi'],
+    ],
+    links: 'Bağlantılar',
+    expertiseEyebrow: 'Mühendislik yetkinlikleri', expertiseTitle: 'Listelemekle kalmayıp gösterebildiklerim',
+    expertiseBody: 'Her alan, onu destekleyen koda veya dokümana bağlanıyor. Kanıtın henüz eksik olduğu yerde bu açıkça belirtiliyor.',
+    expertise: [
+      ['Agentic AI ve çoklu ajan iş akışları', 'Kalıcı durumla görev orkestrasyonu; bir kodlayıcı ajan ve farklı bir sağlayıcıdan bağımsız inceleyici; sınırlarda insan onayı.', 'Seerxo OS'],
+      ['LLM uygulamaları ve tool calling', 'CLI, MCP istemcileri ve web üzerinden erişilen, tek hesaplı ve sürümlü API sözleşmeleri olan canlı bir LLM ürünü.', 'Seerxo'],
+      ['MCP ve AI geliştirici araçları', 'Elle yazılmış bir stdio MCP sunucusu, uzak bir MCP uç noktası, bir Claude Code skill’i ve model API’leri arasında bir ağ geçidi.', 'Seerxo · Bridge'],
+      ['AI değerlendirme ve güvenilirlik', 'CI’da çalışan deterministik golden eval’ler: asılsız iddialar, bozuk çıktı ve prompt injection. Görev başarısı, gecikme ve maliyet ölçümleri planlandı, henüz yapılmadı.', 'Değerlendirme durumu'],
+      ['Backend sistemleri ve API’ler', 'PostgreSQL üzerinde FastAPI ve Node.js servisleri: atomik görev alma, kısmi unique index’ler, migration’lar, çökme sonrası kurtarma ve yedekler.', 'Seerxo OS'],
+      ['AI altyapısı ve güvenlik', 'Kodlama ajanları için izole çalıştırma, imzalı sürümler, en az yetkili CI ve yazılı tehdit modeli olan, fuzz testinden geçmiş bir Rust SSH agent proxy’si.', 'Sürüm geçidi · SigSieve'],
+    ],
+    workEyebrow: 'Öne çıkan mühendislik çalışmaları', workTitle: 'Teknik bir görüşmeye değer üç sistem',
+    workBody: 'Her vaka çalışması problemi, mimariyi, rolümü (AI destekli geliştirme dahil), kararları, kanıtları ve açık sınırlamaları anlatır (İngilizce).',
+    workMoreAi: 'Bu projeler AI mühendisliğini nasıl gösteriyor →', workMoreAll: 'Tüm projeler →',
+    evidenceEyebrow: 'Mühendislik kanıtları', evidenceTitle: 'Kod inceliyorsanız buradan başlayın',
+    evidenceBody: 'Vaka çalışmalarının anlattığı commit’lere sabitlenmiş, doğrudan depo bağlantıları.',
+    evidence: [
+      ['Seerxo OS', 'Deterministik iş tespiti — iş yoksa model çağrısı da yok', 'app/business_reconciler.py'],
+      ['Seerxo OS', 'Golden eval’ler: kanıtsız “bitti” reddedilir', 'evals/test_supervisor_evals.py'],
+      ['Seerxo OS', 'Prompt injection eval’leri: dış metin talimat değil, veridir', 'evals/test_trust_evals.py'],
+      ['Seerxo OS', 'Gerçek PostgreSQL üzerinde çökme sonrası kurtarma testleri', 'tests/test_worker_crash_recovery_postgres.py'],
+      ['Seerxo', 'Sınırlamaları açıkça belirten MCP araç şemaları', 'src/mcp/tools.js'],
+      ['Seerxo', 'stdio MCP sunucusu için uçtan uca test', 'tests/stdio-mcp.test.js'],
+      ['SigSieve', 'Koddan önce yazılan tehdit modeli', 'docs/THREAT_MODEL.md'],
+      ['SigSieve', 'Bulgu kaydı: her sorun ve düzeltmesi', 'docs/FINDINGS.md'],
+    ],
+    ossEyebrow: 'Açık kaynak ve topluluk', ossTitle: 'Diğer geliştiricilerin kullanabileceği araçlar',
+    ossBody: 'SigSieve (MIT), Seerxo istemcisi ve MCP sunucusu (MIT) ve Bridge (Apache-2.0); kurulum rehberleri, issue takibi ve güvenlik politikalarıyla açık kaynak. Seerxo OS’in kaynak kodu okunabilir, ancak henüz lisanslı değil.',
+    ossMore: 'Açık kaynak özeti →',
+    writingEyebrow: 'Araştırma ve yazılar', writingTitle: 'Son notlar', writingMore: 'Tüm yazılar →', researchMore: 'Araştırma günlüğü →',
+    contactEyebrow: 'İletişim', contactTitle: 'AI mühendisliği pozisyonu için mi arıyorsunuz?',
+    contactBody: 'Uluslararası ve uzaktan çalışan ekipler dahil AI Engineer, Applied AI Engineer ve LLM / Agent Engineering pozisyonlarıyla ilgileniyorum. Bana en hızlı LinkedIn üzerinden ulaşabilirsiniz.',
+    contactAll: 'Tüm iletişim seçenekleri',
+  },
+  de: {
+    intro: 'Ich bin Computer Engineer mit Schwerpunkt auf Entwurf und Entwicklung von Agentic-AI-Systemen, LLM-gestützten Anwendungen und Entwickler-Tools. Meine Arbeit verbindet KI-Orchestrierung, Backend-Engineering, zuverlässige Infrastruktur und sicherheitsbewusstes Systemdesign.',
+    ctaAi: 'AI Engineering ansehen', ctaProjects: 'Projekte ansehen', ctaContact: 'Kontakt aufnehmen',
+    glance: 'Profil auf einen Blick',
+    glanceRows: [
+      ['Zielrollen', 'AI Engineer · Applied AI Engineer · Agentic AI / LLM Engineer · AI Product Engineer'],
+      ['Schwerpunkt', 'Agentic AI, autonome Workflows und LLM-Anwendungsentwicklung'],
+      ['Kern-Stack', 'Python · TypeScript / Node.js · Go · Rust · PostgreSQL · Redis · Docker · CI/CD · MCP'],
+      ['Ausbildung', 'B.Sc. Computer Engineering, Universität Karabük'],
+    ],
+    links: 'Links',
+    expertiseEyebrow: 'Engineering-Kompetenzen', expertiseTitle: 'Was ich zeigen kann, nicht nur aufzählen',
+    expertiseBody: 'Jeder Bereich verlinkt auf den Code oder das Dokument, das ihn belegt. Wo Belege noch fehlen, steht das dabei.',
+    expertise: [
+      ['Agentic AI & Multi-Agent-Workflows', 'Aufgaben-Orchestrierung mit persistentem Zustand, ein Coder-Agent und ein unabhängiger Reviewer eines anderen Anbieters, menschliche Freigabe an den Grenzen.', 'Seerxo OS'],
+      ['LLM-Anwendungen & Tool Calling', 'Ein LLM-Produkt im Live-Betrieb, erreichbar über CLI, MCP-Clients und Web, mit einem Konto und versionierten API-Verträgen.', 'Seerxo'],
+      ['MCP & KI-Entwickler-Tools', 'Ein selbst geschriebener stdio-MCP-Server, ein Remote-MCP-Endpunkt, ein Claude-Code-Skill und ein Gateway zwischen Modell-APIs.', 'Seerxo · Bridge'],
+      ['KI-Evaluierung & Zuverlässigkeit', 'Deterministische Golden Evals in CI gegen unbelegte Behauptungen, fehlerhafte Ausgaben und Prompt Injection. Benchmarks zu Aufgabenerfolg, Latenz und Kosten sind geplant, nicht erledigt.', 'Evaluierungsstand'],
+      ['Backend-Systeme & APIs', 'FastAPI- und Node.js-Services auf PostgreSQL: atomare Claims, partielle Unique-Indizes, Migrationen, Crash-Recovery und Backups.', 'Seerxo OS'],
+      ['KI-Infrastruktur & Security', 'Isolierte Ausführung für Coding-Agenten, signierte Releases, CI mit minimalen Rechten und ein gefuzzter SSH-Agent-Proxy in Rust mit schriftlichem Bedrohungsmodell.', 'Release-Gateway · SigSieve'],
+    ],
+    workEyebrow: 'Ausgewählte Projekte', workTitle: 'Drei Systeme für ein technisches Gespräch',
+    workBody: 'Jede Fallstudie behandelt Problem, Architektur, meine Rolle (einschließlich KI-gestützter Entwicklung), Entscheidungen, Belege und offene Grenzen (auf Englisch).',
+    workMoreAi: 'Wie diese Projekte AI Engineering belegen →', workMoreAll: 'Alle Projekte →',
+    evidenceEyebrow: 'Engineering-Belege', evidenceTitle: 'Hier anfangen, wenn Sie Code prüfen',
+    evidenceBody: 'Direkte Links in die Repositories, fixiert auf die Commits, die die Fallstudien beschreiben.',
+    evidence: [
+      ['Seerxo OS', 'Deterministische Arbeitserkennung — keine Arbeit, kein Modellaufruf', 'app/business_reconciler.py'],
+      ['Seerxo OS', 'Golden Evals: „erledigt“ ohne Beleg wird abgelehnt', 'evals/test_supervisor_evals.py'],
+      ['Seerxo OS', 'Prompt-Injection-Evals: externer Text ist Daten, keine Anweisung', 'evals/test_trust_evals.py'],
+      ['Seerxo OS', 'Crash-Recovery-Tests gegen echtes PostgreSQL', 'tests/test_worker_crash_recovery_postgres.py'],
+      ['Seerxo', 'MCP-Tool-Schemas mit expliziten Grenzen', 'src/mcp/tools.js'],
+      ['Seerxo', 'End-to-End-Test des stdio-MCP-Servers', 'tests/stdio-mcp.test.js'],
+      ['SigSieve', 'Bedrohungsmodell, geschrieben vor dem Code', 'docs/THREAT_MODEL.md'],
+      ['SigSieve', 'Findings-Register: jedes Problem und seine Behebung', 'docs/FINDINGS.md'],
+    ],
+    ossEyebrow: 'Open Source & Community', ossTitle: 'Werkzeuge, die andere Entwickler nutzen können',
+    ossBody: 'SigSieve (MIT), der Seerxo-Client mit MCP-Server (MIT) und Bridge (Apache-2.0) sind Open Source, mit Installationsanleitungen, Issue-Trackern und Security-Policies. Seerxo OS ist öffentlich lesbar, aber noch nicht lizenziert.',
+    ossMore: 'Open-Source-Überblick →',
+    writingEyebrow: 'Recherche & Artikel', writingTitle: 'Neueste Beiträge', writingMore: 'Alle Artikel →', researchMore: 'Recherche-Journal →',
+    contactEyebrow: 'Kontakt', contactTitle: 'Sie besetzen eine AI-Engineering-Stelle?',
+    contactBody: 'Ich suche Rollen als AI Engineer, Applied AI Engineer und LLM-/Agent-Engineer, auch in internationalen und Remote-Teams. Am schnellsten erreichen Sie mich über LinkedIn.',
+    contactAll: 'Alle Kontaktmöglichkeiten',
+  },
+} satisfies Record<Lang, unknown>;
+const c = copy[lang];
+
+const expertiseLinks = [
+  ['/projects/seerxo-os/'], ['/projects/seerxo/'], ['/projects/seerxo/', '/projects/bridge/'],
+  [L('/ai-engineering/') + '#evaluation'], ['/projects/seerxo-os/'], ['/projects/seerxo-os/', '/projects/sigsieve/'],
+];
+const evidenceBase: Record<string, string> = { 'Seerxo OS': OS, Seerxo: SX, SigSieve: SS };
+---
+
+<Base>
+  <section class="hero grid-bg" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="idx">sezz.dev</span> <span set:html={s.roleHtml} /></p>
+        <h1 id="hero-title">Semih Buğra Sezer</h1>
+        <p class="tagline">{s.tagline}</p>
+        <p class="intro">{c.intro}</p>
+        <div class="actions">
+          <a class="btn primary" href={L('/ai-engineering/')}>{c.ctaAi} <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn" href={L('/projects/')}>{c.ctaProjects}</a>
+          <a class="btn" href={L('/contact/')}>{c.ctaContact}</a>
+        </div>
+      </div>
+
+      <aside class="spec" aria-labelledby="glance-h">
+        <p class="eyebrow" id="glance-h">{c.glance}</p>
+        <dl>
+          {c.glanceRows.map(([k, v]) => (
+            <div class="spec-row"><dt>{k}</dt><dd>{v}</dd></div>
+          ))}
+          <div class="spec-row">
+            <dt>{c.links}</dt>
+            <dd class="spec-links">
+              <a href={SITE.github} rel="me noopener" target="_blank">GitHub</a>
+              <a href={SITE.linkedin} rel="me noopener" target="_blank">LinkedIn</a>
+              <a href={L('/contact/')}>{s.contact}</a>
+            </dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">01</span> {c.workEyebrow}</p>
+        <h2 id="work-title">{c.workTitle}</h2>
+        <p>{c.workBody}</p>
+      </div>
+      <div class="featured">
+        {featured.map((p, i) => <ProjectCard project={p} index={i + 1} large />)}
+      </div>
+      <p class="more-link"><a href={L('/ai-engineering/')}>{c.workMoreAi}</a> · <a href={L('/projects/')}>{c.workMoreAll}</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="focus-title">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">02</span> {c.expertiseEyebrow}</p>
+        <h2 id="focus-title">{c.expertiseTitle}</h2>
+        <p>{c.expertiseBody}</p>
+      </div>
+      <ol class="areas">
+        {c.expertise.map(([title, body, label], i) => (
+          <li class="area">
+            <span class="meta area-n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{title}</h3>
+            <p>{body}</p>
+            <ul class="area-links">
+              {label.split(' · ').map((l, j) => <li><a href={expertiseLinks[i][j] ?? expertiseLinks[i][0]}>{l} →</a></li>)}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="evidence-title">
+    <div class="wrap two-col">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">03</span> {c.evidenceEyebrow}</p>
+        <h2 id="evidence-title">{c.evidenceTitle}</h2>
+        <p>{c.evidenceBody}</p>
+      </div>
+      <ul class="evidence">
+        {c.evidence.map(([project, what, path]) => (
+          <li>
+            <a href={evidenceBase[project] + path} rel="noopener" target="_blank">
+              <span class="meta">{project}</span>
+              <span class="ev-what">{what}</span>
+              <code>{path}</code>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="oss-title">
+    <div class="wrap two-col">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">04</span> {c.ossEyebrow}</p>
+        <h2 id="oss-title">{c.ossTitle}</h2>
+      </div>
+      <div>
+        <p class="lead-p">{c.ossBody}</p>
+        <p class="more-link"><a href={L('/open-source/')}>{c.ossMore}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="writing-title">
+    <div class="wrap two-col">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">05</span> {c.writingEyebrow}</p>
+        <h2 id="writing-title">{c.writingTitle}</h2>
+        <p class="meta"><a href={L('/research/')}>{c.researchMore}</a> · <a href={L('/writing/')}>{c.writingMore}</a></p>
+      </div>
+      <EntryList items={latest} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="contact-title">
+    <div class="wrap contact">
+      <div class="section-head">
+        <p class="eyebrow"><span class="idx">06</span> {c.contactEyebrow}</p>
+        <h2 id="contact-title">{c.contactTitle}</h2>
+        <p>{c.contactBody}</p>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href={SITE.linkedin} rel="noopener" target="_blank">LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn" href={SITE.github} rel="noopener" target="_blank">GitHub</a>
+        <a class="btn" href={L('/contact/')}>{c.contactAll}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { border-bottom: 1px solid var(--rule); }
+  .hero-grid { display: grid; gap: var(--s-7); padding-block: var(--s-9) var(--s-8); align-items: end; }
+  @media (min-width: 60rem) { .hero-grid { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); } }
+  .hero h1 {
+    font-family: var(--font-display); font-weight: 500; font-size: var(--fs-hero);
+    letter-spacing: -0.035em; line-height: 0.98; margin-block: var(--s-4) var(--s-5);
+  }
+  .tagline { font-family: var(--font-display); font-size: var(--fs-lg); line-height: 1.35; max-width: 30ch; color: var(--ink); font-style: italic; }
+  .intro { margin-top: var(--s-4); color: var(--ink-2); max-width: 58ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-6); }
+
+  .spec { border: 1px solid var(--rule-strong); background: var(--bg-raised); border-radius: var(--radius); padding: var(--s-5); }
+  .spec dl { margin-top: var(--s-3); }
+  .spec-row { display: grid; gap: var(--s-1); padding-block: var(--s-3); border-top: 1px solid var(--rule); }
+  .spec-row:first-child { border-top: 0; }
+  .spec dt { font-weight: 600; }
+  .spec dt { font-family: var(--font-mono); font-size: var(--fs-xs); font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .spec dd { font-size: var(--fs-sm); color: var(--ink); }
+  .spec-links { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-4); }
+  .spec-foot { border-top: 1px solid var(--rule); padding-top: var(--s-3); }
+
+  .areas { list-style: none; padding: 0; display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+  .area { padding: var(--s-5); border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: var(--s-2); }
+  .area-n { color: var(--accent); }
+  .area h3 { font-size: var(--fs-md); font-weight: 600; }
+  .area p { color: var(--ink-2); font-size: var(--fs-sm); }
+  .area-links { list-style: none; padding: 0; margin-top: auto; padding-top: var(--s-3); display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-4); font-size: var(--fs-sm); }
+
+  .featured { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); }
+  .more-link { margin-top: var(--s-5); font-size: var(--fs-sm); }
+
+  .two-col { display: grid; gap: var(--s-6); align-items: start; }
+  @media (min-width: 60rem) { .two-col { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); } }
+  .exploring { list-style: none; padding: 0; display: grid; gap: var(--s-4); }
+  .exploring li { padding-left: var(--s-5); border-left: 1px solid var(--rule-strong); color: var(--ink-2); }
+  .exploring strong { color: var(--ink); font-weight: 600; }
+  .contact .actions { margin-top: 0; }
+  .evidence { list-style: none; padding: 0; border-top: 1px solid var(--rule); }
+  .evidence li { border-bottom: 1px solid var(--rule); }
+  .evidence a { display: grid; grid-template-columns: 6.5rem 1fr; gap: var(--s-1) var(--s-4); padding-block: var(--s-3); text-decoration: none; }
+  .evidence .meta { padding-top: 0.2rem; }
+  .evidence .ev-what { font-weight: 550; }
+  .evidence code { grid-column: 2; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-3); overflow-wrap: anywhere; }
+  .evidence a:hover .ev-what { color: var(--accent-ink); }
+  @media (max-width: 40rem) { .evidence a { grid-template-columns: 1fr; } .evidence code { grid-column: 1; } }
+  .lead-p { color: var(--ink-2); max-width: 62ch; }
+</style>

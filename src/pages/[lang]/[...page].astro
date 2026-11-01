@@ -1,0 +1,37 @@
+---
+// Turkish and German versions of the translated pages: /tr/…, /de/….
+// Each view reads the language from the URL; English lives at the site root.
+import Home from '../../views/Home.astro';
+import AiEngineering from '../../views/AiEngineering.astro';
+import Projects from '../../views/Projects.astro';
+import Research from '../../views/Research.astro';
+import Writing from '../../views/Writing.astro';
+import About from '../../views/About.astro';
+import Now from '../../views/Now.astro';
+import Contact from '../../views/Contact.astro';
+import Search from '../../views/Search.astro';
+import OpenSource from '../../views/OpenSource.astro';
+import { OTHER_LOCALES, TRANSLATED_PAGES } from '../../lib/i18n';
+
+const VIEWS = {
+  '/': Home,
+  '/ai-engineering/': AiEngineering,
+  '/projects/': Projects,
+  '/research/': Research,
+  '/writing/': Writing,
+  '/about/': About,
+  '/now/': Now,
+  '/contact/': Contact,
+  '/search/': Search,
+  '/open-source/': OpenSource,
+} satisfies Record<(typeof TRANSLATED_PAGES)[number], unknown>;
+
+export function getStaticPaths() {
+  return OTHER_LOCALES.flatMap((lang) =>
+    TRANSLATED_PAGES.map((path) => ({ params: { lang, page: path === '/' ? undefined : path.slice(1, -1) }, props: { path } })),
+  );
+}
+const View = VIEWS[Astro.props.path as keyof typeof VIEWS];
+---
+
+<View />

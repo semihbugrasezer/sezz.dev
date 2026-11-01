@@ -1,27 +1,49 @@
 ---
-import { NAV } from '../lib/site';
+import { LOCALES, LANG_META, getLang, localize, isTranslated, sectionIndex, t } from '../lib/i18n';
+const lang = getLang(Astro.url);
+const s = t(lang);
 const path = Astro.url.pathname;
 const current = (href: string) => path === href || path.startsWith(href);
+const nav = [
+  ['/ai-engineering/', s.nav.ai], ['/projects/', s.nav.projects], ['/research/', s.nav.research],
+  ['/writing/', s.nav.writing], ['/about/', s.nav.about], ['/now/', s.nav.now],
+].map(([href, label]) => ({ href: localize(href, lang), label }));
+// Same page in another language, or that section's index when the page is English-only.
+// The 404 page has no address of its own; send the switcher home.
+const here = path.startsWith('/404') ? '/' : path;
+const target = sectionIndex(here);
+const switcher = LOCALES.map((l) => ({ l, href: l === lang ? here : localize(target, l), meta: LANG_META[l] }));
+const englishOnly = !isTranslated(here);
 ---
 
 <header class="site-header">
   <div class="wrap bar">
-    <a href="/" class="brand" aria-label="Semih Buğra Sezer — home">
+    <a href={localize('/', lang)} class="brand" aria-label={`Semih Buğra Sezer — ${s.home}`}>
       <span class="mark" aria-hidden="true">sz</span>
       <span class="brand-name">Semih Buğra Sezer</span>
     </a>
     <nav aria-label="Primary">
       <ul>
-        {NAV.map((n) => (
+        {nav.map((n) => (
           <li><a href={n.href} aria-current={current(n.href) ? 'page' : undefined}>{n.label}</a></li>
         ))}
       </ul>
     </nav>
     <div class="tools">
-      <a class="icon-btn" href="/search/" aria-label="Search">
+      <ul class="langs" aria-label={s.language}>
+        {switcher.map(({ l, href, meta }) => (
+          <li>
+            <a href={href} hreflang={meta.bcp47} lang={meta.bcp47} aria-current={l === lang ? 'true' : undefined}
+              title={englishOnly && l !== 'en' ? `${meta.name} · ${s.englishOnly}` : meta.name}>
+              <span aria-hidden="true">{meta.short}</span><span class="visually-hidden">{meta.name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a class="icon-btn" href={localize('/search/', lang)} aria-label={s.search}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
       </a>
-      <button class="icon-btn" type="button" id="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+      <button class="icon-btn" type="button" id="theme-toggle" aria-label={s.toggleTheme} aria-pressed="false">
         <svg class="i-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
         <svg class="i-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
       </button>
@@ -67,7 +89,15 @@ const current = (href: string) => path === href || path.startsWith(href);
   }
   nav a:hover { color: var(--ink); background: var(--bg-sunken); }
   nav a[aria-current='page'] { color: var(--ink); box-shadow: inset 0 -1.5px 0 var(--accent); border-radius: 0; }
-  .tools { display: flex; gap: var(--s-1); }
+  .tools { display: flex; align-items: center; gap: var(--s-1); }
+  .langs { display: flex; list-style: none; padding: 0; margin-right: var(--s-2); border: 1px solid var(--rule); border-radius: 3px; }
+  .langs li + li { border-left: 1px solid var(--rule); }
+  .langs a {
+    display: block; padding: 0.25rem 0.45rem; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.04em;
+    text-decoration: none; color: var(--ink-3);
+  }
+  .langs a:hover { color: var(--ink); }
+  .langs a[aria-current='true'] { color: var(--ink); background: var(--bg-sunken); font-weight: 600; }
   .icon-btn {
     display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem;
     border: 1px solid transparent; border-radius: 3px; background: none; color: var(--ink-2); cursor: pointer;
@@ -81,6 +111,9 @@ const current = (href: string) => path === href || path.startsWith(href);
     :global(:root:not([data-theme='light'])) .i-moon { display: none; }
   }
 
+  @media (max-width: 26rem) {
+    .brand-name { display: none; }
+  }
   @media (max-width: 52rem) {
     .bar { flex-wrap: wrap; gap: 0 var(--s-3); padding-block: var(--s-2) 0; }
     .brand-name { font-size: var(--fs-sm); }
