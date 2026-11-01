@@ -29,7 +29,7 @@ const notesCount = (await getCollection('writing', (e) => e.data.kind === 'learn
 const areas = [
   {
     n: '01',
-    title: 'Autonomous AI Systems',
+    title: 'Agentic AI & Orchestration',
     body: 'Agents that act inside explicit boundaries: persisted state, deterministic triggers, isolated execution, independent review and human authorisation.',
     links: [{ href: '/projects/seerxo-os/', label: 'Seerxo OS' }, { href: '/research/deterministic-agent-triggers/', label: 'Deterministic triggers' }],
   },
@@ -47,8 +47,8 @@ const areas = [
   },
   {
     n: '04',
-    title: 'Applied Research & Engineering',
-    body: 'Independent technical investigations written up with a question, method, evidence and limitations — separating observations from conclusions.',
+    title: 'LLM Evaluation & Applied Research',
+    body: 'Evidence-led investigations of agent reliability, tool-use boundaries and evaluation methods — with hypotheses separated from verified results.',
     links: [{ href: '/research/', label: 'Research journal' }, { href: '/research/ssh-agent-forwarding-threat-model/', label: 'SSH agent threat model' }],
   },
 ];
@@ -58,23 +58,23 @@ const areas = [
   <section class="hero grid-bg" aria-labelledby="hero-title">
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="idx">sezz.dev</span> Software Engineer · Independent Researcher</p>
+        <p class="eyebrow"><span class="idx">sezz.dev</span> AI Engineer · Agentic AI & LLM Systems</p>
         <h1 id="hero-title">Semih Buğra Sezer</h1>
         <p class="tagline">{SITE.tagline}</p>
         <p class="intro">
-          I design and operate backend systems and infrastructure, build AI agents that work within
-          explicit safety boundaries, and write small security tools with their threat models in plain
-          view. Computer Engineering graduate of Karabük University.
+          I build agentic AI systems, LLM-powered developer tools and the backend infrastructure that
+          makes them reliable. My work spans agent orchestration, MCP integrations, deterministic
+          workflows and explicit security boundaries. B.Sc. Computer Engineering, Karabük University.
         </p>
         <div class="actions">
-          <a class="btn primary" href="/projects/">Explore projects <span class="arrow" aria-hidden="true">→</span></a>
-          <a class="btn" href="/research/">Read research notes</a>
+          <a class="btn primary" href="/ai-engineering/">Explore AI engineering <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn" href="/projects/">See engineering case studies</a>
           <a class="btn" href={SITE.github} rel="noopener" target="_blank">View GitHub</a>
         </div>
       </div>
 
       <aside class="spec" aria-label="Current engineering work">
-        <p class="eyebrow">Current work · Oct 2026</p>
+        <p class="eyebrow">Selected systems · Oct 2026</p>
         <dl>
           {featured.map((p) => (
             <div class="spec-row">
@@ -113,13 +113,13 @@ const areas = [
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow"><span class="idx">02</span> Featured engineering work</p>
-        <h2 id="work-title">Systems I have built and run</h2>
-        <p>Each project has a case study covering the problem, architecture, design decisions, evidence and known limitations.</p>
+        <h2 id="work-title">Engineering evidence, not just a tech stack</h2>
+        <p>Explore what I designed, why the tradeoffs matter, what the code demonstrates and where the work is not yet verified.</p>
       </div>
       <div class="featured">
         {featured.map((p, i) => <ProjectCard project={p} index={i + 1} large />)}
       </div>
-      <p class="more-link"><a href="/projects/">All projects →</a></p>
+      <p class="more-link"><a href="/ai-engineering/">How these projects demonstrate AI engineering →</a> · <a href="/projects/">All projects →</a></p>
     </div>
   </section>
 
@@ -154,7 +154,7 @@ const areas = [
       <div class="section-head">
         <p class="eyebrow"><span class="idx">05</span> Contact & collaboration</p>
         <h2 id="contact-title">Let’s talk about systems</h2>
-        <p>Open to engineering roles, collaboration on agent infrastructure or security tooling, and technical discussion of anything published here.</p>
+        <p>Open to AI Engineer, Applied AI Engineer and LLM / Agent Engineering roles, and collaboration on useful open-source AI infrastructure.</p>
       </div>
       <div class="actions">
         <a class="btn primary" href={SITE.linkedin} rel="noopener" target="_blank">LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
