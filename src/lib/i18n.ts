@@ -13,7 +13,7 @@ export const LANG_META: Record<Lang, { name: string; short: string; bcp47: strin
 };
 
 /** Paths (without language prefix) that exist in every language. */
-export const TRANSLATED_PAGES = ['/', '/ai-engineering/', '/projects/', '/research/', '/writing/', '/about/', '/now/', '/contact/', '/search/'] as const;
+export const TRANSLATED_PAGES = ['/', '/ai-engineering/', '/projects/', '/research/', '/writing/', '/about/', '/now/', '/contact/', '/search/', '/open-source/'] as const;
 
 export function getLang(url: URL): Lang {
   const seg = url.pathname.split('/')[1];
@@ -57,7 +57,7 @@ export const ui = {
     // For uppercase eyebrows: English terms keep English casing (Turkish would render “AGENTİC”).
     roleHtml: 'AI Engineer · Agentic AI &amp; LLM Systems',
     title: 'Semih Buğra Sezer — AI Engineer | Agentic AI & LLM Systems',
-    tagline: 'Building AI agents, intelligent workflows, and reliable LLM-powered systems.',
+    tagline: 'Building autonomous AI agents, intelligent workflows, and production-ready LLM applications.',
     description:
       'AI engineer focused on agentic AI, LLM applications, tool integrations and reliable AI infrastructure. Explore evidence-backed case studies, open-source software and technical research.',
     nav: { ai: 'AI Engineering', projects: 'Projects', research: 'Research', writing: 'Writing', about: 'About', now: 'Now' },
@@ -69,12 +69,14 @@ export const ui = {
     englishOnly: 'English only',
     elsewhere: 'Elsewhere',
     contact: 'Contact',
+    openSource: 'Open source',
     siteSource: 'Site source',
     footerNote: 'Project facts are checked against their public repositories.',
     caseStudy: 'Case study',
     source: 'Source',
     live: 'Live',
     problem: 'Problem',
+    demonstrates: 'Demonstrates',
     technologies: 'Technologies',
     minRead: 'min read',
     learningNote: 'Learning note',
@@ -85,7 +87,7 @@ export const ui = {
     role: 'AI Engineer · Agentic AI & LLM Sistemleri',
     roleHtml: '<span lang="en">AI Engineer · Agentic AI</span> &amp; LLM Sistemleri',
     title: 'Semih Buğra Sezer — AI Engineer | Agentic AI & LLM Sistemleri',
-    tagline: 'AI ajanları, akıllı iş akışları ve güvenilir LLM tabanlı sistemler geliştiriyorum.',
+    tagline: 'Otonom AI ajanları, akıllı iş akışları ve canlıya hazır LLM uygulamaları geliştiriyorum.',
     description:
       'Agentic AI, LLM uygulamaları, araç entegrasyonları ve güvenilir AI altyapısına odaklanan AI mühendisi. Kanıta dayalı vaka çalışmaları, açık kaynak yazılım ve teknik araştırmalar.',
     nav: { ai: 'AI Mühendisliği', projects: 'Projeler', research: 'Araştırma', writing: 'Yazılar', about: 'Hakkımda', now: 'Şimdi' },
@@ -97,12 +99,14 @@ export const ui = {
     englishOnly: 'Yalnızca İngilizce',
     elsewhere: 'Bağlantılar',
     contact: 'İletişim',
+    openSource: 'Açık kaynak',
     siteSource: 'Site kaynak kodu',
     footerNote: 'Proje bilgileri herkese açık depolarıyla karşılaştırılarak doğrulanır.',
     caseStudy: 'Vaka çalışması',
     source: 'Kaynak kod',
     live: 'Canlı',
     problem: 'Problem',
+    demonstrates: 'Gösterdiği beceriler',
     technologies: 'Teknolojiler',
     minRead: 'dk okuma',
     learningNote: 'Öğrenme notu',
@@ -113,7 +117,7 @@ export const ui = {
     role: 'AI Engineer · Agentic AI & LLM-Systeme',
     roleHtml: 'AI Engineer · Agentic AI &amp; LLM-Systeme',
     title: 'Semih Buğra Sezer — AI Engineer | Agentic AI & LLM-Systeme',
-    tagline: 'Ich entwickle KI-Agenten, intelligente Workflows und zuverlässige LLM-basierte Systeme.',
+    tagline: 'Ich entwickle autonome KI-Agenten, intelligente Workflows und produktionsreife LLM-Anwendungen.',
     description:
       'AI Engineer mit Fokus auf Agentic AI, LLM-Anwendungen, Tool-Integrationen und zuverlässige KI-Infrastruktur. Belegbare Fallstudien, Open-Source-Software und technische Recherche.',
     nav: { ai: 'AI Engineering', projects: 'Projekte', research: 'Recherche', writing: 'Artikel', about: 'Über mich', now: 'Aktuell' },
@@ -125,12 +129,14 @@ export const ui = {
     englishOnly: 'Nur auf Englisch',
     elsewhere: 'Profile',
     contact: 'Kontakt',
+    openSource: 'Open Source',
     siteSource: 'Quellcode der Website',
     footerNote: 'Projektangaben werden mit den öffentlichen Repositories abgeglichen.',
     caseStudy: 'Fallstudie',
     source: 'Quellcode',
     live: 'Live',
     problem: 'Problem',
+    demonstrates: 'Belegt',
     technologies: 'Technologien',
     minRead: 'Min. Lesezeit',
     learningNote: 'Lernnotiz',

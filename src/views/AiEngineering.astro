@@ -31,9 +31,29 @@ const copy = {
     systems: [
       { category: 'Agent orchestration & reliability', description: 'An agent-driven operating system with persisted task state, deterministic triggers, isolated code changes, independent model review and explicit release authorisation.', demonstrates: ['Agent lifecycle and task orchestration', 'Tool execution boundaries and human approval', 'Crash recovery and auditability'], limitation: 'Active development; do not treat its Stage C design as proof of fully unattended execution.' },
       { category: 'LLM applications & agent-facing tools', description: 'A live product with CLI, local and remote MCP integrations, an API and a rule-based listing audit kept separate from generative operations.', demonstrates: ['MCP and tool schema design', 'LLM-backed product integration', 'Deterministic validation and API contracts'], limitation: 'The backend is not public; the case study is limited to verified client code and documented interfaces.' },
-      { category: 'Agent security & systems tooling', description: 'A Rust SSH agent proxy that limits which existing identities can be forwarded and can optionally bind them to trusted destination host keys.', demonstrates: ['Threat modelling and least privilege', 'Protocol-level security controls', 'Test-driven handling of failure modes'], limitation: 'Experimental security software. Not independently audited; no claims of complete protection.' },
+      { category: 'Supporting work · SSH security engineering', description: 'Not an AI project: a Rust SSH-agent proxy that limits which keys can be forwarded and can bind them to trusted destination host keys. It shows the security habits I apply to AI infrastructure.', demonstrates: ['Threat modelling and least privilege', 'Protocol-level security controls', 'Test-driven handling of failure modes'], limitation: 'Experimental security software. Not independently audited; no claims of complete protection.' },
     ],
     evidenceH4: 'Engineering evidence', scope: 'Scope:', readCase: 'Read case study', inspect: 'Inspect source',
+    evalEyebrow: 'AI evaluation & reliability', evalTitle: 'What is measured today, and what is not',
+    evalBody: 'An impressive demo and a reliable AI system differ in what gets checked. The table shows each dimension and its current evidence. “In CI” means a deterministic test runs on every change; it pins the system’s reaction to agent output, not the quality of a model.',
+    colDim: 'Dimension', colStatus: 'Status', colEvidence: 'Evidence',
+    stCI: 'In CI', stPartial: 'Partial', stPlanned: 'Planned',
+    evalRows: [
+      ['Structured output validation', 'ci', 'Malformed or off-task agent results are rejected', 'evals/test_supervisor_evals.py'],
+      ['Unsupported claims', 'ci', '“Done.” without evidence returns REVISION_REQUIRED', 'evals/test_supervisor_evals.py'],
+      ['Prompt injection', 'partial', 'Deterministic evals in CI; a live eval against a real model exists, no published run', 'evals/test_trust_evals.py'],
+      ['Security boundaries', 'ci', 'Trust-boundary tripwires for CI permissions and credentials', 'tests/test_trust_boundary.py'],
+      ['Agent recovery', 'ci', 'Crash and stale-run recovery against real PostgreSQL', 'tests/test_worker_crash_recovery_postgres.py'],
+      ['Regression scenarios', 'ci', 'Stage C golden scenarios, each naming the failure it catches', 'evals/test_stage_c_runner_evals.py'],
+      ['Tool contracts (MCP)', 'ci', 'stdio MCP server tested end to end in Seerxo', 'sx:tests/stdio-mcp.test.js'],
+      ['Task completion rate', 'planned', '—', ''],
+      ['Model-level tool-call accuracy', 'planned', '—', ''],
+      ['Latency per task', 'planned', '—', ''],
+      ['Cost per task', 'planned', 'Policy only: metered API keys are refused', 'agents/cost_policy.yaml'],
+    ],
+    harnessTitle: 'Proposed evaluation harness for Seerxo OS',
+    harnessBody: 'A separate deliverable, not yet built. It would turn the questions below into repeatable evidence:',
+    harnessSteps: ['A versioned task suite with fixed inputs and success criteria the supervisor can check', 'Each run recorded with provider, model version, transcript, tool calls and outcome', 'Metrics per suite version: success, partial success, false approvals, recoveries, latency and resource use', 'A CI job that runs the deterministic part on every change and the model part on demand, publishing raw results'],
     roadmap: 'Evaluation roadmap', roadmapTitle: 'The questions I want my systems to answer',
     roadmapBody: 'These are proposed experiments, <strong>not published benchmark results</strong>. I will only report numbers once the tasks, methodology and raw evidence are available for review.',
     toRun: 'experiment to run',
@@ -70,9 +90,29 @@ const copy = {
     systems: [
       { category: 'Ajan orkestrasyonu ve güvenilirlik', description: 'Kalıcı görev durumu, deterministik tetikleyiciler, izole kod değişiklikleri, bağımsız model incelemesi ve açık sürüm onayı olan, ajanlarla çalışan bir işletim sistemi.', demonstrates: ['Ajan yaşam döngüsü ve görev orkestrasyonu', 'Araç çalıştırma sınırları ve insan onayı', 'Çökme sonrası kurtarma ve denetlenebilirlik'], limitation: 'Aktif geliştirmede; Stage C tasarımını tamamen gözetimsiz çalışmanın kanıtı olarak görmeyin.' },
       { category: 'LLM uygulamaları ve ajanlara dönük araçlar', description: 'CLI, yerel ve uzak MCP entegrasyonları, bir API ve üretken işlemlerden ayrı tutulan kural tabanlı bir ilan denetimi olan canlı bir ürün.', demonstrates: ['MCP ve araç şeması tasarımı', 'LLM destekli ürün entegrasyonu', 'Deterministik doğrulama ve API sözleşmeleri'], limitation: 'Backend herkese açık değil; vaka çalışması doğrulanmış istemci kodu ve belgelenmiş arayüzlerle sınırlıdır.' },
-      { category: 'Ajan güvenliği ve sistem araçları', description: 'Hangi mevcut kimliklerin iletilebileceğini sınırlayan ve bunları isteğe bağlı olarak güvenilir hedef host anahtarlarına bağlayabilen, Rust ile yazılmış bir SSH agent proxy’si.', demonstrates: ['Tehdit modelleme ve en az yetki', 'Protokol düzeyinde güvenlik kontrolleri', 'Hata durumlarının test odaklı ele alınması'], limitation: 'Deneysel güvenlik yazılımı. Bağımsız denetimden geçmedi; tam koruma iddiası yoktur.' },
+      { category: 'Destekleyici çalışma · SSH güvenlik mühendisliği', description: 'Bir AI projesi değil: hangi anahtarların iletilebileceğini sınırlayan ve bunları güvenilir hedef host anahtarlarına bağlayabilen, Rust ile yazılmış bir SSH agent proxy’si. AI altyapısında uyguladığım güvenlik alışkanlıklarını gösteriyor.', demonstrates: ['Tehdit modelleme ve en az yetki', 'Protokol düzeyinde güvenlik kontrolleri', 'Hata durumlarının test odaklı ele alınması'], limitation: 'Deneysel güvenlik yazılımı. Bağımsız denetimden geçmedi; tam koruma iddiası yoktur.' },
     ],
     evidenceH4: 'Mühendislik kanıtı', scope: 'Kapsam:', readCase: 'Vaka çalışmasını oku', inspect: 'Kaynak kodu incele',
+    evalEyebrow: 'AI değerlendirme ve güvenilirlik', evalTitle: 'Bugün neyin ölçüldüğü, neyin ölçülmediği',
+    evalBody: 'Etkileyici bir demo ile güvenilir bir AI sistemi arasındaki fark, neyin kontrol edildiğindedir. Tablo her boyutu ve mevcut kanıtını gösterir. “CI’da” ifadesi, her değişiklikte deterministik bir testin çalıştığı anlamına gelir; bu, modelin kalitesini değil, sistemin ajan çıktısına tepkisini sabitler.',
+    colDim: 'Boyut', colStatus: 'Durum', colEvidence: 'Kanıt',
+    stCI: 'CI’da', stPartial: 'Kısmen', stPlanned: 'Planlandı',
+    evalRows: [
+      ['Yapılandırılmış çıktı doğrulaması', 'ci', 'Bozuk ya da başka göreve ait ajan sonuçları reddedilir', 'evals/test_supervisor_evals.py'],
+      ['Asılsız iddialar', 'ci', 'Kanıtsız “Bitti.” cevabı REVISION_REQUIRED döner', 'evals/test_supervisor_evals.py'],
+      ['Prompt injection', 'partial', 'CI’da deterministik eval’ler; gerçek modelle çalışan bir canlı eval mevcut, yayımlanmış sonucu yok', 'evals/test_trust_evals.py'],
+      ['Güvenlik sınırları', 'ci', 'CI yetkileri ve kimlik bilgileri için güven sınırı testleri', 'tests/test_trust_boundary.py'],
+      ['Ajan kurtarma', 'ci', 'Gerçek PostgreSQL üzerinde çökme ve takılı çalıştırma kurtarması', 'tests/test_worker_crash_recovery_postgres.py'],
+      ['Regresyon senaryoları', 'ci', 'Her biri yakaladığı hatayı adlandıran Stage C golden senaryoları', 'evals/test_stage_c_runner_evals.py'],
+      ['Araç sözleşmeleri (MCP)', 'ci', 'Seerxo’da stdio MCP sunucusu uçtan uca test ediliyor', 'sx:tests/stdio-mcp.test.js'],
+      ['Görev tamamlama oranı', 'planned', '—', ''],
+      ['Model düzeyinde tool-call doğruluğu', 'planned', '—', ''],
+      ['Görev başına gecikme', 'planned', '—', ''],
+      ['Görev başına maliyet', 'planned', 'Yalnızca politika: ücretli API anahtarları reddedilir', 'agents/cost_policy.yaml'],
+    ],
+    harnessTitle: 'Seerxo OS için önerilen değerlendirme düzeneği',
+    harnessBody: 'Ayrı bir teslimat; henüz geliştirilmedi. Aşağıdaki soruları tekrarlanabilir kanıta dönüştürecek:',
+    harnessSteps: ['Sabit girdileri ve supervisor’ın kontrol edebileceği başarı kriterleri olan sürümlü bir görev seti', 'Her çalıştırmanın sağlayıcı, model sürümü, transkript, tool call’lar ve sonuçla kaydedilmesi', 'Set sürümü başına metrikler: başarı, kısmi başarı, yanlış onaylar, kurtarmalar, gecikme ve kaynak kullanımı', 'Deterministik kısmı her değişiklikte, model kısmını isteğe bağlı çalıştırıp ham sonuçları yayımlayan bir CI işi'],
     roadmap: 'Değerlendirme yol haritası', roadmapTitle: 'Sistemlerimin cevaplamasını istediğim sorular',
     roadmapBody: 'Bunlar önerilen deneylerdir, <strong>yayımlanmış benchmark sonuçları değildir</strong>. Görevler, yöntem ve ham veriler incelemeye açık olduğunda sayı paylaşacağım.',
     toRun: 'yapılacak deney',
@@ -109,9 +149,29 @@ const copy = {
     systems: [
       { category: 'Agenten-Orchestrierung & Zuverlässigkeit', description: 'Ein agentengesteuertes Betriebssystem mit persistentem Aufgabenzustand, deterministischen Auslösern, isolierten Codeänderungen, unabhängigem Modell-Review und expliziter Release-Freigabe.', demonstrates: ['Agenten-Lebenszyklus und Aufgaben-Orchestrierung', 'Grenzen der Tool-Ausführung und menschliche Freigabe', 'Wiederherstellung nach Abstürzen und Nachvollziehbarkeit'], limitation: 'In aktiver Entwicklung; das Stage-C-Design ist kein Beleg für vollständig unbeaufsichtigte Ausführung.' },
       { category: 'LLM-Anwendungen & Tools für Agenten', description: 'Ein Live-Produkt mit CLI, lokalen und entfernten MCP-Integrationen, einer API und einer regelbasierten Listing-Prüfung, die von generativen Vorgängen getrennt ist.', demonstrates: ['MCP- und Tool-Schema-Design', 'LLM-gestützte Produktintegration', 'Deterministische Validierung und API-Verträge'], limitation: 'Das Backend ist nicht öffentlich; die Fallstudie beschränkt sich auf verifizierten Client-Code und dokumentierte Schnittstellen.' },
-      { category: 'Agenten-Sicherheit & System-Tools', description: 'Ein SSH-Agent-Proxy in Rust, der begrenzt, welche vorhandenen Identitäten weitergeleitet werden dürfen, und sie optional an vertrauenswürdige Ziel-Hostkeys bindet.', demonstrates: ['Bedrohungsmodellierung und minimale Rechte', 'Sicherheitskontrollen auf Protokollebene', 'Testgetriebener Umgang mit Fehlerfällen'], limitation: 'Experimentelle Sicherheitssoftware. Nicht unabhängig auditiert; kein Anspruch auf vollständigen Schutz.' },
+      { category: 'Ergänzende Arbeit · SSH-Sicherheits-Engineering', description: 'Kein KI-Projekt: ein SSH-Agent-Proxy in Rust, der begrenzt, welche Schlüssel weitergeleitet werden, und sie an vertrauenswürdige Ziel-Hostkeys binden kann. Er zeigt die Sicherheitsgewohnheiten, die ich in KI-Infrastruktur einbringe.', demonstrates: ['Bedrohungsmodellierung und minimale Rechte', 'Sicherheitskontrollen auf Protokollebene', 'Testgetriebener Umgang mit Fehlerfällen'], limitation: 'Experimentelle Sicherheitssoftware. Nicht unabhängig auditiert; kein Anspruch auf vollständigen Schutz.' },
     ],
     evidenceH4: 'Engineering-Belege', scope: 'Umfang:', readCase: 'Fallstudie lesen', inspect: 'Quellcode ansehen',
+    evalEyebrow: 'KI-Evaluierung & Zuverlässigkeit', evalTitle: 'Was heute gemessen wird – und was nicht',
+    evalBody: 'Eine beeindruckende Demo und ein zuverlässiges KI-System unterscheiden sich darin, was geprüft wird. Die Tabelle zeigt jede Dimension mit ihrem aktuellen Beleg. „In CI“ bedeutet, dass bei jeder Änderung ein deterministischer Test läuft; er fixiert die Reaktion des Systems auf Agentenausgaben, nicht die Qualität eines Modells.',
+    colDim: 'Dimension', colStatus: 'Status', colEvidence: 'Beleg',
+    stCI: 'In CI', stPartial: 'Teilweise', stPlanned: 'Geplant',
+    evalRows: [
+      ['Validierung strukturierter Ausgaben', 'ci', 'Fehlerhafte oder fremde Agentenergebnisse werden abgelehnt', 'evals/test_supervisor_evals.py'],
+      ['Unbelegte Behauptungen', 'ci', '„Erledigt.“ ohne Beleg ergibt REVISION_REQUIRED', 'evals/test_supervisor_evals.py'],
+      ['Prompt Injection', 'partial', 'Deterministische Evals in CI; ein Live-Eval gegen ein echtes Modell existiert, ohne veröffentlichten Lauf', 'evals/test_trust_evals.py'],
+      ['Sicherheitsgrenzen', 'ci', 'Tripwire-Tests für CI-Berechtigungen und Zugangsdaten', 'tests/test_trust_boundary.py'],
+      ['Wiederherstellung von Agenten', 'ci', 'Crash- und Stale-Run-Recovery gegen echtes PostgreSQL', 'tests/test_worker_crash_recovery_postgres.py'],
+      ['Regressionsszenarien', 'ci', 'Stage-C-Golden-Szenarien, die jeweils den abgefangenen Fehler benennen', 'evals/test_stage_c_runner_evals.py'],
+      ['Tool-Verträge (MCP)', 'ci', 'stdio-MCP-Server in Seerxo End-to-End getestet', 'sx:tests/stdio-mcp.test.js'],
+      ['Aufgaben-Erfolgsquote', 'planned', '—', ''],
+      ['Tool-Call-Genauigkeit auf Modellebene', 'planned', '—', ''],
+      ['Latenz pro Aufgabe', 'planned', '—', ''],
+      ['Kosten pro Aufgabe', 'planned', 'Nur als Richtlinie: kostenpflichtige API-Schlüssel werden abgelehnt', 'agents/cost_policy.yaml'],
+    ],
+    harnessTitle: 'Vorgeschlagenes Evaluierungs-Harness für Seerxo OS',
+    harnessBody: 'Ein eigenes Arbeitspaket, noch nicht gebaut. Es würde die folgenden Fragen in wiederholbare Belege verwandeln:',
+    harnessSteps: ['Eine versionierte Aufgabensammlung mit festen Eingaben und vom Supervisor prüfbaren Erfolgskriterien', 'Jeder Lauf mit Anbieter, Modellversion, Transkript, Tool-Calls und Ergebnis protokolliert', 'Metriken je Sammlungsversion: Erfolg, Teilerfolg, falsche Freigaben, Wiederherstellungen, Latenz und Ressourcenverbrauch', 'Ein CI-Job, der den deterministischen Teil bei jeder Änderung und den Modellteil auf Abruf ausführt und Rohdaten veröffentlicht'],
     roadmap: 'Evaluierungs-Roadmap', roadmapTitle: 'Fragen, die meine Systeme beantworten sollen',
     roadmapBody: 'Das sind geplante Experimente, <strong>keine veröffentlichten Benchmark-Ergebnisse</strong>. Zahlen veröffentliche ich erst, wenn Aufgaben, Methodik und Rohdaten zur Prüfung vorliegen.',
     toRun: 'geplantes Experiment',
@@ -132,6 +192,10 @@ const copy = {
   },
 } satisfies Record<Lang, unknown>;
 const c = copy[lang];
+const OS = 'https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/';
+const SX = 'https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/';
+const evHref = (path: string) => (path.startsWith('sx:') ? SX + path.slice(3) : OS + path);
+const statusLabel = { ci: c.stCI, partial: c.stPartial, planned: c.stPlanned } as Record<string, string>;
 const systems = c.systems.map((sys, i) => ({ ...sys, ...sources[i], number: String(i + 1).padStart(2, '0') }));
 const communityHrefs = ['https://github.com/semihbugrasezer/sigsieve', 'https://github.com/semihbugrasezer/seerxo', L('/research/')];
 ---
@@ -188,10 +252,34 @@ const communityHrefs = ['https://github.com/semihbugrasezer/sigsieve', 'https://
       </div>
     </section>
 
+    <section id="evaluation" class="eval" aria-labelledby="eval-heading">
+      <div class="section-head">
+        <p class="eyebrow">{c.evalEyebrow}</p>
+        <h2 id="eval-heading">{c.evalTitle}</h2>
+        <p>{c.evalBody}</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">{c.colDim}</th><th scope="col">{c.colStatus}</th><th scope="col">{c.colEvidence}</th></tr></thead>
+          <tbody>
+            {c.evalRows.map(([dim, st, note, path]) => (
+              <tr>
+                <th scope="row">{dim}</th>
+                <td><span class={`badge ${st}`}>{statusLabel[st]}</span></td>
+                <td>{note}{path && <> · <a href={evHref(path)} rel="noopener" target="_blank"><code>{path.replace(/^sx:/, '')}</code></a></>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="evaluations" aria-labelledby="evaluation-heading">
       <div class="section-head">
         <p class="eyebrow">{c.roadmap}</p>
-        <h2 id="evaluation-heading">{c.roadmapTitle}</h2>
+        <h2 id="evaluation-heading">{c.harnessTitle}</h2>
+        <p>{c.harnessBody}</p>
+        <ol class="harness">{c.harnessSteps.map((step) => <li>{step}</li>)}</ol>
         <p set:html={c.roadmapBody} />
       </div>
       <ol class="question-grid">
@@ -259,4 +347,17 @@ const communityHrefs = ['https://github.com/semihbugrasezer/sigsieve', 'https://
   .closing { border-top: 1px solid var(--rule); padding-top: var(--s-7); }
   .closing h2 { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-xl); }
   .closing p { max-width: 64ch; margin-top: var(--s-3); color: var(--ink-2); }
+  .content > * { min-width: 0; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--bg-raised); }
+  table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+  th, td { text-align: left; padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  thead th { font-family: var(--font-mono); font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+  tbody th { font-weight: 600; min-width: 11rem; }
+  tbody tr:last-child > * { border-bottom: 0; }
+  td code { font-family: var(--font-mono); font-size: 0.78rem; overflow-wrap: anywhere; }
+  .badge { display: inline-block; white-space: nowrap; font-family: var(--font-mono); font-size: 0.7rem; padding: 0.1rem 0.45rem; border-radius: 2px; border: 1px solid var(--rule-strong); }
+  .badge.ci { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .badge.partial { border-color: var(--accent); color: var(--accent-ink); }
+  .badge.planned { color: var(--ink-3); border-style: dashed; }
+  .harness { padding-left: 1.3em; display: grid; gap: var(--s-1); color: var(--ink-2); max-width: 70ch; }
 </style>

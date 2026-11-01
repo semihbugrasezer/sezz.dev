@@ -6,6 +6,13 @@ type: Architecture Study
 status: Observation
 project: sigsieve
 tags: [ssh, security, threat-modeling, rust]
+l10n:
+  tr:
+    title: "Dışa aktarılamayan anahtarlar için SSH agent yönlendirmesinin tehdit modeli"
+    description: "Özel anahtar Secure Enclave’den çıkamıyorken, iletilen bir agent belirli anahtarlar ve belirli hedeflerle sınırlandırılabilir mi? SigSieve’in arkasındaki mimari inceleme; varsayımlar ve açıklar yazılı olarak."
+  de:
+    title: "Bedrohungsmodell für SSH-Agent-Forwarding mit nicht exportierbaren Schlüsseln"
+    description: "Lässt sich ein weitergeleiteter Agent auf bestimmte Schlüssel und Ziele beschränken, wenn der private Schlüssel die Secure Enclave nicht verlassen kann? Die Architekturstudie hinter SigSieve – mit dokumentierten Annahmen und Lücken."
 ---
 
 ## Research question

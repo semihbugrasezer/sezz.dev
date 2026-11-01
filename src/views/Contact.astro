@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE } from '../lib/site';
-import { getLang, type Lang } from '../lib/i18n';
+import { getLang, localize, type Lang } from '../lib/i18n';
 
 const lang = getLang(Astro.url);
 const copy = {
@@ -10,21 +10,35 @@ const copy = {
     lede: 'For AI Engineer, Applied AI Engineer and LLM / Agent Engineering roles, open-source collaboration, or questions about the systems documented here.',
     li: 'Best for roles and professional enquiries.', gh: 'Issues and discussions on the projects themselves.',
     sec: 'Security reports', secV: 'Per-repository security policy', secD: 'Please follow each project’s SECURITY.md rather than opening a public issue.',
+    recruitersTitle: 'For recruiters and hiring managers',
+    recruitersBody: 'Links you can paste into an application or a hiring note. Case studies are in English.',
+    linkLabels: ['Portfolio', 'AI engineering evidence', 'Seerxo OS — agentic AI case study', 'Seerxo — LLM product case study', 'SigSieve — security engineering case study', 'GitHub', 'LinkedIn'],
   },
   tr: {
     title: 'İletişim', description: 'Semih Buğra Sezer’e ulaşmanın yolları: GitHub ve LinkedIn.', h1: 'İletişime geçin',
     lede: 'AI Engineer, Applied AI Engineer ve LLM / Agent Engineering pozisyonları, açık kaynak iş birlikleri veya burada anlatılan sistemlerle ilgili sorularınız için.',
     li: 'Pozisyonlar ve profesyonel talepler için en uygun kanal.', gh: 'Projelerle ilgili issue ve tartışmalar için.',
     sec: 'Güvenlik bildirimleri', secV: 'Depo bazında güvenlik politikası', secD: 'Lütfen herkese açık issue açmak yerine her projenin SECURITY.md dosyasını izleyin.',
+    recruitersTitle: 'İşe alım uzmanları ve yöneticiler için',
+    recruitersBody: 'Bir başvuruya veya değerlendirme notuna yapıştırabileceğiniz bağlantılar. Vaka çalışmaları İngilizcedir.',
+    linkLabels: ['Portföy', 'AI mühendisliği kanıtları', 'Seerxo OS — agentic AI vaka çalışması', 'Seerxo — LLM ürünü vaka çalışması', 'SigSieve — güvenlik mühendisliği vaka çalışması', 'GitHub', 'LinkedIn'],
   },
   de: {
     title: 'Kontakt', description: 'So erreichen Sie Semih Buğra Sezer: GitHub und LinkedIn.', h1: 'Kontakt aufnehmen',
     lede: 'Für Rollen als AI Engineer, Applied AI Engineer und LLM-/Agent-Engineer, Open-Source-Zusammenarbeit oder Fragen zu den hier dokumentierten Systemen.',
     li: 'Am besten für Stellenangebote und berufliche Anfragen.', gh: 'Issues und Diskussionen zu den Projekten selbst.',
     sec: 'Sicherheitsmeldungen', secV: 'Security-Policy je Repository', secD: 'Bitte folgen Sie der SECURITY.md des jeweiligen Projekts, statt ein öffentliches Issue zu eröffnen.',
+    recruitersTitle: 'Für Recruiter und Hiring Manager',
+    recruitersBody: 'Links zum Einfügen in eine Bewerbung oder Einschätzung. Die Fallstudien sind auf Englisch.',
+    linkLabels: ['Portfolio', 'Belege zum AI Engineering', 'Seerxo OS — Fallstudie Agentic AI', 'Seerxo — Fallstudie LLM-Produkt', 'SigSieve — Fallstudie Security-Engineering', 'GitHub', 'LinkedIn'],
   },
 } satisfies Record<Lang, unknown>;
 const c = copy[lang];
+const abs = (path: string) => `https://sezz.dev${path}`;
+const recruiterLinks = [
+  abs(localize('/', lang)), abs(localize('/ai-engineering/', lang)), abs('/projects/seerxo-os/'), abs('/projects/seerxo/'),
+  abs('/projects/sigsieve/'), SITE.github, SITE.linkedin,
+].map((href, i) => ({ href, label: c.linkLabels[i] }));
 ---
 
 <Base title={c.title} description={c.description}>
@@ -58,6 +72,16 @@ const c = copy[lang];
         </a>
       </li>
     </ul>
+
+    <section class="recruiters" aria-labelledby="recruiters-h">
+      <h2 id="recruiters-h">{c.recruitersTitle}</h2>
+      <p>{c.recruitersBody}</p>
+      <dl>
+        {recruiterLinks.map((l) => (
+          <div><dt>{l.label}</dt><dd><a href={l.href} {...(l.href.startsWith('https://sezz.dev') ? {} : { rel: 'noopener', target: '_blank' })}>{l.href}</a></dd></div>
+        ))}
+      </dl>
+    </section>
   </div>
 </Base>
 
@@ -70,4 +94,12 @@ const c = copy[lang];
   .channels a:hover { border-color: var(--ink-3); color: inherit; }
   .v { font-weight: 600; font-size: var(--fs-md); word-break: break-word; }
   .d { color: var(--ink-2); font-size: var(--fs-sm); }
+  .recruiters { margin-top: var(--s-7); border-top: 1px solid var(--rule); padding-top: var(--s-6); max-width: 52rem; }
+  .recruiters h2 { font-family: var(--font-display); font-weight: 550; font-size: var(--fs-lg); }
+  .recruiters > p { color: var(--ink-2); margin-top: var(--s-2); }
+  .recruiters dl { margin-block: var(--s-4); border-top: 1px solid var(--rule); }
+  .recruiters dl > div { display: grid; grid-template-columns: 17rem 1fr; gap: var(--s-1) var(--s-4); padding-block: var(--s-2); border-bottom: 1px solid var(--rule); font-size: var(--fs-sm); }
+  .recruiters dt { font-weight: 600; }
+  .recruiters dd a { font-family: var(--font-mono); font-size: 0.8rem; overflow-wrap: anywhere; }
+  @media (max-width: 44rem) { .recruiters dl > div { grid-template-columns: 1fr; } }
 </style>

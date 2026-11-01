@@ -8,10 +8,11 @@ const lang = getLang(Astro.url);
 const entries = (await getCollection('research', (e) => !e.data.draft)).sort((a, b) => +b.data.created - +a.data.created);
 const items = entries.map((e) => ({
   href: `/research/${e.id}/`,
-  title: e.data.title,
-  description: e.data.description,
+  title: lang === 'en' ? e.data.title : e.data.l10n[lang].title,
+  description: lang === 'en' ? e.data.description : e.data.l10n[lang].description,
   date: e.data.created,
   label: `${e.data.type} · ${e.data.status}`,
+  localized: lang !== 'en',
 }));
 
 const copy = {

@@ -59,6 +59,8 @@ at `draft: true`; drafts are not built.
 ### Project facts
 
 Numbers on project pages carry a `measured` date and must be traceable to the public repository.
+Evidence links point at a pinned commit SHA, the same one the numbers were measured at. Count commits with
+`git rev-list`, not `git log` piped through tools that may truncate output.
 Do not publish user, revenue or performance figures that have not been measured.
 
 ### Diagrams
@@ -74,7 +76,8 @@ English is served at the site root; Turkish under `/tr/`, German under `/de/`.
   `src/views/`. Each view holds its copy as `{ en, tr, de }` and reads the language from the URL. English
   routes are in `src/pages/`; `src/pages/[lang]/[...page].astro` renders the TR/DE versions.
 - Shared UI strings (navigation, labels) are in `src/lib/i18n.ts`, together with `TRANSLATED_PAGES`.
-- Project cards take `l10n.tr` / `l10n.de` (summary, problem, status) from front matter; the schema requires both.
+- Project cards take `l10n.tr` / `l10n.de` (summary, problem, status, demonstrates) and research entries take
+  `l10n.tr` / `l10n.de` (title, description) from front matter; the schema requires both languages.
 - Case studies, research entries and articles are English-only. On TR/DE pages they carry an “EN” marker and
   the language switcher leads to that section's translated index.
 - Adding a translated page: add its path to `TRANSLATED_PAGES`, create the view, an English route and an entry in

@@ -12,12 +12,15 @@ facts:
   - Candidate container is health-checked before promotion
   - Deployments and ordered events stored in PostgreSQL
   - Docker API reached only through a socket proxy
+demonstrates: ["Health-checked container promotion", "Deployment audit trail in PostgreSQL", "Metrics, logs and alerting stack"]
 l10n:
   tr:
+    demonstrates: ["Sağlık kontrollü konteyner yayına alma", "PostgreSQL’de dağıtım denetim kaydı", "Metrik, log ve alarm yığını"]
     summary: "Minimal, kendi sunucunda çalışan bir PaaS. Bir API depoyu klonlar, imajı derler, aday konteyneri sağlık kontrolünden geçirir ve Traefik arkasında yayına alır; her dağıtımı PostgreSQL'e kaydeder ve isteğe bağlı bir metrik ve log yığını sunar."
     problem: "Bir dağıtım platformunun gerçekte ne yapması gerektiğini — derlemek, doğrulamak, yönlendirmek, kaydetmek ve gözlemlemek — küçük bir tanesini uçtan uca kurarak anlamak."
     status: "Öğrenme projesi · otomatik test yok"
   de:
+    demonstrates: ["Container-Promotion mit Health-Checks", "Deployment-Audit-Trail in PostgreSQL", "Metrik-, Log- und Alerting-Stack"]
     summary: "Eine minimale selbst gehostete PaaS. Eine API klont ein Repository, baut ein Image, prüft einen Kandidaten-Container per Health-Check und schaltet ihn hinter Traefik live – jedes Deployment wird in PostgreSQL protokolliert, optional mit Metrik- und Logging-Stack."
     problem: "Verstehen, was eine Deployment-Plattform tatsächlich leisten muss – bauen, prüfen, routen, protokollieren, beobachten –, indem man eine kleine von Anfang bis Ende selbst baut."
     status: "Lernprojekt · keine automatisierten Tests"

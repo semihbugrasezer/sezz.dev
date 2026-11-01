@@ -12,12 +12,15 @@ facts:
   - Translates tool_use / tool_result blocks to and from tool_calls
   - Re-emits upstream streams as Anthropic-style SSE events
   - Launcher verifies release checksums; keys go to the OS keychain
+demonstrates: ["API translation between LLM providers", "Streaming (SSE) and tool-call mapping", "Checksum-verified release distribution"]
 l10n:
   tr:
+    demonstrates: ["LLM sağlayıcıları arasında API çevirisi", "Streaming (SSE) ve tool-call eşlemesi", "Checksum ile doğrulanan sürüm dağıtımı"]
     summary: "Anthropic Messages API isteklerini kabul edip OpenAI uyumlu herhangi bir Chat Completions sağlayıcısına ileten küçük bir Go ağ geçidi; böylece AI kodlama ajanları başka modellerle çalışabilir."
     problem: "Tek bir model API'si için yazılmış kodlama ajanları, yalnızca OpenAI uyumlu uç noktalar sunan sağlayıcılarla konuşamaz."
     status: "Erken uyumluluk katmanı · v0.3.0"
   de:
+    demonstrates: ["API-Übersetzung zwischen LLM-Anbietern", "Streaming (SSE) und Tool-Call-Mapping", "Release-Verteilung mit Prüfsummen"]
     summary: "Ein kleines Go-Gateway, das Anfragen im Format der Anthropic Messages API entgegennimmt und an beliebige OpenAI-kompatible Chat-Completions-Anbieter weiterleitet, sodass KI-Coding-Agenten auch mit anderen Modellen arbeiten können."
     problem: "Coding-Agenten, die für eine Modell-API gebaut sind, können nicht mit Anbietern sprechen, die nur OpenAI-kompatible Endpunkte bereitstellen."
     status: "Frühe Kompatibilitätsschicht · v0.3.0"

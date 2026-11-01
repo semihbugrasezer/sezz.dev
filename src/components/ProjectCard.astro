@@ -21,6 +21,12 @@ const p = { ...project.data, ...(lang === 'en' ? {} : project.data.l10n[lang]) }
       <p>{p.problem}</p>
     </div>
   )}
+  {large && (
+    <div class="demo">
+      <p class="eyebrow">{s.demonstrates}</p>
+      <ul>{p.demonstrates.map((d) => <li>{d}</li>)}</ul>
+    </div>
+  )}
   <ul class="chips" aria-label={s.technologies}>
     {p.stack.slice(0, large ? 7 : 5).map((s) => <li class="chip">{s}</li>)}
   </ul>
@@ -51,7 +57,10 @@ const p = { ...project.data, ...(lang === 'en' ? {} : project.data.l10n[lang]) }
   .summary { color: var(--ink-2); font-size: var(--fs-sm); }
   .large .summary { font-size: var(--fs-base); }
   .problem { border-top: 1px dashed var(--rule); padding-top: var(--s-3); font-size: var(--fs-sm); color: var(--ink-2); }
-  .problem .eyebrow { margin-bottom: var(--s-1); }
+  .problem .eyebrow, .demo .eyebrow { margin-bottom: var(--s-1); }
+  .demo { font-size: var(--fs-sm); }
+  .demo ul { padding-left: 1.1em; display: grid; gap: 0.2rem; color: var(--ink); }
+  .demo li::marker { color: var(--accent); }
   .card-links { display: flex; gap: var(--s-4); margin-top: auto; padding-top: var(--s-2); }
   .card-links a { text-decoration: none; color: var(--ink-2); }
   .card-links a:hover { color: var(--accent-ink); }

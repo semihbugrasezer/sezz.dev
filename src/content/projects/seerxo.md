@@ -15,13 +15,17 @@ facts:
   - 30 GitHub releases; 33 npm versions
   - 5 MCP tools, 2 runtime dependencies
   - 103 test cases, CI on Node 18 / 20 / 22
+  - 185 commits since Nov 2025; one outside contributor
   - 28 GitHub stars (not a user count)
+demonstrates: ["Shipping an LLM product with several client surfaces", "MCP tool design that prevents overclaiming", "Deterministic validation beside generation"]
 l10n:
   tr:
+    demonstrates: ["Birden çok istemci yüzeyi olan bir LLM ürünü yayına almak", "Abartılı iddiaları önleyen MCP araç tasarımı", "Üretimin yanında deterministik doğrulama"]
     summary: "Etsy ilanlarını taslak olarak hazırlayan, denetleyen ve iyileştiren canlı bir ürün. Tek hesap ve kredi havuzu; bir CLI, stdio MCP sunucusu, uzak MCP uç noktası, Claude Code skill'i ve web uygulamasının arkasında. Deterministik denetim, ücretli AI üretiminden ayrı tutulur."
     problem: "Bir Etsy ilanının katı kuralları (≤140 karakter başlık, ≤20 karakterlik tam 13 etiket) ve esnek kuralları (ana anahtar kelimelerle başlamak) vardır. Satıcıların bu kurallara uyan taslaklara ve mevcut ilanlarında neyin yanlış olduğuna dair dürüst bir açıklamaya ihtiyacı var — tercihen zaten kullandıkları AI asistanının içinde."
     status: "Canlı ürün · npm seerxo 1.13.0"
   de:
+    demonstrates: ["Ein LLM-Produkt mit mehreren Client-Oberflächen ausliefern", "MCP-Tool-Design, das Übertreibungen verhindert", "Deterministische Validierung neben der Generierung"]
     summary: "Ein Live-Produkt, das Etsy-Listings entwirft, prüft und optimiert. Ein Konto und ein Guthaben hinter CLI, stdio-MCP-Server, Remote-MCP-Endpunkt, Claude-Code-Skill und Web-App – mit einer deterministischen Prüfung, die getrennt von der kostenpflichtigen KI-Generierung läuft."
     problem: "Ein Etsy-Listing hat harte Regeln (Titel ≤ 140 Zeichen, genau 13 Tags mit je ≤ 20 Zeichen) und weiche (mit den wichtigsten Keywords beginnen). Verkäufer brauchen Entwürfe, die diese Regeln einhalten, und eine ehrliche Erklärung, was an bestehenden Listings nicht stimmt – am besten direkt im KI-Assistenten, den sie ohnehin nutzen."
     status: "Live-Produkt · npm seerxo 1.13.0"
@@ -117,6 +121,16 @@ model-provider keys.
 - CI actions are pinned by SHA; `npm audit` gates high-severity production advisories; OSV-Scanner
   and OpenSSF Scorecard run weekly; Dependabot is enabled.
 
+## How it was built — my role
+
+- The public repository has 185 commits since 2025-11-29. 106 are authored by me; the rest come
+  from release automation, Dependabot, the Jules bot (16), one outside contributor and one
+  `seerxo-agent` commit.
+- 26 commits carry a Claude co-author trailer. AI assistants help with implementation; product
+  direction, the public contracts and releases are mine. A trailer means *co-authored*, not
+  *written entirely by a model*.
+- The backend and web app are private, so only the client side can be checked here.
+
 ## Testing and validation
 
 `node --test` with `esmock`: 103 test cases in 18 files (static count), including an end-to-end
@@ -125,6 +139,33 @@ package-contents check on Node 18, 20 and 22.
 
 Releases are automated: semantic-release publishes to npm and GitHub Releases on every merge to
 `main`, then updates the MCP Registry entry through GitHub OIDC with no long-lived secret.
+
+## Engineering evidence
+
+All links point at commit `8c52984`.
+
+| What | Where |
+| --- | --- |
+| MCP tool schemas, including `limitations` and score caveats | [`src/mcp/tools.js`](https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/src/mcp/tools.js) |
+| Hand-written stdio JSON-RPC server, HMAC signing, no-retry policy | [`mcp-server.js`](https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/mcp-server.js) |
+| End-to-end test of the stdio MCP server | [`tests/stdio-mcp.test.js`](https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/tests/stdio-mcp.test.js) |
+| Agent skill that forbids invented metrics | [`skills/seerxo-etsy-seo/SKILL.md`](https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/skills/seerxo-etsy-seo/SKILL.md) |
+| Contract rules for contributors and agents | [`AGENTS.md`](https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/AGENTS.md) |
+| CI matrix and automated releases | [`ci.yml`](https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/.github/workflows/ci.yml), [`release.yml`](https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/.github/workflows/release.yml) |
+| Published releases | [GitHub Releases](https://github.com/semihbugrasezer/seerxo/releases), [npm](https://www.npmjs.com/package/seerxo) |
+
+## What this project demonstrates about my AI engineering skills
+
+- **Shipping an LLM product end to end.** A live service with several client surfaces, one account
+  and one credit pool, and automated releases to npm and the MCP Registry.
+- **Designing tools for agents.** Tool schemas carry explicit `limitations` and state that the score
+  is *not a rank or sales prediction*, so an agent relaying results cannot overclaim.
+- **Deterministic validation next to generation.** The rule-based audit is free and explainable;
+  generation is metered and kept separate.
+- **API contracts.** Versioned endpoints, signed requests, stdout treated as a protocol, and
+  deprecated fields kept as aliases.
+- **Cost-aware failure handling.** Metered calls are never retried automatically, so a timeout
+  cannot charge a user twice.
 
 ## Results and evidence
 
@@ -139,7 +180,6 @@ counts.
 - The backend and web frontend are closed source; only the client is open.
 - The most recent weekly OSV-Scanner run (2026-10-26) failed and needs attention.
 - The committed `server.json` lags the published version; CI rewrites it only at release time.
-- The public Git history begins in July 2026, although the repository was created in October 2025.
 
 ## Future directions
 

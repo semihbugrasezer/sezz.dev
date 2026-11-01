@@ -10,6 +10,7 @@ import About from '../../views/About.astro';
 import Now from '../../views/Now.astro';
 import Contact from '../../views/Contact.astro';
 import Search from '../../views/Search.astro';
+import OpenSource from '../../views/OpenSource.astro';
 import { OTHER_LOCALES, TRANSLATED_PAGES } from '../../lib/i18n';
 
 const VIEWS = {
@@ -22,6 +23,7 @@ const VIEWS = {
   '/now/': Now,
   '/contact/': Contact,
   '/search/': Search,
+  '/open-source/': OpenSource,
 } satisfies Record<(typeof TRANSLATED_PAGES)[number], unknown>;
 
 export function getStaticPaths() {

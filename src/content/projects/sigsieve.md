@@ -14,12 +14,15 @@ facts:
   - 4 fuzz targets; CI on macOS arm64, Linux x86_64 and Linux arm64
   - unsafe confined to one module (src/socket.rs)
   - MIT licence
+demonstrates: ["Threat modelling and least privilege", "Rust systems programming at protocol level", "Fuzzing, property and end-to-end testing"]
 l10n:
   tr:
+    demonstrates: ["Tehdit modelleme ve en az yetki", "Protokol düzeyinde Rust sistem programlama", "Fuzzing, property ve uçtan uca testler"]
     summary: "Rust ile yazılmış yerel bir SSH agent proxy'si. Uzak sunuculara yalnızca izin listesindeki kimlikleri iletir ve isteğe bağlı olarak her anahtarı doğrulanmış hedef host anahtarlarına bağlayabilir. İmzalama, Secretive'in tuttuğu Secure Enclave anahtarları dahil, mevcut agent'ınızda kalır."
     problem: "SSH agent'ınızı ilettiğinizde, uzak sunucuda sokete erişebilen her süreç agent'taki her anahtarla imza isteyebilir. Donanım destekli anahtarlar çalınamaz, ama yine de kullanılabilirler."
     status: "Deneysel ön sürüm (v0.1.0-alpha.2) · bağımsız denetimden geçmedi"
   de:
+    demonstrates: ["Bedrohungsmodellierung und minimale Rechte", "Rust-Systemprogrammierung auf Protokollebene", "Fuzzing, Property- und End-to-End-Tests"]
     summary: "Ein lokaler SSH-Agent-Proxy in Rust, der nur freigegebene Identitäten an entfernte Hosts weiterreicht und jeden Schlüssel optional an verifizierte Ziel-Hostkeys binden kann. Signiert wird weiterhin im vorhandenen Agent – auch mit Secure-Enclave-Schlüsseln aus Secretive."
     problem: "Wer seinen SSH-Agent weiterleitet, erlaubt jedem Prozess auf dem entfernten Host, der den Socket erreicht, Signaturen mit jedem Schlüssel im Agent anzufordern. Hardware-gestützte Schlüssel lassen sich nicht stehlen – benutzen lassen sie sich trotzdem."
     status: "Experimentelle Vorabversion (v0.1.0-alpha.2) · nicht unabhängig auditiert"
@@ -129,6 +132,33 @@ need to support destination constraints.
   `ProxyCommand`, `Match exec`, `PermitLocalCommand yes`, `StrictHostKeyChecking=no` and X11
   forwarding.
 
+## How it was built — my role
+
+- 155 of 159 commits on `main` (as of 2026-10-31) are authored by me; the other four are from
+  bots (two Dependabot, two Jules).
+- 77 of those commits carry a Claude co-author trailer: I use AI coding assistants for
+  implementation and for review in separate contexts, and the findings register says so. A trailer
+  means *co-authored*, not *written entirely by a model*; a commit without one is not a claim of
+  hand-written code.
+- The threat model, security invariants, limitations and release decisions are documented in the
+  repository and maintained by me.
+
+## Difficult problems (from the findings register)
+
+Every finding is recorded with its fix in [`docs/FINDINGS.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/FINDINGS.md). Three of the
+seven HIGH findings show where the hard part actually was — not the agent protocol, but the SSH
+client configuration around it:
+
+- **F-01 — ControlMaster reuse** could forward the *unfiltered* agent through an existing
+  multiplexed connection. Fixed.
+- **F-02 — indirect `ProxyCommand`** (environment variables, `sh -c`, wrappers) could forward the
+  unfiltered agent. Fixed by failing closed.
+- **F-29 — unverified proxy hops**: a wrapper on a `ProxyJump` hop ran with the unfiltered login
+  agent in its environment. Fixed: every hop is verified.
+
+The lesson the repository draws is the design rule above: refuse SSH configurations that cannot be
+verified, rather than try to analyse them.
+
 ## Threat model
 
 **Considered attackers:** malicious remote root, a compromised remote account, a raw
@@ -159,6 +189,29 @@ tests that start a throwaway `sshd`. Four cargo-fuzz targets (`requests`, `sessi
   x86_64 and arm64, an MSRV job, `cargo audit`, `cargo deny` and secret scanning.
 - **Traceability:** the security model lists 20 numbered invariants and maps each to named tests;
   a findings register records 42 internal findings and how each was resolved or accepted.
+
+## Engineering evidence
+
+All links point at commit `269cf91`.
+
+| What | Where |
+| --- | --- |
+| The only request dispatcher | [`src/proxy.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/src/proxy.rs) |
+| Bounds-checked protocol parsing | [`src/protocol.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/src/protocol.rs) |
+| Destination binding verification | [`src/binding.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/src/binding.rs) |
+| All `unsafe` code, in one module | [`src/socket.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/src/socket.rs) |
+| Threat model and security invariants | [`THREAT_MODEL.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/THREAT_MODEL.md), [`SECURITY_MODEL.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/SECURITY_MODEL.md) |
+| Findings register | [`docs/FINDINGS.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/FINDINGS.md) |
+| End-to-end tests with a real `sshd` | [`tests/e2e_sshd.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/tests/e2e_sshd.rs) |
+| Fuzz targets | [`fuzz/fuzz_targets/`](https://github.com/semihbugrasezer/sigsieve/tree/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/fuzz/fuzz_targets) |
+| Test strategy | [`docs/TESTING.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/TESTING.md) |
+| CI matrix | [`.github/workflows/ci.yml`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/.github/workflows/ci.yml) |
+
+## What this project demonstrates
+
+SigSieve is security and systems engineering, not an AI project. It shows the habits I bring to AI
+infrastructure: a threat model written before the code, least privilege, fail-closed defaults,
+parsing treated as attack surface, and limitations published next to the features.
 
 ## Limitations
 
