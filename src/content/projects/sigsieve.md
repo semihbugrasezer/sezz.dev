@@ -5,27 +5,28 @@ order: 2
 featured: true
 disciplines: [Security & Tools, Applied Research]
 stack: [Rust, SSH agent protocol, OpenSSH session-bind, Ed25519, ECDSA P-256/384/521, proptest, cargo-fuzz, GitHub Actions]
-status: Experimental pre-release (v0.1.0-alpha.2) · not independently audited
+status: Experimental pre-release (v0.1.0-alpha.4) · not independently audited
 problem: When you forward an SSH agent, any process on the remote host that can reach the socket can ask for signatures with every key in that agent. Hardware-backed keys cannot be stolen, but they can still be used.
 repo: https://github.com/semihbugrasezer/sigsieve
-measured: 2026-10-31
+measured: 2026-11-03
 facts:
-  - 159 tests passed, 0 failed (local cargo test, macOS arm64)
-  - 4 fuzz targets; CI on macOS arm64, Linux x86_64 and Linux arm64
-  - unsafe confined to one module (src/socket.rs)
-  - MIT licence
+  - Published alpha.4 source is pinned to commit 5ea37b7
+  - Prebuilt archives for macOS arm64 and Linux x86_64, with checksums and provenance
+  - macOS Homebrew tap builds the release from source; Linux arm64 is source-only
+  - Four fuzz targets; real OpenSSH integration in CI
+  - MIT licence; no account, telemetry or hosted service
 demonstrates: ["Threat modelling and least privilege", "Rust systems programming at protocol level", "Fuzzing, property and end-to-end testing"]
 l10n:
   tr:
     demonstrates: ["Tehdit modelleme ve en az yetki", "Protokol düzeyinde Rust sistem programlama", "Fuzzing, property ve uçtan uca testler"]
     summary: "Rust ile yazılmış yerel bir SSH agent proxy'si. Uzak sunuculara yalnızca izin listesindeki kimlikleri iletir ve isteğe bağlı olarak her anahtarı doğrulanmış hedef host anahtarlarına bağlayabilir. İmzalama, Secretive'in tuttuğu Secure Enclave anahtarları dahil, mevcut agent'ınızda kalır."
     problem: "SSH agent'ınızı ilettiğinizde, uzak sunucuda sokete erişebilen her süreç agent'taki her anahtarla imza isteyebilir. Donanım destekli anahtarlar çalınamaz, ama yine de kullanılabilirler."
-    status: "Deneysel ön sürüm (v0.1.0-alpha.2) · bağımsız denetimden geçmedi"
+    status: "Deneysel ön sürüm (v0.1.0-alpha.4) · bağımsız denetimden geçmedi"
   de:
     demonstrates: ["Bedrohungsmodellierung und minimale Rechte", "Rust-Systemprogrammierung auf Protokollebene", "Fuzzing, Property- und End-to-End-Tests"]
     summary: "Ein lokaler SSH-Agent-Proxy in Rust, der nur freigegebene Identitäten an entfernte Hosts weiterreicht und jeden Schlüssel optional an verifizierte Ziel-Hostkeys binden kann. Signiert wird weiterhin im vorhandenen Agent – auch mit Secure-Enclave-Schlüsseln aus Secretive."
     problem: "Wer seinen SSH-Agent weiterleitet, erlaubt jedem Prozess auf dem entfernten Host, der den Socket erreicht, Signaturen mit jedem Schlüssel im Agent anzufordern. Hardware-gestützte Schlüssel lassen sich nicht stehlen – benutzen lassen sie sich trotzdem."
-    status: "Experimentelle Vorabversion (v0.1.0-alpha.2) · nicht unabhängig auditiert"
+    status: "Experimentelle Vorabversion (v0.1.0-alpha.4) · nicht unabhängig auditiert"
 ---
 
 ## Overview
@@ -38,6 +39,25 @@ signing (and, for Secretive, still owns the Touch ID prompt).
 
 > **Status.** Experimental security software. Not independently audited. The reviews so far were
 > internal, AI-assisted reviews run in separate contexts — not an external audit.
+
+## Current release and installation
+
+The published experimental release is **v0.1.0-alpha.4**, pinned to source commit
+[`5ea37b7`](https://github.com/semihbugrasezer/sigsieve/commit/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751).
+Prebuilt archives cover macOS Apple Silicon and Linux x86_64 (Ubuntu 24.04 / glibc 2.39 baseline).
+The [installation guide](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/docs/INSTALL.md)
+checks archive checksums, a separately pinned SHA-256 digest and GitHub build provenance.
+
+On macOS, the [Homebrew tap](https://github.com/semihbugrasezer/homebrew-sigsieve) provides a source build:
+
+```sh
+brew install semihbugrasezer/sigsieve/sigsieve
+```
+
+The tap verifies the source archive checksum; that is separate from prebuilt-binary provenance.
+It has been tested on Apple Silicon only. Linux arm64 is CI-tested and source-only.
+The [synthetic-key quickstart](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/docs/QUICKSTART.md)
+lets developers try the workflow without their own agent or remote hosts.
 
 ## The problem
 
@@ -123,7 +143,7 @@ need to support destination constraints.
   was rejected because it brings an async runtime and a wider parsing surface; `ssh-key` was
   avoided to keep the `rsa` crate out of the dependency tree.
 - **No async runtime.** One thread per connection with a registry cap, chosen for auditability.
-- **`unsafe` in one file.** All 22 `unsafe` sites are libc calls in `src/socket.rs`;
+- **`unsafe` in one file.** OS calls are isolated in `src/socket.rs`;
   `#![forbid(unsafe_op_in_unsafe_fn)]` is set crate-wide.
 - **No upstream retries.** A retry could trigger a second Touch ID prompt for one user action.
 - **Bounded resources.** 256 KiB frame cap checked before allocation, 10 s per-frame deadline,
@@ -134,19 +154,15 @@ need to support destination constraints.
 
 ## How it was built — my role
 
-- 155 of 159 commits on `main` (as of 2026-10-31) are authored by me; the other four are from
-  bots (two Dependabot, two Jules).
-- 77 of those commits carry a Claude co-author trailer: I use AI coding assistants for
-  implementation and for review in separate contexts, and the findings register says so. A trailer
-  means *co-authored*, not *written entirely by a model*; a commit without one is not a claim of
-  hand-written code.
+- I use AI coding assistants for implementation and for review in separate contexts; the findings
+  register documents that process. These internal reviews are not an independent security audit.
 - The threat model, security invariants, limitations and release decisions are documented in the
   repository and maintained by me.
 
 ## Difficult problems (from the findings register)
 
-Every finding is recorded with its fix in [`docs/FINDINGS.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/FINDINGS.md). Three of the
-seven HIGH findings show where the hard part actually was — not the agent protocol, but the SSH
+Every finding is recorded with its fix in [`docs/FINDINGS.md`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/docs/FINDINGS.md). Three of the
+documented findings show where the hard part actually was — not the agent protocol, but the SSH
 client configuration around it:
 
 - **F-01 — ControlMaster reuse** could forward the *unfiltered* agent through an existing
@@ -179,33 +195,37 @@ with hostile modes, CLI tests on the real binary, tests against real OpenSSH too
 tests that start a throwaway `sshd`. Four cargo-fuzz targets (`requests`, `session_bind`,
 `key_blob`, `upstream_reply`) run under libFuzzer with AddressSanitizer.
 
-- **Local run (2026-10-31, macOS arm64, `cargo test --offline`):** 159 passed, 0 failed,
-  2 ignored. The 11 `sshd` end-to-end tests also passed with `SIGSIEVE_REQUIRE_SSHD=1`, which turns
-  missing prerequisites into failures instead of skips.
-- **Fuzzing (release commit `fc7484b`):** one hour per target, about 313 million executions, no
-  crashes or sanitizer findings. The project states plainly that this is not proof of the absence
-  of vulnerabilities.
-- **CI:** formatting, `clippy -D warnings`, debug and release tests on macOS arm64, Ubuntu 24.04
-  x86_64 and arm64, an MSRV job, `cargo audit`, `cargo deny` and secret scanning.
-- **Traceability:** the security model lists 20 numbered invariants and maps each to named tests;
-  a findings register records 42 internal findings and how each was resolved or accepted.
+- **Alpha.4 candidate CI:** Rust tests and real OpenSSH integration, including platform-specific
+  checks, are recorded in the [candidate run](https://github.com/semihbugrasezer/sigsieve/actions/runs/41519403249).
+- **Linux cross-user restriction:** a [separate run](https://github.com/semihbugrasezer/sigsieve/actions/runs/41519403122)
+  exercises peer credentials and its negative test. It does not establish macOS cross-user behavior.
+- **Alpha.4 fuzz campaign:** four targets, one hour each, with 287,516,615 reported executions and
+  no reported crash in the [recorded campaign](https://github.com/semihbugrasezer/sigsieve/actions/runs/41527783557).
+  This is not proof of the absence of vulnerabilities.
+- **Distribution:** the [release build](https://github.com/semihbugrasezer/sigsieve/actions/runs/41538765784)
+  publishes archives, SHA-256 checksums, CycloneDX SBOMs and provenance attestations;
+  [Linux release verification](https://github.com/semihbugrasezer/sigsieve/actions/runs/41540423408)
+  is recorded separately.
+
+These are the project's published evidence records, not tests rerun for this portfolio update.
+They apply to release commit `5ea37b7`, not every later commit on `main`.
 
 ## Engineering evidence
 
-All links point at commit `269cf91`.
+Source links below point at the alpha.4 release commit `5ea37b7`.
 
 | What | Where |
 | --- | --- |
-| The only request dispatcher | [`src/proxy.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/src/proxy.rs) |
-| Bounds-checked protocol parsing | [`src/protocol.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/src/protocol.rs) |
-| Destination binding verification | [`src/binding.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/src/binding.rs) |
-| All `unsafe` code, in one module | [`src/socket.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/src/socket.rs) |
-| Threat model and security invariants | [`THREAT_MODEL.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/THREAT_MODEL.md), [`SECURITY_MODEL.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/SECURITY_MODEL.md) |
-| Findings register | [`docs/FINDINGS.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/FINDINGS.md) |
-| End-to-end tests with a real `sshd` | [`tests/e2e_sshd.rs`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/tests/e2e_sshd.rs) |
-| Fuzz targets | [`fuzz/fuzz_targets/`](https://github.com/semihbugrasezer/sigsieve/tree/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/fuzz/fuzz_targets) |
-| Test strategy | [`docs/TESTING.md`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/docs/TESTING.md) |
-| CI matrix | [`.github/workflows/ci.yml`](https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/.github/workflows/ci.yml) |
+| The only request dispatcher | [`src/proxy.rs`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/src/proxy.rs) |
+| Bounds-checked protocol parsing | [`src/protocol.rs`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/src/protocol.rs) |
+| Destination binding verification | [`src/binding.rs`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/src/binding.rs) |
+| All `unsafe` code, in one module | [`src/socket.rs`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/src/socket.rs) |
+| Threat model and security invariants | [`THREAT_MODEL.md`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/docs/THREAT_MODEL.md), [`SECURITY_MODEL.md`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/docs/SECURITY_MODEL.md) |
+| Findings register | [`docs/FINDINGS.md`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/docs/FINDINGS.md) |
+| End-to-end tests with a real `sshd` | [`tests/e2e_sshd.rs`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/tests/e2e_sshd.rs) |
+| Fuzz targets | [`fuzz/fuzz_targets/`](https://github.com/semihbugrasezer/sigsieve/tree/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/fuzz/fuzz_targets) |
+| Test strategy | [`docs/TESTING.md`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/docs/TESTING.md) |
+| CI matrix | [`.github/workflows/ci.yml`](https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/.github/workflows/ci.yml) |
 
 ## What this project demonstrates
 
@@ -216,22 +236,25 @@ parsing treated as attack surface, and limitations published next to the feature
 ## Limitations
 
 - Experimental and not independently audited.
-- Real Secretive testing so far: one owner-assisted run with one P-256 key against two local SSH
-  servers. Secretive version and Touch ID prompt counts were not recorded.
+- Real Secretive signing and destination binding were observed on an earlier alpha.2 candidate
+  with one P-256 key against two local SSH servers. Secretive/Touch ID behavior has **not** been
+  reverified for alpha.4; the earlier run did not record the Secretive version or full prompt counts.
+- A recorded-session replay limitation remains documented. macOS cross-user testing and an
+  independent external audit are not complete.
 - Binding mode is unverified end-to-end against GitHub; GitLab.com and Bitbucket Cloud did not
   advertise hostbound authentication when measured (2026-10-27).
 - Binding mode forbids non-authentication signing such as `git commit -S`.
-- No OpenSSH certificates, no legacy SHA-1 `ssh-rsa`, no Windows or Intel-macOS validation; no
-  Homebrew, crates.io or notarised builds.
+- No OpenSSH certificates, no legacy SHA-1 `ssh-rsa`, no Windows or Intel-macOS validation;
+  no crates.io package or notarised macOS builds.
 
 ## Future directions
 
 - An external review before any non-experimental release.
 - Broader hardware coverage (1Password, FIDO security keys) with recorded evidence.
-- Tagging the next pre-release (`0.1.0-alpha.3` is in `Cargo.toml` but not yet tagged).
+- Reverify Secretive and Touch ID behavior on the current release, and complete macOS cross-user testing.
 
 ## References
 
 - Repository: [github.com/semihbugrasezer/sigsieve](https://github.com/semihbugrasezer/sigsieve)
-- Release: [v0.1.0-alpha.2 (pre-release)](https://github.com/semihbugrasezer/sigsieve/releases/tag/v0.1.0-alpha.2)
+- Release: [v0.1.0-alpha.4 (pre-release)](https://github.com/semihbugrasezer/sigsieve/releases/tag/v0.1.0-alpha.4)
 - Related research: [Threat-modelling SSH agent forwarding](/research/ssh-agent-forwarding-threat-model/)

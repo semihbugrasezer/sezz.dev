@@ -56,8 +56,8 @@ published run yet. Those numbers need a separate harness with recorded runs.
 
 ## Source
 
-- [`evals/test_supervisor_evals.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_supervisor_evals.py)
-- [`evals/test_trust_evals.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_trust_evals.py)
+- [`evals/test_supervisor_evals.py`](https://github.com/Seerxo/Acthelm/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_supervisor_evals.py)
+- [`evals/test_trust_evals.py`](https://github.com/Seerxo/Acthelm/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_trust_evals.py)
 - [Acthelm case study](/projects/acthelm/)
 
 ---

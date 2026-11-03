@@ -57,9 +57,9 @@ export const ui = {
     // For uppercase eyebrows: English terms keep English casing (Turkish would render “AGENTİC”).
     roleHtml: 'AI Engineer · Agentic AI &amp; LLM Systems',
     title: 'Semih Buğra Sezer — AI Engineer | Agentic AI & LLM Systems',
-    tagline: 'Building autonomous AI agents, intelligent workflows, and production-ready LLM applications.',
+    tagline: 'Agent orchestration, secure developer tools, and reliable infrastructure.',
     description:
-      'AI engineer focused on agentic AI, LLM applications, tool integrations and reliable AI infrastructure. Explore evidence-backed case studies, open-source software and technical research.',
+      'AI engineer building Acthelm for agent orchestration, SigSieve for SSH-agent filtering, and Seerxo for AI-assisted Etsy workflows. Explore project architecture, source code and engineering notes.',
     nav: { ai: 'AI Engineering', projects: 'Projects', research: 'Research', writing: 'Writing', about: 'About', now: 'Now' },
     skip: 'Skip to content',
     home: 'home',
@@ -88,9 +88,9 @@ export const ui = {
     role: 'AI Engineer · Agentic AI & LLM Sistemleri',
     roleHtml: '<span lang="en">AI Engineer · Agentic AI</span> &amp; LLM Sistemleri',
     title: 'Semih Buğra Sezer — AI Engineer | Agentic AI & LLM Sistemleri',
-    tagline: 'Otonom AI ajanları, akıllı iş akışları ve canlıya hazır LLM uygulamaları geliştiriyorum.',
+    tagline: 'Ajan orkestrasyonu, güvenli geliştirici araçları ve güvenilir altyapı.',
     description:
-      'Agentic AI, LLM uygulamaları, araç entegrasyonları ve güvenilir AI altyapısına odaklanan AI mühendisi. Kanıta dayalı vaka çalışmaları, açık kaynak yazılım ve teknik araştırmalar.',
+      'Ajan orkestrasyonu için Acthelm’i, SSH agent filtrelemesi için SigSieve’i ve AI destekli Etsy iş akışları için Seerxo’yu geliştiren AI mühendisi. Proje mimarileri, kaynak kod ve mühendislik notları.',
     nav: { ai: 'AI Mühendisliği', projects: 'Projeler', research: 'Araştırma', writing: 'Yazılar', about: 'Hakkımda', now: 'Şimdi' },
     skip: 'İçeriğe geç',
     home: 'ana sayfa',
@@ -119,9 +119,9 @@ export const ui = {
     role: 'AI Engineer · Agentic AI & LLM-Systeme',
     roleHtml: 'AI Engineer · Agentic AI &amp; LLM-Systeme',
     title: 'Semih Buğra Sezer — AI Engineer | Agentic AI & LLM-Systeme',
-    tagline: 'Ich entwickle autonome KI-Agenten, intelligente Workflows und produktionsreife LLM-Anwendungen.',
+    tagline: 'Agenten-Orchestrierung, sichere Entwickler-Tools und zuverlässige Infrastruktur.',
     description:
-      'AI Engineer mit Fokus auf Agentic AI, LLM-Anwendungen, Tool-Integrationen und zuverlässige KI-Infrastruktur. Belegbare Fallstudien, Open-Source-Software und technische Recherche.',
+      'AI Engineer hinter Acthelm für Agenten-Orchestrierung, SigSieve für SSH-Agent-Filterung und Seerxo für KI-gestützte Etsy-Abläufe. Projektarchitektur, Quellcode und Engineering-Notizen.',
     nav: { ai: 'AI Engineering', projects: 'Projekte', research: 'Recherche', writing: 'Artikel', about: 'Über mich', now: 'Aktuell' },
     skip: 'Zum Inhalt springen',
     home: 'Startseite',

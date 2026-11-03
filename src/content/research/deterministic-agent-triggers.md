@@ -75,5 +75,5 @@ against an alternative design.
 
 ## References
 
-- Acthelm repository: [github.com/Seerxo/seerxo-os](https://github.com/Seerxo/seerxo-os)
+- Acthelm repository: [github.com/Seerxo/Acthelm](https://github.com/Seerxo/Acthelm)
   — see `README.md`, `docs/AUTONOMOUS_AGENT_ARCHITECTURE.md`, `docs/operations/DECISIONS.md`
