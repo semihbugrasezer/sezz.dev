@@ -22,13 +22,6 @@ const tools = [
     caseStudy: '/projects/seerxo/',
   },
   {
-    name: 'Bridge', licence: 'Apache-2.0', repo: `${GH}/Seerxo/bridge`, open: true,
-    install: 'npx seerxo-bridge',
-    docs: `${GH}/Seerxo/bridge#readme`, issues: `${GH}/Seerxo/bridge/issues`,
-    security: `${GH}/Seerxo/bridge/blob/main/SECURITY.md`, contribute: null,
-    caseStudy: '/projects/bridge/',
-  },
-  {
     name: 'Acthelm', licence: null, repo: `${GH}/Seerxo/Acthelm`, open: false,
     install: null,
     docs: `${GH}/Seerxo/Acthelm#readme`, issues: `${GH}/Seerxo/Acthelm/issues`,
@@ -52,7 +45,6 @@ const copy = {
     items: [
       { what: 'Forwards selected identities from an existing SSH agent, with optional destination binding. Alpha.4 has macOS arm64 and Linux x86_64 downloads with checksums and provenance; the macOS Homebrew tap builds from source. No account or telemetry.', limits: 'Experimental alpha.4, not independently audited. Homebrew tested on Apple Silicon only. Secretive/Touch ID behavior has not been reverified for alpha.4; an allowed key can still be misused while forwarding is active.' },
       { what: 'Drafts, audits and optimises Etsy listings from a terminal, Claude Desktop, Claude Code or any MCP client. The audit is free and rule-based.', limits: 'The open-source part is the client; generation runs on the hosted Seerxo service and needs an account.' },
-      { what: 'Lets AI coding agents that speak the Anthropic Messages API run against OpenAI-compatible providers, including streaming and tool calls.', limits: 'Early compatibility layer: images, prompt caching and extended thinking are not translated yet.' },
       { what: 'A reference design for running AI agents inside explicit boundaries: persisted state, deterministic triggers, isolated execution and signed releases. Useful to read; not yet licensed for reuse.', limits: 'Single host, one company, no licence. Unattended code changes are off by default.' },
     ],
   },
@@ -70,7 +62,6 @@ const copy = {
     items: [
       { what: 'Mevcut SSH agent’ınızdan seçtiğiniz kimlikleri iletir; isteğe bağlı hedef kısıtlaması sunar. Alpha.4 için checksum ve provenance ile macOS arm64 ve Linux x86_64 indirmeleri var; macOS Homebrew tap’i kaynak koddan derler. Hesap veya telemetri yok.', limits: 'Deneysel alpha.4; bağımsız denetimden geçmedi. Homebrew yalnızca Apple Silicon’da test edildi. Secretive/Touch ID davranışı alpha.4 için yeniden doğrulanmadı; yönlendirme açıkken izin verilen bir anahtar kötüye kullanılabilir.' },
       { what: 'Etsy ilanlarını terminalden, Claude Desktop’tan, Claude Code’dan veya herhangi bir MCP istemcisinden hazırlar, denetler ve iyileştirir. Denetim ücretsiz ve kural tabanlıdır.', limits: 'Açık kaynak olan kısım istemcidir; üretim, barındırılan Seerxo servisinde çalışır ve hesap gerektirir.' },
-      { what: 'Anthropic Messages API kullanan AI kodlama ajanlarının, streaming ve tool call’lar dahil, OpenAI uyumlu sağlayıcılarla çalışmasını sağlar.', limits: 'Erken uyumluluk katmanı: görseller, prompt caching ve extended thinking henüz çevrilmiyor.' },
       { what: 'AI ajanlarını açık sınırlar içinde çalıştırmak için bir referans tasarım: kalıcı durum, deterministik tetikleyiciler, izole çalıştırma ve imzalı sürümler. Okumak için faydalı; yeniden kullanım için henüz lisanslı değil.', limits: 'Tek sunucu, tek şirket, lisans yok. Gözetimsiz kod değişiklikleri varsayılan olarak kapalı.' },
     ],
   },
@@ -88,7 +79,6 @@ const copy = {
     items: [
       { what: 'Leitet ausgewählte Identitäten eines vorhandenen SSH-Agenten weiter, optional an Ziel-Hostkeys gebunden. Alpha.4 bietet Downloads für macOS arm64 und Linux x86_64 mit Prüfsummen und Provenienz; der macOS-Homebrew-Tap baut aus dem Quellcode. Kein Konto und keine Telemetrie.', limits: 'Experimentelle alpha.4, nicht unabhängig auditiert. Homebrew nur auf Apple Silicon getestet. Secretive/Touch ID wurde für alpha.4 nicht erneut verifiziert; erlaubte Schlüssel können während der Weiterleitung weiterhin missbraucht werden.' },
       { what: 'Entwirft, prüft und optimiert Etsy-Listings aus dem Terminal, Claude Desktop, Claude Code oder jedem MCP-Client. Die Prüfung ist kostenlos und regelbasiert.', limits: 'Open Source ist der Client; die Generierung läuft auf dem gehosteten Seerxo-Dienst und erfordert ein Konto.' },
-      { what: 'Lässt KI-Coding-Agenten, die die Anthropic Messages API sprechen, mit OpenAI-kompatiblen Anbietern arbeiten – inklusive Streaming und Tool-Calls.', limits: 'Frühe Kompatibilitätsschicht: Bilder, Prompt Caching und Extended Thinking werden noch nicht übersetzt.' },
       { what: 'Ein Referenzdesign für KI-Agenten innerhalb klarer Grenzen: persistenter Zustand, deterministische Auslöser, isolierte Ausführung und signierte Releases. Lesenswert, aber noch nicht zur Weiterverwendung lizenziert.', limits: 'Ein Host, ein Unternehmen, keine Lizenz. Unbeaufsichtigte Codeänderungen sind standardmäßig aus.' },
     ],
   },
