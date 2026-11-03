@@ -7,7 +7,7 @@ const s = t(lang);
 const L = (path: string) => localize(path, lang);
 
 const sources = [
-  { name: 'Acthelm', caseStudy: '/projects/acthelm/', source: 'https://github.com/Seerxo/seerxo-os' },
+  { name: 'Acthelm', caseStudy: '/projects/acthelm/', source: 'https://github.com/Seerxo/Acthelm' },
   { name: 'Seerxo', caseStudy: '/projects/seerxo/', source: 'https://github.com/semihbugrasezer/seerxo' },
   { name: 'SigSieve', caseStudy: '/projects/sigsieve/', source: 'https://github.com/semihbugrasezer/sigsieve' },
 ];
@@ -228,9 +228,9 @@ const copy = {
   },
 } satisfies Record<Lang, unknown>;
 const c = copy[lang];
-const OS = 'https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/';
+const OS = 'https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/';
 const SX = 'https://github.com/semihbugrasezer/seerxo/blob/8c529841efc37ebb999500bd1b7e5bbfaba9e985/';
-const SS = 'https://github.com/semihbugrasezer/sigsieve/blob/269cf91dd2ae006a0f3aa557659b87f5ec0f543c/';
+const SS = 'https://github.com/semihbugrasezer/sigsieve/blob/5ea37b73ce7ed5dd33f3ac405c3ae4ad4da68751/';
 const codeBase: Record<string, string> = { 'Acthelm': OS, Seerxo: SX, SigSieve: SS };
 const evHref = (path: string) => (path.startsWith('sx:') ? SX + path.slice(3) : OS + path);
 const statusLabel = { ci: c.stCI, partial: c.stPartial, planned: c.stPlanned } as Record<string, string>;

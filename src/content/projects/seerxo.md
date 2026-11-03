@@ -2,7 +2,7 @@
 title: Seerxo
 summary: A live product that drafts, audits and optimises Etsy listings. One account and credit pool behind a CLI, a stdio MCP server, a remote MCP endpoint, a Claude Code skill and a web app — with a deterministic audit kept separate from metered AI generation.
 order: 3
-featured: true
+featured: false
 disciplines: [Autonomous AI, Backend & Infrastructure, Security & Tools]
 stack: [Node.js, JSON-RPC / MCP, REST, HMAC-SHA256, node:test, semantic-release, GitHub Actions OIDC, React]
 status: Live product · npm seerxo 1.13.0

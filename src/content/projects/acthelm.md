@@ -1,35 +1,39 @@
 ---
 title: Acthelm
-summary: A self-hosted operating system for a small company. PostgreSQL holds operational memory, a deterministic reconciler decides when work exists, and AI coding agents run inside isolated containers behind independent review and a signed release gateway.
+summary: An agent-driven operating system for a small company. PostgreSQL keeps operational state, deterministic rules identify work, and isolated AI agents prepare changes behind independent review and human approval.
 order: 1
 featured: true
 disciplines: [Autonomous AI, Backend & Infrastructure, Security & Tools]
-stack: [Python 3.12, FastAPI, PostgreSQL 18, SQLAlchemy 2, Alembic, Docker, systemd, React 19, Claude Code CLI, Codex CLI, SSH signatures]
+stack: [Python 3.12, FastAPI, PostgreSQL 18, SQLAlchemy 2, Alembic, Docker, systemd, React, TypeScript, Vite, Claude Code CLI, Codex CLI, SSH signatures]
 status: V1 · in active development · runs for one company
 problem: Language models forget, improvise and can be talked into things. A company that lets agents work on its behalf needs state that outlives a conversation, a deterministic answer to "is there work?", and boundaries that hold even when a model behaves badly.
-repo: https://github.com/Seerxo/seerxo-os
-measured: 2026-11-01
+repo: https://github.com/Seerxo/Acthelm
+measured: 2026-11-03
 facts:
-  - 12 Alembic migrations, 7 CI workflows
-  - ~2,140 test functions across 144 test files (static count)
-  - 39 deterministic golden-eval tests, run in CI (green on 43f000c)
+  - PostgreSQL task state, atomic claims, checkpoints and crash recovery
+  - Stage C prepares independently reviewed fork PRs; it does not authorize merge or deploy
+  - Founder Desk, encrypted backups and a signed release gateway
   - Release risk is an allow-list; only docs/* is low-risk
   - No licence yet — source is public, all rights reserved
 demonstrates: ["Agent orchestration with persisted state", "Deterministic gates around model decisions", "Golden evals for unsupported claims and injection"]
 l10n:
   tr:
     demonstrates: ["Kalıcı durumla ajan orkestrasyonu", "Model kararları etrafında deterministik kontroller", "Asılsız iddialar ve injection için golden eval’ler"]
-    summary: "Küçük bir şirket için kendi sunucunda çalışan bir işletim sistemi. Operasyonel hafıza PostgreSQL'de tutulur, işin ne zaman var olduğuna deterministik bir uzlaştırıcı (reconciler) karar verir ve AI kodlama ajanları bağımsız inceleme ile imzalı bir sürüm geçidinin (release gateway) arkasında, izole konteynerlerde çalışır."
+    summary: "Küçük bir şirket için ajan tabanlı işletim sistemi. PostgreSQL operasyonel durumu saklar, deterministik kurallar yapılacak işi belirler ve izole AI ajanları bağımsız inceleme ile insan onayı sınırları içinde değişiklik hazırlar."
     problem: "Dil modelleri unutur, doğaçlama yapar ve yönlendirilebilir. Ajanların kendi adına çalışmasına izin veren bir şirketin, bir konuşmadan daha uzun yaşayan bir duruma, \"iş var mı?\" sorusuna deterministik bir cevaba ve model kötü davrandığında bile ayakta kalan sınırlara ihtiyacı vardır."
     status: "V1 · aktif geliştirmede · tek bir şirket için çalışıyor"
   de:
     demonstrates: ["Agenten-Orchestrierung mit persistentem Zustand", "Deterministische Kontrollen um Modellentscheidungen", "Golden Evals gegen unbelegte Behauptungen und Injection"]
-    summary: "Ein selbst gehostetes Betriebssystem für ein kleines Unternehmen. PostgreSQL hält das operative Gedächtnis, ein deterministischer Reconciler entscheidet, wann Arbeit anliegt, und KI-Coding-Agenten laufen in isolierten Containern hinter unabhängigem Review und einem signierten Release-Gateway."
+    summary: "Ein agentengesteuertes Betriebssystem für ein kleines Unternehmen. PostgreSQL speichert den operativen Zustand, deterministische Regeln erkennen anstehende Arbeit und isolierte KI-Agenten bereiten Änderungen unter unabhängigem Review und menschlicher Freigabe vor."
     problem: "Sprachmodelle vergessen, improvisieren und lassen sich zu Dingen überreden. Ein Unternehmen, das Agenten in seinem Namen arbeiten lässt, braucht Zustand, der ein Gespräch überdauert, eine deterministische Antwort auf „Gibt es Arbeit?“ und Grenzen, die auch dann halten, wenn sich ein Modell falsch verhält."
     status: "V1 · in aktiver Entwicklung · im Einsatz für ein Unternehmen"
 ---
 
 ## Overview
+
+**Agents work. You steer.** Acthelm was previously named Seerxo OS; the public repository is now
+[`Seerxo/Acthelm`](https://github.com/Seerxo/Acthelm). The repository rename and the signed production
+release identity are separate changes, as documented in the project's naming decision.
 
 Acthelm is the system I use to run Seerxo, a one-founder company. It is a FastAPI service over
 PostgreSQL that stores the company's operational state — goals, tasks, events, incidents,
@@ -85,14 +89,14 @@ flowchart TB
   M --> GW["release gateway"] --> HV["host verifier<br/>signed manifest + ledger"]
 ```
 
-The deployment is a Docker Compose stack on a single host: `company-postgres`, `company-api`,
+The reference deployment is a Docker Compose stack on a single host: `company-postgres`, `company-api`,
 `company-worker`, `company-reasoner`, `company-review-signer` and two egress proxies, with a
 `cloudflared` tunnel in front of the API. Each service has its own build target with base images
 pinned by digest.
 
 ## Core components
 
-**Operational memory.** PostgreSQL via SQLAlchemy 2, evolved through 12 Alembic migrations (tasks,
+**Operational memory.** PostgreSQL via SQLAlchemy 2, evolved through Alembic migrations (tasks,
 events, agent execution state, notebook memory, metric observations, experiments, notification
 state). CI asserts that there is exactly one migration head. Policy — agent registry, cost policy,
 release policy, coder profiles — is versioned in Git, not in the database.
@@ -128,12 +132,12 @@ verify → apply → record under a single `flock`, with sequence numbers, an ap
 
 Acthelm is developed with AI coding agents, and the repository makes that visible:
 
-- 33 of 35 commits on `main` (as of 2026-11-01) are authored by the `seerxo-agent` account; 28 carry
-  a Claude co-author trailer. A trailer means *co-authored*, not *written entirely by a model*.
+- I use AI coding agents for implementation and review. Agent-generated changes still pass through
+  independent review and explicit authorization; using agents does not delegate ownership of decisions.
 - The repository's own decision log records the decisions as the **founder's** (for example
   `DEC-001` … `DEC-008`, and the 2026-10-07 decision not to loosen the coder container for Codex).
   I am that founder: the recorded decisions, policies and boundaries are mine, and I operate the
-  system. 18 commits also list me as co-author.
+  system.
 
 ## Design decisions
 
@@ -183,11 +187,11 @@ queueing problems.
 
 ## Testing and validation
 
-The backend uses pytest with xdist; the Founder Desk uses Node's built-in test runner. A static
-count finds about 2,140 test functions across 144 backend test files.
+The backend uses pytest with xdist; the Founder Desk uses Node's built-in test runner.
+Backend integration tests require a disposable PostgreSQL database with a guarded test-only name.
 
-**Golden evaluations.** `evals/` holds 39 deterministic test functions (several are parametrised
-over many scenarios) that pin how the control plane reacts to what an agent hands back. They do
+**Golden evaluations.** `evals/` contains deterministic scenarios that pin how the control plane
+reacts to what an agent hands back. They do
 not measure model quality — the model is replaced by scripted stand-ins:
 
 - A worker that says *"Done."* with no evidence, or omits a required token, gets
@@ -198,28 +202,28 @@ not measure model quality — the model is replaced by scripted stand-ins:
 - The unattended worker gate refuses tasks it must never pick up; Stage C scenarios name the failure
   each one catches.
 
-CI runs them in the "Python tests and golden evaluations" step; the run on `43f000c` (2026-11-01)
-passed. A live prompt-injection eval against a real provider exists
-(`evals/live/injection_eval.py`) but has no published run yet. Dedicated suites exercise PostgreSQL concurrency and crash
-recovery using subprocess crash children, and CI runs a real Docker rehearsal of release recovery.
+The backend CI workflow runs the tests and golden evaluations. Dedicated suites exercise PostgreSQL
+concurrency and crash recovery using subprocess crash children, and release recovery has a Docker
+rehearsal. These deterministic checks are separate from measured model-level task success and from
+verification of a running deployment.
 
 ## Engineering evidence
 
-All links point at commit `43f000c`.
+Source links below point at commit `b8b7e77` (3 November 2026).
 
 | What | Where |
 | --- | --- |
-| Deterministic work detection | [`app/business_reconciler.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/app/business_reconciler.py) |
-| Atomic task claims, retries, checkpoints | [`app/worker.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/app/worker.py) |
-| Open-work deduplication in the database | [`b8e41d0c7a52_open_work_unique_indexes.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/migrations/versions/b8e41d0c7a52_open_work_unique_indexes.py) |
-| Provider health states, metered-key refusal | [`app/providers.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/app/providers.py) |
-| Exact-diff review and publication | [`app/stage_c_runner.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/app/stage_c_runner.py) |
-| Host-side release verifier and ledger | [`app/release_host.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/app/release_host.py) |
-| Golden evals: unsupported claims, injection | [`evals/test_supervisor_evals.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_supervisor_evals.py), [`evals/test_trust_evals.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/evals/test_trust_evals.py) |
-| Crash-recovery tests on PostgreSQL | [`tests/test_worker_crash_recovery_postgres.py`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/tests/test_worker_crash_recovery_postgres.py) |
-| Threat model and release gateway | [`THREAT_MODEL.md`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/docs/security/THREAT_MODEL.md), [`RELEASE_GATEWAY.md`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/docs/security/RELEASE_GATEWAY.md) |
-| Decision log | [`docs/operations/DECISIONS.md`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/docs/operations/DECISIONS.md) |
-| CI definition | [`.github/workflows/python-tests.yml`](https://github.com/Seerxo/seerxo-os/blob/43f000caf43d67fd1fca001d0cf88dc44b06d7c2/.github/workflows/python-tests.yml) |
+| Deterministic work detection | [`app/business_reconciler.py`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/app/business_reconciler.py) |
+| Atomic task claims, retries, checkpoints | [`app/worker.py`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/app/worker.py) |
+| Open-work deduplication in the database | [`b8e41d0c7a52_open_work_unique_indexes.py`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/migrations/versions/b8e41d0c7a52_open_work_unique_indexes.py) |
+| Provider health states, metered-key refusal | [`app/providers.py`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/app/providers.py) |
+| Exact-diff review and publication | [`app/stage_c_runner.py`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/app/stage_c_runner.py) |
+| Host-side release verifier and ledger | [`app/release_host.py`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/app/release_host.py) |
+| Golden evals: unsupported claims, injection | [`evals/test_supervisor_evals.py`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/evals/test_supervisor_evals.py), [`evals/test_trust_evals.py`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/evals/test_trust_evals.py) |
+| Crash-recovery tests on PostgreSQL | [`tests/test_worker_crash_recovery_postgres.py`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/tests/test_worker_crash_recovery_postgres.py) |
+| Threat model and release gateway | [`THREAT_MODEL.md`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/docs/security/THREAT_MODEL.md), [`RELEASE_GATEWAY.md`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/docs/security/RELEASE_GATEWAY.md) |
+| Decision log | [`docs/operations/DECISIONS.md`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/docs/operations/DECISIONS.md) |
+| CI definition | [`.github/workflows/python-tests.yml`](https://github.com/Seerxo/Acthelm/blob/b8b7e770c4508f2e2f9f86f08bb43b6e82528b16/.github/workflows/python-tests.yml) |
 
 ## What this project demonstrates about my AI engineering skills
 
@@ -249,8 +253,8 @@ All links point at commit `43f000c`.
   see the [planned evaluation harness](/ai-engineering/#evaluation).
 - Single host, single company; no horizontal scaling.
 - No automatic merge. Stage D is not enabled. Unattended code changes are off by default.
-- The repository's own documents disagree on how far the Stage C pilot went; I treat it as
-  **attended, not yet unattended**.
+- The README reports an **attended** Stage C pilot. It does not establish a verified unattended
+  deployment; Stage C remains off until enabled per task.
 - The public repository starts at an initial public-release commit (October 2026); earlier history
   is in a private repository. There are no tagged releases.
 - No licence has been chosen; the source is public to read but all rights are reserved.
@@ -261,9 +265,9 @@ All links point at commit `43f000c`.
 - A real unattended Stage C pilot with recorded evidence before widening scope.
 - Verified cutover of release duties from the private repository to the public one, under a signed
   procedure.
-- Choosing a licence so external contributions become possible.
+- Choosing a licence to define reuse and distribution rights.
 
 ## References
 
-- Repository: [github.com/Seerxo/seerxo-os](https://github.com/Seerxo/seerxo-os)
+- Repository: [github.com/Seerxo/Acthelm](https://github.com/Seerxo/Acthelm)
 - Related research: [Deterministic triggers for agent work](/research/deterministic-agent-triggers/)
